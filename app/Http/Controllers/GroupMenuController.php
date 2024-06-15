@@ -7,58 +7,27 @@ use Illuminate\Http\Request;
 
 class GroupMenuController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     */
     public function index()
     {
-        //
+        return GroupMenu::all();
     }
 
-    /**
-     * Show the form for creating a new resource.
-     */
-    public function create()
-    {
-        //
-    }
-
-    /**
-     * Store a newly created resource in storage.
-     */
     public function store(Request $request)
     {
-        //
+
     }
 
-    /**
-     * Display the specified resource.
-     */
-    public function show(GroupMenu $groupMenu)
+    public function show(int $id)
     {
         //
     }
 
-    /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit(GroupMenu $groupMenu)
+    public function update(Request $request, int $id)
     {
         //
     }
 
-    /**
-     * Update the specified resource in storage.
-     */
-    public function update(Request $request, GroupMenu $groupMenu)
-    {
-        //
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     */
-    public function destroy(GroupMenu $groupMenu)
+    public function destroy(int $id)
     {
         //
     }

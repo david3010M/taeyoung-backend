@@ -2,10 +2,9 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\CotizationMachinary;
 use Illuminate\Http\Request;
 
-class CotizationMachinaryController extends Controller
+class ClientController extends Controller
 {
     public function index()
     {
@@ -17,17 +16,17 @@ class CotizationMachinaryController extends Controller
         //
     }
 
-    public function show(int $id)
+    public function show(string $id)
     {
         //
     }
 
-    public function update(Request $request, int $id)
+    public function update(Request $request, string $id)
     {
         //
     }
 
-    public function destroy(int $id)
+    public function destroy(string $id)
     {
         //
     }

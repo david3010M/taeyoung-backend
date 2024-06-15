@@ -9,7 +9,7 @@ class UserController extends Controller
 
     /**
      * @OA\Get (
-     *     path="/api/users",
+     *     path="/taeyoung-backend/public/api/users",
      *     tags={"User"},
      *     summary="Get list of users",
      *     operationId="index",

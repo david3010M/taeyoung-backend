@@ -6,7 +6,358 @@
         "version": "1.0.0"
     },
     "paths": {
-        "/api/users": {
+        "/taeyoung-backend/public/api/login": {
+            "post": {
+                "tags": [
+                    "Authentication"
+                ],
+                "summary": "Login user",
+                "operationId": "3670f45ffa73e8e8e5fdeee0af92328a",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "properties": {
+                                    "username": {
+                                        "type": "string",
+                                        "example": "username"
+                                    },
+                                    "password": {
+                                        "type": "string",
+                                        "example": "123456"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "User authenticated",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "access_token": {
+                                            "type": "string",
+                                            "example": "11|SphTzJDxcMxPjpTA3GAMnGMepQKaWMpC05NKn10a1d2879de"
+                                        },
+                                        "expires_at": {
+                                            "type": "string",
+                                            "example": "2021-05-19 04:44:04"
+                                        },
+                                        "user": {
+                                            "$ref": "#/components/schemas/User"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "User not authenticated",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Unauthorized."
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Credentials are invalid",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Invalid credentials."
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/taeyoung-backend/public/api/authenticate": {
+            "get": {
+                "tags": [
+                    "Authentication"
+                ],
+                "summary": "Authenticate user",
+                "operationId": "430a570814cb7471f1abe16268629f11",
+                "responses": {
+                    "200": {
+                        "description": "User authenticated",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "access_token": {
+                                            "type": "string",
+                                            "example": "11|SphTzJDxcMxPjpTA3GAMnGMepQKaWMpC05NKn10a1d2879de"
+                                        },
+                                        "expires_at": {
+                                            "type": "string",
+                                            "example": "2021-05-19 04:44:04"
+                                        },
+                                        "user": {
+                                            "$ref": "#/components/schemas/User"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "User not authenticated",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "example": "User not authenticated"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
+        "/taeyoung-backend/public/api/logout": {
+            "get": {
+                "tags": [
+                    "Authentication"
+                ],
+                "summary": "Logout user",
+                "operationId": "0dec290bd67b054c441262ef3461ba5a",
+                "responses": {
+                    "200": {
+                        "description": "Logged out successfully",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Logged out successfully"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "User not authenticated",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "example": "User not authenticated"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
+        "/taeyoung-backend/public/api/country": {
+            "get": {
+                "tags": [
+                    "Countries"
+                ],
+                "summary": "List of countries",
+                "operationId": "f15cd647bfb3bc1ae17c5259622c2b56",
+                "responses": {
+                    "200": {
+                        "description": "List of countries",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "array",
+                                    "items": {
+                                        "$ref": "#/components/schemas/Country"
+                                    }
+                                }
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
+        "/tecnimotors-backend/public/api/supplier": {
+            "get": {
+                "tags": [
+                    "Supplier"
+                ],
+                "summary": "Show all suppliers",
+                "operationId": "a441a661c2edc710e36cf7f683d5b6c3",
+                "responses": {
+                    "200": {
+                        "description": "Show all suppliers",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "array",
+                                    "items": {
+                                        "$ref": "#/components/schemas/Supplier"
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthenticated",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "msg": {
+                                            "type": "string",
+                                            "example": "Unauthenticated"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            },
+            "post": {
+                "tags": [
+                    "Supplier"
+                ],
+                "summary": "Create a new supplier",
+                "operationId": "b52ec72b1bfd83099673918c9abddb0e",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "properties": {
+                                    "type": {
+                                        "type": "string",
+                                        "example": "JURIDICA"
+                                    },
+                                    "ruc": {
+                                        "type": "string",
+                                        "example": "20547869541"
+                                    },
+                                    "businessName": {
+                                        "type": "string",
+                                        "example": "Distribuidora de Productos S.A."
+                                    },
+                                    "address": {
+                                        "type": "string",
+                                        "example": "Jr. Los Pinos 123"
+                                    },
+                                    "email": {
+                                        "type": "string",
+                                        "example": "supplier@gmail.com"
+                                    },
+                                    "phone": {
+                                        "type": "string",
+                                        "example": "987654321"
+                                    },
+                                    "representativeDni": {
+                                        "type": "string",
+                                        "example": "12345678"
+                                    },
+                                    "representativeNames": {
+                                        "type": "string",
+                                        "example": "Juan Perez"
+                                    },
+                                    "country_id": {
+                                        "type": "integer",
+                                        "example": "1"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Supplier created successfully",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/Supplier"
+                                }
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "Validation error",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "error": {
+                                            "type": "string",
+                                            "example": "The given data was invalid."
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
+        "/taeyoung-backend/public/api/users": {
             "get": {
                 "tags": [
                     "User"
@@ -22,6 +373,118 @@
         }
     },
     "components": {
+        "schemas": {
+            "Country": {
+                "title": "Country",
+                "description": "Country model",
+                "properties": {
+                    "id": {
+                        "type": "integer",
+                        "example": "1"
+                    },
+                    "name": {
+                        "type": "string",
+                        "example": "Peru"
+                    }
+                },
+                "type": "object"
+            },
+            "Supplier": {
+                "title": "Supplier",
+                "description": "Supplier model",
+                "properties": {
+                    "id": {
+                        "type": "integer",
+                        "example": "1"
+                    },
+                    "type": {
+                        "type": "string",
+                        "example": "JURIDICA"
+                    },
+                    "ruc": {
+                        "type": "string",
+                        "example": "20547869541"
+                    },
+                    "businessName": {
+                        "type": "string",
+                        "example": "Distribuidora de Productos S.A."
+                    },
+                    "address": {
+                        "type": "string",
+                        "example": "Jr. Los Pinos 123"
+                    },
+                    "email": {
+                        "type": "string",
+                        "example": "supplier@gmail.com"
+                    },
+                    "phone": {
+                        "type": "string",
+                        "example": "987654321"
+                    },
+                    "representativeDni": {
+                        "type": "string",
+                        "example": "12345678"
+                    },
+                    "representativeNames": {
+                        "type": "string",
+                        "example": "Juan Perez"
+                    },
+                    "country_id": {
+                        "type": "integer",
+                        "example": "1"
+                    },
+                    "country": {
+                        "$ref": "#/components/schemas/Country"
+                    }
+                },
+                "type": "object"
+            },
+            "TypeUser": {
+                "title": "TypeUser",
+                "description": "TypeUser model",
+                "properties": {
+                    "id": {
+                        "type": "integer",
+                        "example": "1"
+                    },
+                    "name": {
+                        "type": "string",
+                        "example": "Admin"
+                    }
+                },
+                "type": "object"
+            },
+            "User": {
+                "title": "User",
+                "description": "User model",
+                "properties": {
+                    "id": {
+                        "type": "integer",
+                        "example": "1"
+                    },
+                    "names": {
+                        "type": "string",
+                        "example": "John"
+                    },
+                    "lastnames": {
+                        "type": "string",
+                        "example": "Doe"
+                    },
+                    "username": {
+                        "type": "string",
+                        "example": "johndoe"
+                    },
+                    "typeuser_id": {
+                        "type": "integer",
+                        "example": "1"
+                    },
+                    "typeuser": {
+                        "$ref": "#/components/schemas/TypeUser"
+                    }
+                },
+                "type": "object"
+            }
+        },
         "securitySchemes": {
             "bearerAuth": {
                 "type": "http",

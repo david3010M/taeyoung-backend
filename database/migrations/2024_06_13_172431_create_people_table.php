@@ -4,8 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-return new class extends Migration
-{
+return new class extends Migration {
     /**
      * Run the migrations.
      */
@@ -13,7 +12,17 @@ return new class extends Migration
     {
         Schema::create('people', function (Blueprint $table) {
             $table->id();
+            $table->string('type'); // client or provider
+            $table->string('ruc')->unique();
+            $table->string('businessName')->nullable();
+            $table->string('address')->nullable();
+            $table->string('email')->nullable();
+            $table->string('phone')->nullable();
+            $table->string('representativeDni')->nullable();
+            $table->string('representativeNames')->nullable();
+            $table->foreignId('country_id')->nullable()->unsigned()->constrained('countries');
             $table->timestamps();
+            $table->softDeletes();
         });
     }
 
