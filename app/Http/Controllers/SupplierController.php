@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Http\Resources\SupplierResource;
 use App\Models\Person;
 use Illuminate\Http\Request;
+use Illuminate\Validation\Rule;
 
 class SupplierController extends Controller
 {
@@ -74,10 +75,16 @@ class SupplierController extends Controller
     public function store(Request $request)
     {
         $validator = validator()->make($request->all(), [
-            'ruc' => 'required|string|max:11',
+            'ruc' => [
+                'required',
+                'string',
+                'max:11',
+                Rule::unique('people')->where('type', 'supplier')
+                    ->whereNull('deleted_at')
+            ],
             'businessName' => 'required|string',
             'email' => 'nullable|email',
-            'phone' => 'nullable|int',
+            'phone' => 'nullable|integer',
             'representativeDni' => 'nullable|string',
             'representativeNames' => 'nullable|string',
             'country_id' => 'required|integer',
@@ -109,16 +116,66 @@ class SupplierController extends Controller
     public function show(string $id)
     {
         $supplier = Person::with('country')->find($id);
-
+        if (!$supplier) {
+            return response()->json(['error' => 'Supplier not found'], 404);
+        }
+        return response()->json($supplier);
     }
 
     public function update(Request $request, string $id)
     {
-        //
+        $supplier = Person::find($id);
+
+        if (!$supplier) {
+            return response()->json(['error' => 'Supplier not found'], 404);
+        }
+
+        $validator = validator()->make($request->all(), [
+            'ruc' => [
+                'required',
+                'string',
+                'max:11',
+                Rule::unique('people')->where('type', 'supplier')
+                    ->ignore($supplier->id, 'id')->whereNull('deleted_at')
+            ],
+            'businessName' => 'required|string',
+            'email' => 'nullable|email',
+            'phone' => 'nullable|int',
+            'representativeDni' => 'nullable|string',
+            'representativeNames' => 'nullable|string',
+            'country_id' => 'required|integer',
+        ]);
+
+        if ($validator->fails()) {
+            return response()->json(['error' => $validator->errors()->first()], 422);
+        }
+
+        $data = [
+            'ruc' => $request->input('ruc'),
+            'businessName' => $request->input('businessName'),
+            'email' => $request->input('email'),
+            'phone' => $request->input('phone'),
+            'representativeDni' => $request->input('representativeDni'),
+            'representativeNames' => $request->input('representativeNames'),
+            'country_id' => $request->input('country_id')
+        ];
+
+        $supplier->update($data);
+        $supplier = Person::with('country')->find($id);
+
+        return response()->json($supplier);
     }
 
     public function destroy(string $id)
     {
-        //
+        $supplier = Person::find($id);
+
+        if (!$supplier) {
+            return response()->json(['error' => 'Supplier not found'], 404);
+        }
+
+        $supplier->delete();
+
+        return response()->json(['message' => 'Supplier deleted successfully']);
     }
 }
