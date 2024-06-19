@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Resources\SupplierResource;
 use App\Models\Person;
 use Illuminate\Http\Request;
 
@@ -32,7 +33,8 @@ class SupplierController extends Controller
      */
     public function index()
     {
-        return response()->json(Person::with('country')->where('type', 'supplier')->get());
+        $suppliers = Person::with('country')->where('type', 'supplier')->get();
+        return response()->json(SupplierResource::collection($suppliers));
     }
 
     /**
@@ -72,12 +74,10 @@ class SupplierController extends Controller
     public function store(Request $request)
     {
         $validator = validator()->make($request->all(), [
-            'type' => 'required|string|in:supplier,client',
-            'ruc' => 'required|string|length:11',
+            'ruc' => 'required|string|max:11',
             'businessName' => 'required|string',
-            'address' => 'nullable|string',
             'email' => 'nullable|email',
-            'phone' => 'nullable|string',
+            'phone' => 'nullable|int',
             'representativeDni' => 'nullable|string',
             'representativeNames' => 'nullable|string',
             'country_id' => 'required|integer',
@@ -91,7 +91,7 @@ class SupplierController extends Controller
             'type' => 'supplier',
             'ruc' => $request->input('ruc'),
             'businessName' => $request->input('businessName'),
-            'address' => $request->input('address'),
+//            'address' => $request->input('address'),
             'email' => $request->input('email'),
             'phone' => $request->input('phone'),
             'representativeDni' => $request->input('representativeDni'),
@@ -108,7 +108,8 @@ class SupplierController extends Controller
 
     public function show(string $id)
     {
-        //
+        $supplier = Person::with('country')->find($id);
+
     }
 
     public function update(Request $request, string $id)

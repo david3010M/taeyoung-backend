@@ -13,11 +13,11 @@ return new class extends Migration {
         Schema::create('people', function (Blueprint $table) {
             $table->id();
             $table->string('type'); // client or provider
-            $table->string('ruc')->unique();
+            $table->string('ruc'); // UNIQUE THEN
             $table->string('businessName')->nullable();
-            $table->string('address')->nullable();
+//            $table->string('address')->nullable();
             $table->string('email')->nullable();
-            $table->string('phone')->nullable();
+            $table->integer('phone')->nullable();
             $table->string('representativeDni')->nullable();
             $table->string('representativeNames')->nullable();
             $table->foreignId('country_id')->nullable()->unsigned()->constrained('countries');
