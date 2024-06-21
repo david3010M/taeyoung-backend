@@ -34,8 +34,8 @@ class SupplierController extends Controller
      */
     public function index()
     {
-        $suppliers = Person::with('country')->where('type', 'supplier')->get();
-        return response()->json(SupplierResource::collection($suppliers));
+        $suppliers = Person::with('country')->where('type', 'supplier')->paginate(5);
+        return SupplierResource::collection($suppliers);
     }
 
     /**
