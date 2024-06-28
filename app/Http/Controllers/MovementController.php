@@ -5,7 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Movment;
 use Illuminate\Http\Request;
 
-class MovmentController extends Controller
+class MovementController extends Controller
 {
     public function index()
     {

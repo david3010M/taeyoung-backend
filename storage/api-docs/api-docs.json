@@ -195,6 +195,68 @@
                 ]
             }
         },
+        "/taeyoung-backend/public/api/client": {
+            "get": {
+                "tags": [
+                    "Client"
+                ],
+                "summary": "Show all clients",
+                "description": "SHOW ALL CLIENTS",
+                "operationId": "3d63222732fa8b7df8ba346c91d5b94b",
+                "responses": {
+                    "200": {
+                        "description": "Show all clients",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "array",
+                                    "items": {
+                                        "$ref": "#/components/schemas/ClientPagination"
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "Validation error",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "error": {
+                                            "type": "string",
+                                            "example": "The pagination must be an integer."
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthenticated",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "msg": {
+                                            "type": "string",
+                                            "example": "Unauthenticated"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
         "/taeyoung-backend/public/api/country": {
             "get": {
                 "tags": [
@@ -224,13 +286,245 @@
                 ]
             }
         },
-        "/tecnimotors-backend/public/api/supplier": {
+        "/taeyoung-backend/public/api/spareparts": {
+            "get": {
+                "tags": [
+                    "Spare Parts"
+                ],
+                "summary": "List all spare parts",
+                "operationId": "e559b1302cf3b1bf543bd0da24fde40d",
+                "parameters": [
+                    {
+                        "name": "pagination",
+                        "in": "query",
+                        "description": "Number of items to display per page",
+                        "required": false,
+                        "schema": {
+                            "type": "integer",
+                            "minimum": 5
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "List of spare parts",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/SparePartPagination"
+                                }
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "Validation error",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ValidationError"
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthenticated",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/Unauthenticated"
+                                }
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            },
+            "post": {
+                "tags": [
+                    "Spare Parts"
+                ],
+                "summary": "Create a spare part",
+                "operationId": "aa39145506167ad5733b52d8be3f706a",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/SparePartRequest"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Spare part created",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/SparePartResource"
+                                }
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "Validation error",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ValidationError"
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthenticated",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/Unauthenticated"
+                                }
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
+        "/taeyoung-backend/public/api/spareparts/{id}": {
+            "get": {
+                "tags": [
+                    "Spare Parts"
+                ],
+                "summary": "Show a spare part",
+                "operationId": "2d7ef941c184cbdf1a547b9368eabe0b",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "Spare part ID",
+                        "required": true,
+                        "schema": {
+                            "type": "integer",
+                            "minimum": 1
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Spare part detail",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/SparePartResource"
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Spare part not found",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Spare part not found"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthenticated",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/Unauthenticated"
+                                }
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
+        "/taeyoung-backend/public/api/supplier": {
             "get": {
                 "tags": [
                     "Supplier"
                 ],
                 "summary": "Show all suppliers",
-                "operationId": "a441a661c2edc710e36cf7f683d5b6c3",
+                "operationId": "846d032d37ae8fae626d404be694761e",
+                "parameters": [
+                    {
+                        "name": "pagination",
+                        "in": "query",
+                        "description": "Number of items to display per page",
+                        "required": false,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    },
+                    {
+                        "name": "ruc",
+                        "in": "query",
+                        "description": "Supplier RUC",
+                        "required": false,
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "businessName",
+                        "in": "query",
+                        "description": "Supplier business name",
+                        "required": false,
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "email",
+                        "in": "query",
+                        "description": "Supplier email",
+                        "required": false,
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "phone",
+                        "in": "query",
+                        "description": "Supplier phone",
+                        "required": false,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    },
+                    {
+                        "name": "countryId",
+                        "in": "query",
+                        "description": "Supplier country ID",
+                        "required": false,
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
                 "responses": {
                     "200": {
                         "description": "Show all suppliers",
@@ -239,7 +533,7 @@
                                 "schema": {
                                     "type": "array",
                                     "items": {
-                                        "$ref": "#/components/schemas/Supplier"
+                                        "$ref": "#/components/schemas/SupplierPagination"
                                     }
                                 }
                             }
@@ -273,51 +567,13 @@
                     "Supplier"
                 ],
                 "summary": "Create a new supplier",
-                "operationId": "b52ec72b1bfd83099673918c9abddb0e",
+                "operationId": "656d3da27b32060216b9a7c225aa251e",
                 "requestBody": {
                     "required": true,
                     "content": {
                         "application/json": {
                             "schema": {
-                                "properties": {
-                                    "type": {
-                                        "type": "string",
-                                        "example": "JURIDICA"
-                                    },
-                                    "ruc": {
-                                        "type": "string",
-                                        "example": "20547869541"
-                                    },
-                                    "businessName": {
-                                        "type": "string",
-                                        "example": "Distribuidora de Productos S.A."
-                                    },
-                                    "address": {
-                                        "type": "string",
-                                        "example": "Jr. Los Pinos 123"
-                                    },
-                                    "email": {
-                                        "type": "string",
-                                        "example": "supplier@gmail.com"
-                                    },
-                                    "phone": {
-                                        "type": "string",
-                                        "example": "987654321"
-                                    },
-                                    "representativeDni": {
-                                        "type": "string",
-                                        "example": "12345678"
-                                    },
-                                    "representativeNames": {
-                                        "type": "string",
-                                        "example": "Juan Perez"
-                                    },
-                                    "country_id": {
-                                        "type": "integer",
-                                        "example": "1"
-                                    }
-                                },
-                                "type": "object"
+                                "$ref": "#/components/schemas/SupplierRequest"
                             }
                         }
                     }
@@ -342,6 +598,257 @@
                                         "error": {
                                             "type": "string",
                                             "example": "The given data was invalid."
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthenticated",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "error": {
+                                            "type": "string",
+                                            "example": "Unauthenticated"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
+        "/taeyoung-backend/public/api/supplier/{id}": {
+            "get": {
+                "tags": [
+                    "Supplier"
+                ],
+                "summary": "Show a supplier",
+                "operationId": "4328f13d0f645fdce27d2592dd90778f",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "Supplier ID",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Show a supplier",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/Supplier"
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Supplier not found",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Supplier not found"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthenticated",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "error": {
+                                            "type": "string",
+                                            "example": "Unauthenticated"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            },
+            "put": {
+                "tags": [
+                    "Supplier"
+                ],
+                "summary": "Update a supplier",
+                "operationId": "df4f2e2623801b50ca898b1da220811b",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "Supplier ID",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/SupplierRequest"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Supplier updated successfully",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/Supplier"
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Supplier not found",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Supplier not found"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "Validation error",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "error": {
+                                            "type": "string",
+                                            "example": "The given data was invalid."
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthenticated",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "error": {
+                                            "type": "string",
+                                            "example": "Unauthenticated"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            },
+            "delete": {
+                "tags": [
+                    "Supplier"
+                ],
+                "summary": "Delete a supplier",
+                "operationId": "bd30b086410cccf0d0d7ef986ca5c2c2",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "Supplier ID",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Supplier deleted successfully",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Supplier deleted successfully"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Supplier not found",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Supplier not found"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthenticated",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "error": {
+                                            "type": "string",
+                                            "example": "Unauthenticated"
                                         }
                                     },
                                     "type": "object"
@@ -374,17 +881,200 @@
     },
     "components": {
         "schemas": {
-            "Country": {
-                "title": "Country",
-                "description": "Country model",
+            "PaginationLinks": {
+                "properties": {
+                    "first": {
+                        "type": "string",
+                        "example": "https://develop.garzasoft.com/taeyoung-backend/public/api/client?page=1"
+                    },
+                    "last": {
+                        "type": "string",
+                        "example": "https://develop.garzasoft.com/taeyoung-backend/public/api/supplier?page=4"
+                    },
+                    "prev": {
+                        "type": "string",
+                        "example": "null"
+                    },
+                    "next": {
+                        "type": "string",
+                        "example": "https://develop.garzasoft.com/taeyoung-backend/public/api/supplier?page=2"
+                    }
+                },
+                "type": "object"
+            },
+            "PaginationMetaLinks": {
+                "properties": {
+                    "url": {
+                        "type": "string",
+                        "example": "https://develop.garzasoft.com/taeyoung-backend/public/api/supplier?page=1"
+                    },
+                    "label": {
+                        "type": "string",
+                        "example": "1"
+                    },
+                    "active": {
+                        "type": "boolean",
+                        "example": "true"
+                    }
+                },
+                "type": "object"
+            },
+            "PaginationMeta": {
+                "properties": {
+                    "current_page": {
+                        "type": "integer",
+                        "example": "1"
+                    },
+                    "from": {
+                        "type": "integer",
+                        "example": "1"
+                    },
+                    "last_page": {
+                        "type": "integer",
+                        "example": "4"
+                    },
+                    "links": {
+                        "$ref": "#/components/schemas/PaginationMetaLinks"
+                    },
+                    "path": {
+                        "type": "string",
+                        "example": "https://develop.garzasoft.com/taeyoung-backend/public/api/supplier"
+                    },
+                    "per_page": {
+                        "type": "integer",
+                        "example": "15"
+                    },
+                    "to": {
+                        "type": "integer",
+                        "example": "15"
+                    },
+                    "total": {
+                        "type": "integer",
+                        "example": "60"
+                    }
+                },
+                "type": "object"
+            },
+            "ValidationError": {
+                "properties": {
+                    "error": {
+                        "type": "string",
+                        "example": "The pagination must be an integer."
+                    }
+                },
+                "type": "object"
+            },
+            "Unauthenticated": {
+                "properties": {
+                    "error": {
+                        "type": "string",
+                        "example": "Unauthenticated."
+                    }
+                },
+                "type": "object"
+            },
+            "Client": {
+                "required": [
+                    "id",
+                    "ruc",
+                    "businessName",
+                    "email",
+                    "phone",
+                    "country"
+                ],
                 "properties": {
                     "id": {
                         "type": "integer",
                         "example": "1"
                     },
-                    "name": {
+                    "ruc": {
+                        "type": "string",
+                        "example": "12345678901"
+                    },
+                    "businessName": {
+                        "type": "string",
+                        "example": "Business Name"
+                    },
+                    "email": {
+                        "type": "string",
+                        "example": "mail@gmail.com"
+                    },
+                    "phone": {
+                        "type": "integer",
+                        "example": "123456789"
+                    },
+                    "country": {
                         "type": "string",
                         "example": "Peru"
+                    }
+                },
+                "type": "object"
+            },
+            "ClientPagination": {
+                "properties": {
+                    "data": {
+                        "type": "array",
+                        "items": {
+                            "$ref": "#/components/schemas/Client"
+                        }
+                    },
+                    "links": {
+                        "$ref": "#/components/schemas/PaginationLinks"
+                    },
+                    "meta": {
+                        "$ref": "#/components/schemas/PaginationMeta"
+                    }
+                },
+                "type": "object"
+            },
+            "SparePartResource": {
+                "title": "SparePartResource",
+                "properties": {
+                    "id": {
+                        "type": "integer",
+                        "example": "1"
+                    },
+                    "code": {
+                        "type": "string",
+                        "example": "123456"
+                    },
+                    "name": {
+                        "type": "string",
+                        "example": "Spare Part"
+                    },
+                    "purchasePrice": {
+                        "type": "number",
+                        "example": "100.00"
+                    },
+                    "salePrice": {
+                        "type": "number",
+                        "example": "150.00"
+                    },
+                    "stock": {
+                        "type": "integer",
+                        "example": "10"
+                    },
+                    "image": {
+                        "type": "string",
+                        "example": "http://example.com/image.jpg"
+                    }
+                },
+                "type": "object"
+            },
+            "SparePartPagination": {
+                "title": "SparePartPagination",
+                "properties": {
+                    "data": {
+                        "type": "array",
+                        "items": {
+                            "$ref": "#/components/schemas/SparePartResource"
+                        }
+                    },
+                    "links": {
+                        "$ref": "#/components/schemas/PaginationLinks"
+                    },
+                    "meta": {
+                        "$ref": "#/components/schemas/PaginationMeta"
                     }
                 },
                 "type": "object"
@@ -399,7 +1089,7 @@
                     },
                     "type": {
                         "type": "string",
-                        "example": "JURIDICA"
+                        "example": "supplier"
                     },
                     "ruc": {
                         "type": "string",
@@ -408,10 +1098,6 @@
                     "businessName": {
                         "type": "string",
                         "example": "Distribuidora de Productos S.A."
-                    },
-                    "address": {
-                        "type": "string",
-                        "example": "Jr. Los Pinos 123"
                     },
                     "email": {
                         "type": "string",
@@ -435,6 +1121,148 @@
                     },
                     "country": {
                         "$ref": "#/components/schemas/Country"
+                    }
+                },
+                "type": "object"
+            },
+            "SupplierResource": {
+                "required": [
+                    "id",
+                    "ruc",
+                    "businessName",
+                    "email",
+                    "phone",
+                    "country"
+                ],
+                "properties": {
+                    "id": {
+                        "type": "integer",
+                        "example": "1"
+                    },
+                    "ruc": {
+                        "type": "string",
+                        "example": "12345678901"
+                    },
+                    "businessName": {
+                        "type": "string",
+                        "example": "Business Name"
+                    },
+                    "email": {
+                        "type": "string",
+                        "example": "mail@gmail.com"
+                    },
+                    "phone": {
+                        "type": "integer",
+                        "example": "123456789"
+                    },
+                    "country": {
+                        "type": "string",
+                        "example": "Peru"
+                    }
+                },
+                "type": "object"
+            },
+            "SupplierPagination": {
+                "properties": {
+                    "data": {
+                        "type": "array",
+                        "items": {
+                            "$ref": "#/components/schemas/SupplierResource"
+                        }
+                    },
+                    "links": {
+                        "$ref": "#/components/schemas/PaginationLinks"
+                    },
+                    "meta": {
+                        "$ref": "#/components/schemas/PaginationMeta"
+                    }
+                },
+                "type": "object"
+            },
+            "SupplierRequest": {
+                "title": "SupplierRequest",
+                "description": "Supplier request",
+                "required": [
+                    "ruc",
+                    "businessName",
+                    "country_id"
+                ],
+                "properties": {
+                    "ruc": {
+                        "type": "string",
+                        "example": "20547869541"
+                    },
+                    "businessName": {
+                        "type": "string",
+                        "example": "Distribuidora de Productos S.A."
+                    },
+                    "email": {
+                        "type": "string",
+                        "example": "supplier@gmail.com"
+                    },
+                    "phone": {
+                        "type": "string",
+                        "example": "987654321"
+                    },
+                    "representativeDni": {
+                        "type": "string",
+                        "example": "12345678"
+                    },
+                    "representativeNames": {
+                        "type": "string",
+                        "example": "Juan Perez"
+                    },
+                    "country_id": {
+                        "type": "integer",
+                        "example": "1"
+                    }
+                },
+                "type": "object"
+            },
+            "Country": {
+                "title": "Country",
+                "description": "Country model",
+                "properties": {
+                    "id": {
+                        "type": "integer",
+                        "example": "1"
+                    },
+                    "name": {
+                        "type": "string",
+                        "example": "Peru"
+                    }
+                },
+                "type": "object"
+            },
+            "SparePartRequest": {
+                "title": "SparePartRequest",
+                "required": [
+                    "code",
+                    "name",
+                    "purchasePrice",
+                    "salePrice",
+                    "stock"
+                ],
+                "properties": {
+                    "code": {
+                        "type": "string",
+                        "example": "123456"
+                    },
+                    "name": {
+                        "type": "string",
+                        "example": "Spare Part"
+                    },
+                    "purchasePrice": {
+                        "type": "number",
+                        "example": "100.00"
+                    },
+                    "salePrice": {
+                        "type": "number",
+                        "example": "150.00"
+                    },
+                    "stock": {
+                        "type": "integer",
+                        "example": "10"
                     }
                 },
                 "type": "object"

@@ -2,10 +2,13 @@
 
 use App\Http\Controllers\AccessController;
 use App\Http\Controllers\Auth\AuthController;
+use App\Http\Controllers\ClientController;
 use App\Http\Controllers\CountryController;
 use App\Http\Controllers\GroupMenuController;
+use App\Http\Controllers\MachineryPurchaseController;
 use App\Http\Controllers\OptionMenuController;
 use App\Http\Controllers\PersonController;
+use App\Http\Controllers\SparePartController;
 use App\Http\Controllers\SupplierController;
 use App\Http\Controllers\TypeUserController;
 use App\Http\Controllers\UserController;
@@ -120,6 +123,45 @@ Route::group(
                 'show' => 'supplier.show',
                 'update' => 'supplier.update',
                 'destroy' => 'supplier.destroy',
+            ]
+        );
+
+//        CLIENT
+        Route::resource('client', ClientController::class)->only(
+            ['index', 'show', 'store', 'update', 'destroy']
+        )->names(
+            [
+                'index' => 'client.index',
+                'store' => 'client.store',
+                'show' => 'client.show',
+                'update' => 'client.update',
+                'destroy' => 'client.destroy',
+            ]
+        );
+
+//        SPARE PART
+        Route::resource('sparepart', SparePartController::class)->only(
+            ['index', 'show', 'store', 'update', 'destroy']
+        )->names(
+            [
+                'index' => 'sparepart.index',
+                'store' => 'sparepart.store',
+                'show' => 'sparepart.show',
+                'update' => 'sparepart.update',
+                'destroy' => 'sparepart.destroy',
+            ]
+        );
+
+//        MACHINERY PURCHASE
+        Route::resource('machinerypurchase', MachineryPurchaseController::class)->only(
+            ['index', 'show', 'store', 'update', 'destroy']
+        )->names(
+            [
+                'index' => 'machinerypurchase.index',
+                'store' => 'machinerypurchase.store',
+                'show' => 'machinerypurchase.show',
+                'update' => 'machinerypurchase.update',
+                'destroy' => 'machinerypurchase.destroy',
             ]
         );
 

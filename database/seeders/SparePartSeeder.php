@@ -2,19 +2,17 @@
 
 namespace Database\Seeders;
 
-use App\Models\Person;
+use App\Models\SparePart;
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 
-class SupplierSeeder extends Seeder
+class SparePartSeeder extends Seeder
 {
     /**
      * Run the database seeds.
      */
     public function run(): void
     {
-        Person::factory()->count(20)->create([
-            'type' => 'supplier',
-        ]);
+        SparePart::factory()->count(50)->create();
     }
 }

@@ -2,19 +2,22 @@
 
 namespace Database\Seeders;
 
-use App\Models\Person;
+use App\Models\File;
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 
-class SupplierSeeder extends Seeder
+class FileSeeder extends Seeder
 {
     /**
      * Run the database seeds.
      */
     public function run(): void
     {
-        Person::factory()->count(20)->create([
-            'type' => 'supplier',
-        ]);
+        foreach (range(1, 50) as $id) {
+            File::factory()->create([
+                'spare_part_id' => $id,
+            ]);
+        }
+
     }
 }

@@ -19,6 +19,9 @@ class DatabaseSeeder extends Seeder
         $this->call(AccessSeeder::class);
         $this->call(UserSeeder::class);
         $this->call(SupplierSeeder::class);
+        $this->call(ClientSeeder::class);
+        $this->call(SparePartSeeder::class);
+//        $this->call(FileSeeder::class);
 
     }
 }
