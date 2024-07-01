@@ -16,6 +16,7 @@ class Order extends Model
         'date',
         'number',
         'documentType',
+        'quantity',
         'detail',
         'totalIncome',
         'totalExpense',
@@ -24,6 +25,13 @@ class Order extends Model
         'comment',
         'supplier_id',
     ];
+
+    protected $hidden = [
+        'created_at',
+        'updated_at',
+        'deleted_at',
+    ];
+
 
     public function supplier()
     {

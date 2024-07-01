@@ -13,14 +13,15 @@ return new class extends Migration {
         Schema::create('orders', function (Blueprint $table) {
             $table->id();
             $table->string('type'); // machineryPurchase, machinerySale, sparePartPurchase, sparePartSale
-            $table->dateTime('date');
+            $table->date('date');
             $table->string('number');
-            $table->string('documentType'); // BOLETA, FACTURA, TICKET
+            $table->string('documentType')->nullable(); // BOLETA, FACTURA, TICKET
+            $table->integer('quantity');
             $table->string('detail'); // TEXT LIBRE
-            $table->decimal('totalIncome');
-            $table->decimal('totalExpense');
+            $table->decimal('totalIncome')->default(0);
+            $table->decimal('totalExpense')->default(0);
             $table->string('currency');
-            $table->string('typePayment'); // PAGO A SUNAT
+            $table->string('typePayment')->nullable(); // PAGO A SUNAT
             $table->string('comment')->nullable();
             $table->foreignId('supplier_id')->nullable()->unsigned()->constrained('people');
 //            COTIZATION
