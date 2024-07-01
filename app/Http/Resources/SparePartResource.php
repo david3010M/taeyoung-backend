@@ -36,12 +36,14 @@ class SparePartResource extends JsonResource
      */
     public function toArray(Request $request): array
     {
+        $formatPrice = fn($value) => 'S/ ' . number_format($value, 2);
+
         return [
             'id' => $this->id,
             'code' => $this->code,
             'name' => $this->name,
-            'purchasePrice' => $this->purchasePrice,
-            'salePrice' => $this->salePrice,
+            'purchasePrice' => $formatPrice($this->purchasePrice),
+            'salePrice' => $formatPrice($this->salePrice),
             'stock' => $this->stock
         ];
     }
