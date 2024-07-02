@@ -16,7 +16,7 @@ class UserSeeder extends Seeder
     {
         $array = [
             ['names' => 'Admin', 'lastnames' => 'Taeyoung', 'username' => 'admin', 'password' => Hash::make('adminTaeyoung'), 'typeuser_id' => 1],
-            ['names' => 'User', 'lastnames' => 'Taeyoung', 'username' => 'user', 'password' => Hash::make('userTaeyoung'), 'typeuser_id' => 1]
+            ['names' => 'User', 'lastnames' => 'Taeyoung', 'username' => 'user', 'password' => Hash::make('userTaeyoung'), 'typeuser_id' => 2]
         ];
 
         foreach ($array as $value) {

@@ -9,7 +9,7 @@ class GroupMenuController extends Controller
 {
     public function index()
     {
-        return GroupMenu::all();
+        return GroupMenu::with('optionMenus')->get();
     }
 
     public function store(Request $request)

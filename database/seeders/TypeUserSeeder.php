@@ -16,7 +16,6 @@ class TypeUserSeeder extends Seeder
         $array = [
             ['name' => 'Administrador'],
             ['name' => 'Vendedor'],
-            ['name' => 'Cliente'],
         ];
 
         foreach ($array as $item) {

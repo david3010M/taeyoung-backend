@@ -44,12 +44,14 @@
                                             "type": "string",
                                             "example": "11|SphTzJDxcMxPjpTA3GAMnGMepQKaWMpC05NKn10a1d2879de"
                                         },
-                                        "expires_at": {
-                                            "type": "string",
-                                            "example": "2021-05-19 04:44:04"
-                                        },
                                         "user": {
                                             "$ref": "#/components/schemas/User"
+                                        },
+                                        "group_menus": {
+                                            "type": "array",
+                                            "items": {
+                                                "$ref": "#/components/schemas/GroupMenu"
+                                            }
                                         }
                                     },
                                     "type": "object"
@@ -110,12 +112,14 @@
                                             "type": "string",
                                             "example": "11|SphTzJDxcMxPjpTA3GAMnGMepQKaWMpC05NKn10a1d2879de"
                                         },
-                                        "expires_at": {
-                                            "type": "string",
-                                            "example": "2021-05-19 04:44:04"
-                                        },
                                         "user": {
                                             "$ref": "#/components/schemas/User"
+                                        },
+                                        "group_menus": {
+                                            "type": "array",
+                                            "items": {
+                                                "$ref": "#/components/schemas/GroupMenu"
+                                            }
                                         }
                                     },
                                     "type": "object"
@@ -1724,6 +1728,76 @@
                     "name": {
                         "type": "string",
                         "example": "Peru"
+                    }
+                },
+                "type": "object"
+            },
+            "GroupMenu": {
+                "title": "GroupMenu",
+                "required": [
+                    "id",
+                    "name",
+                    "icon"
+                ],
+                "properties": {
+                    "id": {
+                        "type": "number",
+                        "example": "1"
+                    },
+                    "name": {
+                        "type": "string",
+                        "example": "Admin"
+                    },
+                    "icon": {
+                        "type": "string",
+                        "example": "fas fa-user"
+                    },
+                    "order": {
+                        "type": "number",
+                        "example": "1"
+                    },
+                    "option_menus": {
+                        "type": "array",
+                        "items": {
+                            "$ref": "#/components/schemas/OptionMenu"
+                        }
+                    }
+                },
+                "type": "object"
+            },
+            "OptionMenu": {
+                "title": "OptionMenu",
+                "required": [
+                    "id",
+                    "name",
+                    "route",
+                    "icon",
+                    "groupmenu_id"
+                ],
+                "properties": {
+                    "id": {
+                        "type": "number",
+                        "example": "1"
+                    },
+                    "name": {
+                        "type": "string",
+                        "example": "Principal"
+                    },
+                    "route": {
+                        "type": "string",
+                        "example": "principal"
+                    },
+                    "order": {
+                        "type": "number",
+                        "example": "1"
+                    },
+                    "icon": {
+                        "type": "string",
+                        "example": "fas fa-user"
+                    },
+                    "groupmenu_id": {
+                        "type": "string",
+                        "example": "1"
                     }
                 },
                 "type": "object"

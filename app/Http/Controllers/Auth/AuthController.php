@@ -3,7 +3,9 @@
 namespace App\Http\Controllers\Auth;
 
 use App\Http\Controllers\Controller;
+use App\Models\GroupMenu;
 use App\Models\Optionmenu;
+use App\Models\User;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -28,8 +30,8 @@ class AuthController extends Controller
      *         description="User authenticated",
      *         @OA\JsonContent(
      *            @OA\Property( property="access_token", type="string", example="11|SphTzJDxcMxPjpTA3GAMnGMepQKaWMpC05NKn10a1d2879de" ),
-     *            @OA\Property( property="expires_at", type="string", example="2021-05-19 04:44:04" ),
-     *            @OA\Property( property="user", ref="#/components/schemas/User" )
+     *            @OA\Property( property="user", ref="#/components/schemas/User" ),
+     *            @OA\Property( property="group_menus", type="array", @OA\Items( type="object", ref="#/components/schemas/GroupMenu" ) ),
      *        )
      *      ),
      *      @OA\Response(
@@ -66,20 +68,13 @@ class AuthController extends Controller
 
             $token = $user->createToken('AuthToken', expiresAt: now()->addDays(7));
 
-            $typeuser = $user->typeuser;
-
-//            $typeuserAccess = $typeuser->getAccess($typeuser->id);
-
-//            PERMISSIONS IN A STRING FORMAT
-//            $typeuserHasPermission = $typeuser->getHasPermission($typeuser->id);
+            $groupMenu = GroupMenu::getFilteredGroupMenus($user->typeuser->id);
 
             return response()->json([
                 'access_token' => $token->plainTextToken,
-                'expires_at' => Carbon::parse($token->accessToken->expires_at)->toDateTimeString(),
+//                'expires_at' => Carbon::parse($token->accessToken->expires_at)->toDateTimeString(),
                 'user' => $user,
-//                'typeuser' => $typeuser,
-//                'optionMenuAccess' => $typeuserAccess,
-//                'permissions' => $typeuserHasPermission
+                'group_menus' => $groupMenu,
 
             ]);
         } else {
@@ -98,8 +93,8 @@ class AuthController extends Controller
      *     description="User authenticated",
      *     @OA\JsonContent(
      *         @OA\Property( property="access_token", type="string", example="11|SphTzJDxcMxPjpTA3GAMnGMepQKaWMpC05NKn10a1d2879de" ),
-     *         @OA\Property( property="expires_at", type="string", example="2021-05-19 04:44:04" ),
-     *         @OA\Property( property="user", ref="#/components/schemas/User" )
+     *         @OA\Property( property="user", ref="#/components/schemas/User" ),
+     *         @OA\Property( property="group_menus", type="array", @OA\Items( type="object", ref="#/components/schemas/GroupMenu" ) ),
      *     )
      *    ),
      *     @OA\Response(
@@ -119,15 +114,19 @@ class AuthController extends Controller
     public function authenticate(Request $request)
     {
         $user = auth('sanctum')->user();
-        $token = $request->bearerToken();
 
         if ($user) {
-            $typeuser = $user->typeuser;
+            $user = User::find($user->id);
+
+            $user->tokens()->delete();
+
+            $token = $user->createToken('AuthToken', ['expires_at' => now()->addDays(7)])->plainTextToken;
+            $groupMenu = GroupMenu::getFilteredGroupMenus($user->typeuser->id);
 
             return response()->json([
                 'access_token' => $token,
-                'expires_at' => Carbon::parse($user->currentAccessToken()->expires_at)->toDateTimeString(),
                 'user' => $user,
+                'group_menus' => $groupMenu,
             ]);
         } else {
             return response()->json(['message' => 'User not authenticated'], 401);

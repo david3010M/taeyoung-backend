@@ -196,8 +196,8 @@ class SparePartController extends Controller
         $data = [
             'code' => $request->input('code'),
             'name' => $request->input('name'),
-            'purchase_price' => $request->input('purchasePrice'),
-            'sale_price' => $request->input('salePrice'),
+            'purchasePrice' => $request->input('purchasePrice'),
+            'salePrice' => $request->input('salePrice'),
             'stock' => $request->input('stock'),
         ];
 

@@ -14,8 +14,8 @@ class GroupMenuSeeder extends Seeder
     public function run(): void
     {
         $array = [
-            ['name' => 'Administración', 'icon' => 'fas fa-cogs', 'order' => 1],
-            ['name' => 'Ventas', 'icon' => 'fas fa-shopping-cart', 'order' => 2],
+            ['name' => 'Ventas', 'icon' => 'fas fa-cogs', 'order' => 1],
+            ['name' => 'Compras', 'icon' => 'fas fa-shopping-cart', 'order' => 2],
             ['name' => 'Inventario', 'icon' => 'fas fa-boxes', 'order' => 3],
             ['name' => 'Reportes', 'icon' => 'fas fa-chart-line', 'order' => 4],
             ['name' => 'Configuración', 'icon' => 'fas fa-cog', 'order' => 5]

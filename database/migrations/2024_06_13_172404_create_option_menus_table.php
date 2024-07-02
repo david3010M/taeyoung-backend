@@ -14,7 +14,7 @@ return new class extends Migration {
             $table->id();
             $table->string('name')->unique();
             $table->string('route')->unique();
-            $table->integer('order')->unique();
+            $table->integer('order');
             $table->string('icon');
             $table->foreignId('groupmenu_id')->constrained('group_menus');
             $table->timestamps();
