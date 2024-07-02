@@ -286,6 +286,403 @@
                 ]
             }
         },
+        "/taeyoung-backend/public/api/machinerypurchase": {
+            "get": {
+                "tags": [
+                    "Machinery Purchase"
+                ],
+                "summary": "Get all machinery purchases",
+                "description": "Returns all machinery purchases",
+                "operationId": "cb4ca1a3471ab267d972370585e87d25",
+                "parameters": [
+                    {
+                        "name": "per_page",
+                        "in": "query",
+                        "description": "Number of items per page",
+                        "required": false,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    },
+                    {
+                        "name": "businessName",
+                        "in": "query",
+                        "description": "Supplier business name",
+                        "required": false,
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "country_id",
+                        "in": "query",
+                        "description": "Supplier country id",
+                        "required": false,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    },
+                    {
+                        "name": "number",
+                        "in": "query",
+                        "description": "Order number",
+                        "required": false,
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "date",
+                        "in": "query",
+                        "description": "Order date",
+                        "required": false,
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Machinery purchases retrieved",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/MachineryPurchaseResourceCollection"
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthenticated",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/Unauthenticated"
+                                }
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "Validation error",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ValidationError"
+                                }
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            },
+            "post": {
+                "tags": [
+                    "Machinery Purchase"
+                ],
+                "summary": "Create a new machinery purchase",
+                "description": "Create a new machinery purchase",
+                "operationId": "636c477da37079e38d46db0e6194da35",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "required": [
+                                    "number",
+                                    "date",
+                                    "quantity",
+                                    "features",
+                                    "total",
+                                    "supplier_id"
+                                ],
+                                "properties": {
+                                    "number": {
+                                        "type": "string",
+                                        "example": "123456"
+                                    },
+                                    "date": {
+                                        "type": "string",
+                                        "example": "2021-09-01"
+                                    },
+                                    "quantity": {
+                                        "type": "integer",
+                                        "example": "1"
+                                    },
+                                    "features": {
+                                        "type": "string",
+                                        "example": "Features"
+                                    },
+                                    "total": {
+                                        "type": "number",
+                                        "example": "1000.00"
+                                    },
+                                    "supplier_id": {
+                                        "type": "integer",
+                                        "example": "1"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Machinery purchase created",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/MachineryPurchaseResource"
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthenticated",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/Unauthenticated"
+                                }
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "Validation error",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ValidationError"
+                                }
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
+        "/taeyoung-backend/public/api/machinerypurchase/{id}": {
+            "get": {
+                "tags": [
+                    "Machinery Purchase"
+                ],
+                "summary": "Get machinery purchase",
+                "description": "Returns the machinery purchase identified by the given id",
+                "operationId": "2c0ad7454c3714fc69b88869088dd29e",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "Machinery purchase id",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Machinery purchase retrieved",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/MachineryPurchaseResource"
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthenticated",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/Unauthenticated"
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Machinery purchase not found",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "error": {
+                                            "type": "string",
+                                            "example": "Machinery Purchase not found"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            },
+            "put": {
+                "tags": [
+                    "Machinery Purchase"
+                ],
+                "summary": "Update machinery purchase",
+                "description": "Update machinery purchase",
+                "operationId": "1da603bc864af778a6076196975bb227",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "Machinery purchase id",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/MachineryPurchaseRequest"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Machinery purchase updated",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/MachineryPurchaseResource"
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthenticated",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/Unauthenticated"
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Machinery purchase not found",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "error": {
+                                            "type": "string",
+                                            "example": "Machinery Purchase not found"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "Validation error",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ValidationError"
+                                }
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            },
+            "delete": {
+                "tags": [
+                    "Machinery Purchase"
+                ],
+                "summary": "Delete machinery purchase",
+                "description": "Delete machinery purchase",
+                "operationId": "b54af1ca12b7179e9db5f208b86cd61d",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "Machinery purchase id",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Machinery purchase deleted",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Machinery Purchase deleted"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthenticated",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/Unauthenticated"
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Machinery purchase not found",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "error": {
+                                            "type": "string",
+                                            "example": "Machinery Purchase not found"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
         "/taeyoung-backend/public/api/spareparts": {
             "get": {
                 "tags": [
@@ -885,11 +1282,11 @@
                 "properties": {
                     "first": {
                         "type": "string",
-                        "example": "https://develop.garzasoft.com/taeyoung-backend/public/api/client?page=1"
+                        "example": "https://develop.garzasoft.com/taeyoung-backend/public/api/path?page=1"
                     },
                     "last": {
                         "type": "string",
-                        "example": "https://develop.garzasoft.com/taeyoung-backend/public/api/supplier?page=4"
+                        "example": "https://develop.garzasoft.com/taeyoung-backend/public/api/path?page=4"
                     },
                     "prev": {
                         "type": "string",
@@ -897,7 +1294,7 @@
                     },
                     "next": {
                         "type": "string",
-                        "example": "https://develop.garzasoft.com/taeyoung-backend/public/api/supplier?page=2"
+                        "example": "https://develop.garzasoft.com/taeyoung-backend/public/api/path?page=2"
                     }
                 },
                 "type": "object"
@@ -906,7 +1303,7 @@
                 "properties": {
                     "url": {
                         "type": "string",
-                        "example": "https://develop.garzasoft.com/taeyoung-backend/public/api/supplier?page=1"
+                        "example": "https://develop.garzasoft.com/taeyoung-backend/public/api/path?page=1"
                     },
                     "label": {
                         "type": "string",
@@ -938,7 +1335,7 @@
                     },
                     "path": {
                         "type": "string",
-                        "example": "https://develop.garzasoft.com/taeyoung-backend/public/api/supplier"
+                        "example": "https://develop.garzasoft.com/taeyoung-backend/public/api/path"
                     },
                     "per_page": {
                         "type": "integer",
@@ -1023,6 +1420,103 @@
                     },
                     "meta": {
                         "$ref": "#/components/schemas/PaginationMeta"
+                    }
+                },
+                "type": "object"
+            },
+            "MachineryPurchaseResource": {
+                "title": "MachineryPurchaseResource",
+                "description": "Machinery Purchase resource",
+                "properties": {
+                    "id": {
+                        "type": "integer",
+                        "example": "1"
+                    },
+                    "number": {
+                        "type": "string",
+                        "example": "123456"
+                    },
+                    "date": {
+                        "type": "string",
+                        "example": "2021-09-01"
+                    },
+                    "supplier": {
+                        "type": "string",
+                        "example": "Supplier Name"
+                    },
+                    "country": {
+                        "type": "string",
+                        "example": "Country Name"
+                    },
+                    "features": {
+                        "type": "string",
+                        "example": "Features"
+                    },
+                    "quantity": {
+                        "type": "integer",
+                        "example": "1"
+                    },
+                    "total": {
+                        "type": "number",
+                        "example": "1000.00"
+                    }
+                },
+                "type": "object"
+            },
+            "MachineryPurchaseResourceCollection": {
+                "title": "MachineryPurchaseResourceCollection",
+                "description": "Machinery Purchase resource collection",
+                "properties": {
+                    "data": {
+                        "type": "array",
+                        "items": {
+                            "$ref": "#/components/schemas/MachineryPurchaseResource"
+                        }
+                    },
+                    "links": {
+                        "$ref": "#/components/schemas/PaginationLinks"
+                    },
+                    "meta": {
+                        "$ref": "#/components/schemas/PaginationMeta"
+                    }
+                },
+                "type": "object"
+            },
+            "MachineryPurchaseRequest": {
+                "title": "MachineryPurchaseRequest",
+                "description": "Machinery Purchase request",
+                "required": [
+                    "number",
+                    "date",
+                    "quantity",
+                    "features",
+                    "total",
+                    "supplier_id"
+                ],
+                "properties": {
+                    "number": {
+                        "type": "string",
+                        "example": "COMAQ-0000099"
+                    },
+                    "date": {
+                        "type": "string",
+                        "example": "2021-09-01"
+                    },
+                    "quantity": {
+                        "type": "integer",
+                        "example": "1"
+                    },
+                    "features": {
+                        "type": "string",
+                        "example": "Features"
+                    },
+                    "total": {
+                        "type": "number",
+                        "example": "999.99"
+                    },
+                    "supplier_id": {
+                        "type": "integer",
+                        "example": "1"
                     }
                 },
                 "type": "object"

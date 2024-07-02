@@ -24,15 +24,15 @@ use Illuminate\Routing\Controller as BaseController;
  *
  * @OA\Schema (
  *     schema="PaginationLinks",
- *     @OA\Property(property="first", type="string", example="https://develop.garzasoft.com/taeyoung-backend/public/api/client?page=1"),
- *     @OA\Property(property="last", type="string", example="https://develop.garzasoft.com/taeyoung-backend/public/api/supplier?page=4"),
+ *     @OA\Property(property="first", type="string", example="https://develop.garzasoft.com/taeyoung-backend/public/api/path?page=1"),
+ *     @OA\Property(property="last", type="string", example="https://develop.garzasoft.com/taeyoung-backend/public/api/path?page=4"),
  *     @OA\Property(property="prev", type="string", example="null"),
- *     @OA\Property(property="next", type="string", example="https://develop.garzasoft.com/taeyoung-backend/public/api/supplier?page=2")
+ *     @OA\Property(property="next", type="string", example="https://develop.garzasoft.com/taeyoung-backend/public/api/path?page=2")
  * )
  *
  * @OA\Schema (
  *     schema="PaginationMetaLinks",
- *     @OA\Property(property="url", type="string", example="https://develop.garzasoft.com/taeyoung-backend/public/api/supplier?page=1"),
+ *     @OA\Property(property="url", type="string", example="https://develop.garzasoft.com/taeyoung-backend/public/api/path?page=1"),
  *     @OA\Property(property="label", type="string", example="1"),
  *     @OA\Property(property="active", type="boolean", example="true")
  * )
@@ -43,7 +43,7 @@ use Illuminate\Routing\Controller as BaseController;
  *     @OA\Property(property="from", type="integer", example="1"),
  *     @OA\Property(property="last_page", type="integer", example="4"),
  *     @OA\Property(property="links", type="object", ref="#/components/schemas/PaginationMetaLinks"),
- *     @OA\Property(property="path", type="string", example="https://develop.garzasoft.com/taeyoung-backend/public/api/supplier"),
+ *     @OA\Property(property="path", type="string", example="https://develop.garzasoft.com/taeyoung-backend/public/api/path"),
  *     @OA\Property(property="per_page", type="integer", example="15"),
  *     @OA\Property(property="to", type="integer", example="15"),
  *     @OA\Property(property="total", type="integer", example="60")
