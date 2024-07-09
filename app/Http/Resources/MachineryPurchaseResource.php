@@ -69,7 +69,7 @@ class MachineryPurchaseResource extends JsonResource
             'country' => $this->supplier->country->name,
             'features' => $this->detail,
             'quantity' => $this->quantity,
-            'total' => $this->totalExpense,
+            'total' => (float)$this->totalExpense,
         ];
 
         if (!self::$isCollection) {

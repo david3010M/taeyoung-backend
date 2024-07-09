@@ -33,8 +33,8 @@ class SparePart extends Model
     ];
 
     protected $casts = [
-        'purchasePrice' => 'decimal:2',
-        'salePrice' => 'decimal:2',
+        'purchasePrice' => 'float',
+        'salePrice' => 'float',
     ];
 
     protected $hidden = [

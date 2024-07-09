@@ -133,7 +133,7 @@ class MachineryPurchaseController extends Controller
         $machineryPurchase = Order::create($data);
         $machineryPurchase = Order::with('supplier.country')->find($machineryPurchase->id);
 
-        return response()->json($machineryPurchase);
+        return response()->json(MachineryPurchaseResource::make($machineryPurchase));
     }
 
     /**
@@ -220,7 +220,7 @@ class MachineryPurchaseController extends Controller
         $machineryPurchase->update($data);
         $machineryPurchase = Order::with('supplier.country')->find($machineryPurchase->id);
 
-        return response()->json($machineryPurchase);
+        return response()->json(MachineryPurchaseResource::make($machineryPurchase));
     }
 
     /**
