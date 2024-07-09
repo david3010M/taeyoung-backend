@@ -43,7 +43,8 @@ class ClientController extends Controller
     public function index(Request $request)
     {
         $validator = validator($request->query(), [
-            'pagination' => 'integer',
+            'pagination' => 'nullable|integer',
+            'all' => 'nullable|string|in:true,false',
         ]);
 
         if ($validator->fails()) {
@@ -51,8 +52,16 @@ class ClientController extends Controller
         }
 
         $pagination = $request->query('pagination', 5);
+        $all = $request->query('all', 'false') == 'true';
 
-        $clients = Person::with('country')->where('type', 'client')->paginate($pagination);
+        $clients = Person::with('country')->where('type', 'client');
+
+        if (!$all) {
+            $clients = $clients->paginate($pagination);
+        } else {
+            $clients = $clients->get();
+        }
+
         return SupplierResource::collection($clients);
     }
 

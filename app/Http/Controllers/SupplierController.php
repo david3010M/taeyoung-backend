@@ -21,6 +21,7 @@ class SupplierController extends Controller
      *     @OA\Parameter(name="email", in="query", description="Supplier email", required=false, @OA\Schema(type="string")),
      *     @OA\Parameter(name="phone", in="query", description="Supplier phone", required=false, @OA\Schema(type="integer")),
      *     @OA\Parameter(name="countryId", in="query", description="Supplier country ID", required=false, @OA\Schema(type="string")),
+     *     @OA\Parameter(name="all", in="query", description="Show all suppliers", required=false, @OA\Schema(type="string", enum={"true", "false"})),
      *     @OA\Response(
      *         response=200,
      *         description="Show all suppliers",
@@ -47,6 +48,7 @@ class SupplierController extends Controller
             'email' => 'nullable|string',
             'phone' => 'nullable|integer',
             'countryId' => 'nullable|string',
+            'all' => 'nullable|string|in:true,false',
         ]);
 
         if ($validator->fails()) {
@@ -54,14 +56,21 @@ class SupplierController extends Controller
         }
 
         $pagination = $request->query('pagination', 5);
+        $all = $request->query('all', false) == 'true';
 
         $suppliers = Person::with('country')->where('type', 'supplier')
             ->where('ruc', 'like', '%' . $request->query('ruc') . '%')
             ->where('businessName', 'like', '%' . $request->query('businessName') . '%')
             ->where('email', 'like', '%' . $request->query('email') . '%')
             ->where('phone', 'like', '%' . $request->query('phone') . '%')
-            ->where('country_id', 'like', '%' . $request->query('countryId') . '%')
-            ->paginate($pagination);
+            ->where('country_id', 'like', '%' . $request->query('countryId') . '%');
+
+        if (!$all) {
+            $suppliers = $suppliers->paginate($pagination);
+        } else {
+            $suppliers = $suppliers->get();
+        }
+
         return SupplierResource::collection($suppliers);
     }
 
