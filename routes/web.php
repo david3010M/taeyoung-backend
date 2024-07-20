@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\PdfController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -16,3 +17,9 @@ use Illuminate\Support\Facades\Route;
 Route::get('/', function () {
     return view('welcome');
 });
+
+Route::get('repuesto', function () {
+    return view('repuesto');
+});
+
+Route::get('/repuestos', [PdfController::class, 'getRepuestos'])->name('repuesto');

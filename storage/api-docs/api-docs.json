@@ -924,6 +924,19 @@
                         "schema": {
                             "type": "string"
                         }
+                    },
+                    {
+                        "name": "all",
+                        "in": "query",
+                        "description": "Show all suppliers",
+                        "required": false,
+                        "schema": {
+                            "type": "string",
+                            "enum": [
+                                "true",
+                                "false"
+                            ]
+                        }
                     }
                 ],
                 "responses": {
