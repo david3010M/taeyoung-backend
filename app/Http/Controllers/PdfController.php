@@ -31,7 +31,6 @@ class PdfController extends Controller
             ->where('name', 'like', '%' . $name . '%')
             ->paginate($per_page, ['*'], 'page', $page);
 
-
 //        HORIZONTAL
         $pdf = Pdf::loadView('repuesto', [
             'repuestos' => $object,
@@ -39,6 +38,9 @@ class PdfController extends Controller
             'per_page' => $per_page,
             'code' => $code,
             'name' => $name,
+            'total' => $object->total(),
+            'from' => $object->firstItem(),
+            'to' => $object->lastItem(),
         ]);
 //        $pdf->setPaper('a3', 'landscape');
 

@@ -22,4 +22,3 @@ Route::get('repuesto', function () {
     return view('repuesto');
 });
 
-Route::get('/repuestos', [PdfController::class, 'getRepuestos'])->name('repuesto');

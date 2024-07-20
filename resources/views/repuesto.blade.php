@@ -88,8 +88,8 @@
 
         .page {
             position: absolute;
-            bottom: 150px;
-            right: 64px;
+            bottom: 190px;
+            right: 0;
         }
 
         .tableFooter {
@@ -160,6 +160,10 @@
             color: #4d4d4d;
         }
 
+        .font12 {
+            font-size: 12px;
+        }
+
 
     </style>
 
@@ -169,9 +173,17 @@
 <body>
 
 {{--PAGE--}}
-<div class="page">
-    <p class="gray">Página {{$page}}</p>
-</div>
+<table class="px64 page w100">
+    <tr class="w100 font12">
+        <td>
+            <p class="m0 gray text-start">Mostrando {{$per_page}} de {{$total}} resultados del {{$from}}
+                al {{$to}}</p>
+        </td>
+        <td>
+            <p class="m0 gray text-end">Página {{$page}}</p>
+        </td>
+    </tr>
+</table>
 
 {{--LOGO--}}
 <table class="w100">

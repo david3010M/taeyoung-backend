@@ -7,6 +7,7 @@ use App\Http\Controllers\CountryController;
 use App\Http\Controllers\GroupMenuController;
 use App\Http\Controllers\MachineryPurchaseController;
 use App\Http\Controllers\OptionMenuController;
+use App\Http\Controllers\PdfController;
 use App\Http\Controllers\PersonController;
 use App\Http\Controllers\SparePartController;
 use App\Http\Controllers\SupplierController;
@@ -27,6 +28,8 @@ use Illuminate\Support\Facades\Route;
 */
 
 Route::post('/login', [AuthController::class, 'login'])->name('login');
+
+Route::get('/repuestos', [PdfController::class, 'getRepuestos'])->name('repuesto');
 
 Route::group(
     ['middleware' => ['auth:sanctum']],
@@ -164,6 +167,8 @@ Route::group(
                 'destroy' => 'machinerypurchase.destroy',
             ]
         );
+
+//
 
 
     }
