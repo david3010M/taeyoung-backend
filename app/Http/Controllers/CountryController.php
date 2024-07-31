@@ -14,7 +14,7 @@ use Illuminate\Http\Request;
 class CountryController extends Controller
 {
     use Filterable;
-    
+
     public function index(IndexCountryRequest $request)
     {
         return $this->getFilteredResults(
@@ -27,7 +27,7 @@ class CountryController extends Controller
 
     public function store(Request $request)
     {
-
+        
     }
 
     public function show(int $id)

@@ -47,7 +47,6 @@ class UserController extends Controller
      *     @OA\RequestBody(required=true, @OA\JsonContent(ref="#/components/schemas/CreateUserRequest")),
      *     @OA\Response(response=200, description="User created successfully", @OA\JsonContent(ref="#/components/schemas/User")),
      *     @OA\Response(response=401, description="Unauthorized", @OA\JsonContent( ref="#/components/schemas/Unauthenticated" ) ),
-     *     @OA\Response(response=422, description="Validation error", @OA\JsonContent( ref="#/components/schemas/UnprocessableEntity" ) )
      * )
      */
     public function store(CreateUserRequest $request)

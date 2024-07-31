@@ -261,35 +261,6 @@
                 ]
             }
         },
-        "/taeyoung-backend/public/api/country": {
-            "get": {
-                "tags": [
-                    "Countries"
-                ],
-                "summary": "List of countries",
-                "operationId": "f15cd647bfb3bc1ae17c5259622c2b56",
-                "responses": {
-                    "200": {
-                        "description": "List of countries",
-                        "content": {
-                            "application/json": {
-                                "schema": {
-                                    "type": "array",
-                                    "items": {
-                                        "$ref": "#/components/schemas/Country"
-                                    }
-                                }
-                            }
-                        }
-                    }
-                },
-                "security": [
-                    {
-                        "bearerAuth": []
-                    }
-                ]
-            }
-        },
         "/taeyoung-backend/public/api/machinerypurchase": {
             "get": {
                 "tags": [
@@ -1362,6 +1333,50 @@
                         "bearerAuth": []
                     }
                 ]
+            },
+            "post": {
+                "tags": [
+                    "User"
+                ],
+                "summary": "Create a user",
+                "operationId": "6dccc675f1e5c545bc34ba6a047b5075",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/CreateUserRequest"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "User created successfully",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/User"
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/Unauthenticated"
+                                }
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
             }
         }
     },
@@ -1455,6 +1470,39 @@
                     "error": {
                         "type": "string",
                         "example": "Unauthenticated."
+                    }
+                },
+                "type": "object"
+            },
+            "CreateUserRequest": {
+                "title": "Create User Request",
+                "required": [
+                    "names",
+                    "lastnames",
+                    "username",
+                    "password",
+                    "typeuser_id"
+                ],
+                "properties": {
+                    "names": {
+                        "type": "string",
+                        "example": "John"
+                    },
+                    "lastnames": {
+                        "type": "string",
+                        "example": "Doe"
+                    },
+                    "username": {
+                        "type": "string",
+                        "example": "johndoe"
+                    },
+                    "password": {
+                        "type": "string",
+                        "example": "password"
+                    },
+                    "typeuser_id": {
+                        "type": "integer",
+                        "example": "1"
                     }
                 },
                 "type": "object"
