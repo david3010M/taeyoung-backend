@@ -30,4 +30,6 @@ class Country extends Model
         'updated_at',
         'deleted_at',
     ];
+
+    const filters = ['name'];
 }

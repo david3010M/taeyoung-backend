@@ -2,46 +2,46 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\country\CountryIndexRequest;
+use App\Http\Requests\country\IndexCountryRequest;
+use App\Http\Resources\CountryResource;
+use App\Http\Resources\UserResource;
 use App\Models\Country;
+use App\Models\User;
+use App\Traits\Filterable;
 use Illuminate\Http\Request;
 
 class CountryController extends Controller
 {
-    /**
-     * @OA\Get (
-     *     path="/taeyoung-backend/public/api/country",
-     *     tags={"Countries"},
-     *     security={{"bearerAuth": {}}},
-     *     summary="List of countries",
-     *     @OA\Response(
-     *         response=200,
-     *         description="List of countries",
-     *         @OA\JsonContent(
-     *             type="array",
-     *             @OA\Items(ref="#/components/schemas/Country")
-     *         )
-     *    )
-     * )
-     *
-     */
-    public function index()
+    use Filterable;
+    
+    public function index(IndexCountryRequest $request)
     {
-        return response()->json(Country::all());
+        return $this->getFilteredResults(
+            Country::class,
+            $request,
+            Country::filters,
+            CountryResource::class
+        );
     }
 
     public function store(Request $request)
     {
-        //
+
     }
 
     public function show(int $id)
     {
-        //
+        $country = Country::find($id);
+        if (!$country) {
+            return response()->json(['message' => 'Country not found'], 404);
+        }
+        return new CountryResource($country);
     }
 
     public function update(Request $request, int $id)
     {
-        //
+
     }
 
     public function destroy(int $id)

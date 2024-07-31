@@ -8,17 +8,14 @@ use Illuminate\Database\Seeder;
 
 class GroupMenuSeeder extends Seeder
 {
-    /**
-     * Run the database seeds.
-     */
     public function run(): void
     {
         $array = [
-            ['name' => 'Ventas', 'icon' => 'fas fa-cogs', 'order' => 1],
-            ['name' => 'Compras', 'icon' => 'fas fa-shopping-cart', 'order' => 2],
-            ['name' => 'Inventario', 'icon' => 'fas fa-boxes', 'order' => 3],
-            ['name' => 'Reportes', 'icon' => 'fas fa-chart-line', 'order' => 4],
-            ['name' => 'Configuración', 'icon' => 'fas fa-cog', 'order' => 5]
+            ['name' => 'Ventas', 'icon' => 'ShoppingBag', 'order' => 1],
+            ['name' => 'Compras', 'icon' => 'ShoppingCart', 'order' => 2],
+            ['name' => 'Inventario', 'icon' => 'Package', 'order' => 3],
+            ['name' => 'Reportes', 'icon' => 'FileText', 'order' => 4],
+            ['name' => 'Configuración', 'icon' => 'Settings', 'order' => 5]
         ];
 
         foreach ($array as $item) {
