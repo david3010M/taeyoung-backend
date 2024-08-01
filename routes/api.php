@@ -5,11 +5,13 @@ use App\Http\Controllers\Auth\AuthController;
 use App\Http\Controllers\ClientController;
 use App\Http\Controllers\CountryController;
 use App\Http\Controllers\CurrencyController;
+use App\Http\Controllers\DetailSparePartController;
 use App\Http\Controllers\GroupMenuController;
 use App\Http\Controllers\MachineryPurchaseController;
 use App\Http\Controllers\OptionMenuController;
 use App\Http\Controllers\PdfController;
 use App\Http\Controllers\PersonController;
+use App\Http\Controllers\QuotationController;
 use App\Http\Controllers\SparePartController;
 use App\Http\Controllers\SupplierController;
 use App\Http\Controllers\TypeUserController;
@@ -144,28 +146,41 @@ Route::group(
         );
 
 //        SPARE PART
-        Route::resource('sparepart', SparePartController::class)->only(
+        Route::resource('sparePart', SparePartController::class)->only(
             ['index', 'show', 'store', 'update', 'destroy']
         )->names(
             [
-                'index' => 'sparepart.index',
-                'store' => 'sparepart.store',
-                'show' => 'sparepart.show',
-                'update' => 'sparepart.update',
-                'destroy' => 'sparepart.destroy',
+                'index' => 'sparePart.index',
+                'store' => 'sparePart.store',
+                'show' => 'sparePart.show',
+                'update' => 'sparePart.update',
+                'destroy' => 'sparePart.destroy',
+            ]
+        );
+
+//        QUOTATION
+        Route::resource('quotation', QuotationController::class)->only(
+            ['index', 'show', 'store', 'update', 'destroy']
+        )->names(
+            [
+                'index' => 'quotation.index',
+                'store' => 'quotation.store',
+                'show' => 'quotation.show',
+                'update' => 'quotation.update',
+                'destroy' => 'quotation.destroy',
             ]
         );
 
 //        MACHINERY PURCHASE
-        Route::resource('machinerypurchase', MachineryPurchaseController::class)->only(
+        Route::resource('machineryPurchase', MachineryPurchaseController::class)->only(
             ['index', 'show', 'store', 'update', 'destroy']
         )->names(
             [
-                'index' => 'machinerypurchase.index',
-                'store' => 'machinerypurchase.store',
-                'show' => 'machinerypurchase.show',
-                'update' => 'machinerypurchase.update',
-                'destroy' => 'machinerypurchase.destroy',
+                'index' => 'machineryPurchase.index',
+                'store' => 'machineryPurchase.store',
+                'show' => 'machineryPurchase.show',
+                'update' => 'machineryPurchase.update',
+                'destroy' => 'machineryPurchase.destroy',
             ]
         );
 
@@ -179,6 +194,19 @@ Route::group(
                 'show' => 'currency.show',
                 'update' => 'currency.update',
                 'destroy' => 'currency.destroy',
+            ]
+        );
+
+//        DETAIL SPARE PART
+        Route::resource('detailSparePart', DetailSparePartController::class)->only(
+            ['index', 'show', 'store', 'update', 'destroy']
+        )->names(
+            [
+                'index' => 'detailSparePart.index',
+                'store' => 'detailSparePart.store',
+                'show' => 'detailSparePart.show',
+                'update' => 'detailSparePart.update',
+                'destroy' => 'detailSparePart.destroy',
             ]
         );
 

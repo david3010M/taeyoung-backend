@@ -42,4 +42,10 @@ class SparePart extends Model
         'updated_at',
         'deleted_at',
     ];
+
+    const filters = [
+        'code' => 'like',
+        'name' => 'like',
+    ];
+
 }

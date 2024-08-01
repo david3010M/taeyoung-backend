@@ -6,17 +6,21 @@ use App\Http\Requests\IndexQuotationRequest;
 use App\Http\Requests\StoreQuotationRequest;
 use App\Http\Requests\UpdateQuotationRequest;
 use App\Http\Resources\CountryResource;
+use App\Http\Resources\QuotationResource;
 use App\Models\Quotation;
+use App\Traits\Filterable;
 
 class QuotationController extends Controller
 {
+    use Filterable;
+
     public function index(IndexQuotationRequest $request)
     {
         return $this->getFilteredResults(
             Quotation::class,
             $request,
             Quotation::filters,
-            CountryResource::class
+            QuotationResource::class
         );
     }
 

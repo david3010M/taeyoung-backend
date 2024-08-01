@@ -13,11 +13,20 @@ return new class extends Migration {
 //        COTIZACIONES
         Schema::create('quotations', function (Blueprint $table) {
             $table->id();
-            $table->date('date');
             $table->string('number');
+            $table->string('detail');
+            $table->dateTime('date');
+            $table->string('currencyType')->nullable();
+            $table->string('price')->nullable();
+            $table->string('initialPayment')->nullable();
+            $table->string('balance')->nullable();
+            $table->string('debts')->nullable();
+            $table->string('exchangeRate')->nullable();
 
-            $table->string('description');
+            $table->foreignId('currency_id')->nullable()->constrained();
+            $table->foreignId('client_id')->constrained('people');
             $table->timestamps();
+            $table->softDeletes();
         });
     }
 

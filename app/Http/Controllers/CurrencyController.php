@@ -6,9 +6,7 @@ use App\Http\Requests\IndexCurrencyRequest;
 use App\Http\Requests\StoreCurrencyRequest;
 use App\Http\Requests\UpdateCurrencyRequest;
 use App\Http\Resources\CurrencyResource;
-use App\Http\Resources\UserResource;
 use App\Models\Currency;
-use App\Models\User;
 use App\Traits\Filterable;
 
 class CurrencyController extends Controller
@@ -27,21 +25,30 @@ class CurrencyController extends Controller
 
     public function store(StoreCurrencyRequest $request)
     {
-        //
+        $currency = Currency::create($request->validated());
+        return response()->json(new CurrencyResource($currency));
     }
 
-    public function show(Currency $currency)
+    public function show(int $id)
     {
-        //
+        $currency = Currency::find($id);
+        if (!$currency) return response()->json(['message' => 'Currency not found'], 404);
+        return response()->json(new CurrencyResource($currency));
     }
 
-    public function update(UpdateCurrencyRequest $request, Currency $currency)
+    public function update(UpdateCurrencyRequest $request, int $id)
     {
-        //
+        $currency = Currency::find($id);
+        if (!$currency) return response()->json(['message' => 'Currency not found'], 404);
+        $currency->update($request->validated());
+        return response()->json(new CurrencyResource($currency));
     }
 
-    public function destroy(Currency $currency)
+    public function destroy(int $id)
     {
-        //
+        $currency = Currency::find($id);
+        if (!$currency) return response()->json(['message' => 'Currency not found'], 404);
+        $currency->delete();
+        return response()->json(['message' => 'Currency deleted']);
     }
 }

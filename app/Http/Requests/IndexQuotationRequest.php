@@ -4,25 +4,14 @@ namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
 
-class IndexQuotationRequest extends FormRequest
+class IndexQuotationRequest extends IndexRequest
 {
-    /**
-     * Determine if the user is authorized to make this request.
-     */
-    public function authorize(): bool
-    {
-        return false;
-    }
-
-    /**
-     * Get the validation rules that apply to the request.
-     *
-     * @return array<string, \Illuminate\Contracts\Validation\ValidationRule|array<mixed>|string>
-     */
     public function rules(): array
     {
         return [
-            //
+            'currencyFrom' => 'nullable|string|in:USD,PEN',
+            'currencyTo' => 'nullable|string|in:USD,PEN',
+            'date' => 'nullable|date',
         ];
     }
 }

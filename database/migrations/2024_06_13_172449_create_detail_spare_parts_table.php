@@ -17,6 +17,7 @@ return new class extends Migration {
             $table->decimal('purchasePrice');
             $table->decimal('salePrice');
             $table->foreignId('order_id')->constrained('orders');
+            $table->foreignId('quotation_id')->constrained('quotations');
             $table->foreignId('spare_part_id')->constrained('spare_parts');
             $table->timestamps();
             $table->softDeletes();

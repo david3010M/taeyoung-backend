@@ -23,6 +23,7 @@ class DatabaseSeeder extends Seeder
         $this->call(ClientSeeder::class);
         $this->call(SparePartSeeder::class);
 //        $this->call(FileSeeder::class);
+        $this->call(QuotationSeeder::class);
         $this->call(OrderSeeder::class);
 
     }

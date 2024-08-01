@@ -2,6 +2,7 @@
 
 namespace App\Http\Resources;
 
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
 
@@ -19,7 +20,7 @@ class CurrencyResource extends JsonResource
             'currencyFrom' => $this->currencyFrom,
             'currencyTo' => $this->currencyTo,
             'rate' => $this->rate,
-            'date' => $this->date,
+            'date' => Carbon::parse($this->date)->format('Y-m-d'),
         ];
     }
 }

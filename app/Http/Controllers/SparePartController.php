@@ -2,8 +2,12 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\IndexSparePartRequest;
+use App\Http\Resources\QuotationResource;
 use App\Http\Resources\SparePartResource;
+use App\Models\Quotation;
 use App\Models\SparePart;
+use App\Traits\Filterable;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Validation\Rule;
@@ -43,24 +47,14 @@ class SparePartController extends Controller
      *     )
      * )
      */
-    public function index(Request $request)
+    public function index(IndexSparePartRequest $request)
     {
-        $validator = validator($request->query(), [
-            'pagination' => 'nullable|integer',
-            'code' => 'nullable|string',
-            'name' => 'nullable|string',
-        ]);
-
-        if ($validator->fails()) {
-            return response()->json(['error' => $validator->errors()->first()], 422);
-        }
-
-        $pagination = $request->query('pagination', 5);
-
-        $spareParts = SparePart::where('name', 'like', '%' . $request->query('name') . '%')
-            ->where('code', 'like', '%' . $request->query('code') . '%')
-            ->paginate($pagination);
-        return SparePartResource::collection($spareParts);
+        return $this->getFilteredResults(
+            SparePart::class,
+            $request,
+            SparePart::filters,
+            SparePartResource::class
+        );
     }
 
     /**
