@@ -1,8 +1,8 @@
 <?php
 
-namespace App\Http\Requests\user;
+namespace App\Http\Requests\User;
 
-use Illuminate\Foundation\Http\FormRequest;
+use App\Http\Requests\CreateRequest;
 use Illuminate\Validation\Rule;
 
 /**
@@ -17,13 +17,8 @@ use Illuminate\Validation\Rule;
  *     @OA\Property(property="typeuser_id", type="integer", example="1")
  * )
  */
-class CreateUserRequest extends FormRequest
+class CreateUserRequest extends CreateRequest
 {
-    public function authorize(): bool
-    {
-        return true;
-    }
-
     public function rules(): array
     {
         return [

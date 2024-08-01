@@ -8,11 +8,41 @@ trait Filterable
 {
     protected function applyFilters($query, $request, $filters)
     {
-        foreach ($filters as $filter) {
-            if ($value = $request->query($filter)) {
-                $query->where($filter, 'like', '%' . $value . '%');
+        foreach ($filters as $filter => $operator) {
+            $value = $request->query($filter);
+
+            if ($value !== null) {
+                switch ($operator) {
+                    case 'like':
+                        $query->where($filter, 'like', '%' . $value . '%');
+                        break;
+                    case 'between':
+                        if (is_array($value) && count($value) === 2) {
+                            $query->whereBetween($filter, $value);
+                        }
+                        break;
+                    case '>':
+                        $query->where($filter, '>', $value);
+                        break;
+                    case '<':
+                        $query->where($filter, '<', $value);
+                        break;
+                    case '>=':
+                        $query->where($filter, '>=', $value);
+                        break;
+                    case '<=':
+                        $query->where($filter, '<=', $value);
+                        break;
+                    case '=':
+                        $query->where($filter, '=', $value);
+                        break;
+                    default:
+                        // Maneja operadores adicionales si es necesario
+                        break;
+                }
             }
         }
+
         return $query;
     }
 

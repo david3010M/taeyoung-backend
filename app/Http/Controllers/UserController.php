@@ -2,10 +2,10 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Requests\user\UpdateUserRequest;
+use App\Http\Requests\User\UpdateUserRequest;
 use App\Traits\Filterable;
-use App\Http\Requests\user\IndexUserRequest;
-use App\Http\Requests\user\CreateUserRequest;
+use App\Http\Requests\User\IndexUserRequest;
+use App\Http\Requests\User\CreateUserRequest;
 use App\Http\Resources\UserResource;
 use App\Models\User;
 
@@ -51,15 +51,7 @@ class UserController extends Controller
      */
     public function store(CreateUserRequest $request)
     {
-        $data = [
-            'names' => $request->input('names'),
-            'lastnames' => $request->input('lastnames'),
-            'username' => $request->input('username'),
-            'password' => bcrypt($request->input('password')),
-            'typeuser_id' => $request->input('typeuser_id'),
-        ];
-
-        $user = User::create($data);
+        $user = User::create($request->validated());
         return response()->json(new UserResource($user));
     }
 
@@ -75,22 +67,15 @@ class UserController extends Controller
     public function update(UpdateUserRequest $request, string $id)
     {
         $user = User::find($id);
-
         if (!$user) {
             return response()->json(['message' => 'User not found'], 404);
         }
 
-        $data = [
-            'names' => $request->input('names'),
-            'lastnames' => $request->input('lastnames'),
-            'username' => $request->input('username'),
-            'password' => bcrypt($request->input('password')),
-            'typeuser_id' => $request->input('typeuser_id'),
-        ];
+        $data = $request->validated();
+        $data = array_merge($user->toArray(), $data);
 
         $user->update($data);
         $user = User::find($id);
-
         return response()->json(new UserResource($user));
     }
 

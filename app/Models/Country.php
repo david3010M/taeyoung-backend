@@ -31,5 +31,7 @@ class Country extends Model
         'deleted_at',
     ];
 
-    const filters = ['name'];
+    const filters = [
+        'name' => 'like',
+    ];
 }

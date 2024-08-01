@@ -1,9 +1,8 @@
 <?php
 
-namespace App\Http\Requests\country;
+namespace App\Http\Requests\Country;
 
 use App\Http\Requests\IndexRequest;
-use Illuminate\Foundation\Http\FormRequest;
 
 class IndexCountryRequest extends IndexRequest
 {

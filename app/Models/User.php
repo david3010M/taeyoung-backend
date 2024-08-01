@@ -41,12 +41,17 @@ class User extends Authenticatable
         'updated_at',
         'deleted_at',
     ];
-    
+
     protected $casts = [
         'email_verified_at' => 'datetime',
     ];
 
-    const filters = ['names', 'typeuser_id'];
+    const filters = [
+        'names' => 'like',
+        'lastnames' => 'like',
+        'username' => 'like',
+        'typeuser_id' => 'like',
+    ];
 
     public function typeuser()
     {

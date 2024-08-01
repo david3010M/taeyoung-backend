@@ -1,17 +1,12 @@
 <?php
 
-namespace App\Http\Requests\user;
+namespace App\Http\Requests\User;
 
-use Illuminate\Foundation\Http\FormRequest;
+use App\Http\Requests\UpdateRequest;
 use Illuminate\Validation\Rule;
 
-class UpdateUserRequest extends FormRequest
+class UpdateUserRequest extends UpdateRequest
 {
-    public function authorize(): bool
-    {
-        return true;
-    }
-
     public function rules(): array
     {
         return [
@@ -24,7 +19,7 @@ class UpdateUserRequest extends FormRequest
                     ->whereNull('deleted_at')
                     ->ignore($this->route('user')),
             ],
-            'password' => 'required|string',
+            'password' => 'nullable|string',
             'typeuser_id' => 'nullable|integer|exists:type_users,id',
         ];
     }

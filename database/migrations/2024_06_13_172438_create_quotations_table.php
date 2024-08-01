@@ -10,7 +10,8 @@ return new class extends Migration {
      */
     public function up(): void
     {
-        Schema::create('cotization_machinaries', function (Blueprint $table) {
+//        COTIZACIONES
+        Schema::create('quotations', function (Blueprint $table) {
             $table->id();
             $table->date('date');
             $table->string('description');
@@ -23,6 +24,6 @@ return new class extends Migration {
      */
     public function down(): void
     {
-        Schema::dropIfExists('cotization_machinaries');
+        Schema::dropIfExists('quotations');
     }
 };
