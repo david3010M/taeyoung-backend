@@ -1,8 +1,7 @@
 <?php
 
-namespace App\Http\Requests\User;
+namespace App\Http\Requests;
 
-use App\Http\Requests\UpdateRequest;
 use Illuminate\Validation\Rule;
 
 class UpdateUserRequest extends UpdateRequest

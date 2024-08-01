@@ -2,13 +2,11 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Requests\Quotation\CreateQuotationRequest;
-use App\Http\Requests\Quotation\IndexQuotationRequest;
-use App\Http\Requests\Quotation\UpdateQuotationRequest;
+use App\Http\Requests\IndexQuotationRequest;
+use App\Http\Requests\StoreQuotationRequest;
+use App\Http\Requests\UpdateQuotationRequest;
 use App\Http\Resources\CountryResource;
-use App\Models\Country;
 use App\Models\Quotation;
-use Illuminate\Http\Request;
 
 class QuotationController extends Controller
 {
@@ -22,7 +20,7 @@ class QuotationController extends Controller
         );
     }
 
-    public function store(CreateQuotationRequest $request)
+    public function store(StoreQuotationRequest $request)
     {
         //
     }

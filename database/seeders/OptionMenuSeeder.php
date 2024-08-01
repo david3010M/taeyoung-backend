@@ -3,7 +3,6 @@
 namespace Database\Seeders;
 
 use App\Models\OptionMenu;
-use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 
 class OptionMenuSeeder extends Seeder
@@ -29,7 +28,8 @@ class OptionMenuSeeder extends Seeder
             ['id' => 13, 'name' => 'Egresos', 'route' => 'egresos', 'order' => 3, 'icon' => 'fas fa-cog', 'groupmenu_id' => 5],
             ['id' => 14, 'name' => 'Usuarios', 'route' => 'usuarios', 'order' => 4, 'icon' => 'fas fa-cog', 'groupmenu_id' => 5],
             ['id' => 15, 'name' => 'Paises', 'route' => 'paises', 'order' => 5, 'icon' => 'fas fa-cog', 'groupmenu_id' => 5],
-            ['id' => 16, 'name' => 'Tipo de Cambio', 'route' => 'tipoCambio', 'order' => 6, 'icon' => 'fas fa-cog', 'groupmenu_id' => 5]
+            ['id' => 16, 'name' => 'Tipo de Cambio', 'route' => 'tipoCambio', 'order' => 6, 'icon' => 'fas fa-cog', 'groupmenu_id' => 5],
+            ['id' => 17, 'name' => 'Proveedor', 'route' => 'proveedoor', 'order' => 7, 'icon' => 'fas fa-cog', 'groupmenu_id' => 5]
         ];
 
         foreach ($array as $item) {

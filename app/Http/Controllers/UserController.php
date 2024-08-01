@@ -2,12 +2,12 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Requests\User\UpdateUserRequest;
-use App\Traits\Filterable;
-use App\Http\Requests\User\IndexUserRequest;
-use App\Http\Requests\User\CreateUserRequest;
+use App\Http\Requests\IndexUserRequest;
+use App\Http\Requests\StoreUserRequest;
+use App\Http\Requests\UpdateUserRequest;
 use App\Http\Resources\UserResource;
 use App\Models\User;
+use App\Traits\Filterable;
 
 class UserController extends Controller
 {
@@ -44,12 +44,12 @@ class UserController extends Controller
      *     tags={"User"},
      *     summary="Create a user",
      *     security={{"bearerAuth": {}}},
-     *     @OA\RequestBody(required=true, @OA\JsonContent(ref="#/components/schemas/CreateUserRequest")),
+     *     @OA\RequestBody(required=true, @OA\JsonContent(ref="#/components/schemas/StoreUserRequest")),
      *     @OA\Response(response=200, description="User created successfully", @OA\JsonContent(ref="#/components/schemas/User")),
      *     @OA\Response(response=401, description="Unauthorized", @OA\JsonContent( ref="#/components/schemas/Unauthenticated" ) ),
      * )
      */
-    public function store(CreateUserRequest $request)
+    public function store(StoreUserRequest $request)
     {
         $user = User::create($request->validated());
         return response()->json(new UserResource($user));

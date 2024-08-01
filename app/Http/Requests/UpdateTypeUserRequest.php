@@ -1,10 +1,10 @@
 <?php
 
-namespace App\Http\Requests\Quotation;
+namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
 
-class UpdateQuotationRequest extends FormRequest
+class UpdateTypeUserRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.

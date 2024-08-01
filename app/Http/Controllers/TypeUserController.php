@@ -2,14 +2,25 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\IndexTypeUserRequest;
+use App\Http\Resources\CurrencyResource;
+use App\Http\Resources\TypeUserResource;
 use App\Models\TypeUser;
+use App\Traits\Filterable;
 use Illuminate\Http\Request;
 
 class TypeUserController extends Controller
 {
-    public function index()
+    use Filterable;
+
+    public function index(IndexTypeUserRequest $request)
     {
-        //
+        return $this->getFilteredResults(
+            TypeUser::class,
+            $request,
+            TypeUser::filters,
+            TypeUserResource::class
+        );
     }
 
     public function store(Request $request)

@@ -1,11 +1,10 @@
 <?php
 
-namespace App\Http\Requests\Country;
+namespace App\Http\Requests;
 
-use App\Http\Requests\CreateRequest;
 use Illuminate\Validation\Rule;
 
-class CreateCountryRequest extends CreateRequest
+class UpdateCountryRequest extends UpdateRequest
 {
     public function rules(): array
     {
@@ -15,7 +14,8 @@ class CreateCountryRequest extends CreateRequest
                 "string",
                 Rule::unique('countries', 'name')
                     ->whereNull('deleted_at')
-            ],
+                    ->ignore($this->route('country')),
+            ]
         ];
     }
 }

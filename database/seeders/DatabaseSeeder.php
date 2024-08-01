@@ -17,6 +17,7 @@ class DatabaseSeeder extends Seeder
         $this->call(TypeUserSeeder::class);
         $this->call(OptionMenuSeeder::class);
         $this->call(AccessSeeder::class);
+        $this->call(CurrencySeeder::class);
         $this->call(UserSeeder::class);
         $this->call(SupplierSeeder::class);
         $this->call(ClientSeeder::class);

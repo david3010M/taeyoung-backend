@@ -1,8 +1,6 @@
 <?php
 
-namespace App\Http\Requests\User;
-
-use App\Http\Requests\IndexRequest;
+namespace App\Http\Requests;
 
 class IndexUserRequest extends IndexRequest
 {

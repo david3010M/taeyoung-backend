@@ -30,6 +30,10 @@ class TypeUser extends Model
         'deleted_at',
     ];
 
+    const filters = [
+        'name' => 'like',
+    ];
+
     public function access()
     {
         return $this->hasMany(Access::class, 'typeuser_id');

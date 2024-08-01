@@ -10,14 +10,14 @@ return new class extends Migration {
      */
     public function up(): void
     {
-//        COTIZACIONES
-        Schema::create('quotations', function (Blueprint $table) {
+        Schema::create('currencies', function (Blueprint $table) {
             $table->id();
-            $table->date('date');
-            $table->string('number');
-
-            $table->string('description');
+            $table->string('currencyFrom');
+            $table->string('currencyTo');
+            $table->float('rate');
+            $table->dateTime('date');
             $table->timestamps();
+            $table->softDeletes();
         });
     }
 
@@ -26,6 +26,6 @@ return new class extends Migration {
      */
     public function down(): void
     {
-        Schema::dropIfExists('quotations');
+        Schema::dropIfExists('currencies');
     }
 };

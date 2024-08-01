@@ -4,6 +4,7 @@ use App\Http\Controllers\AccessController;
 use App\Http\Controllers\Auth\AuthController;
 use App\Http\Controllers\ClientController;
 use App\Http\Controllers\CountryController;
+use App\Http\Controllers\CurrencyController;
 use App\Http\Controllers\GroupMenuController;
 use App\Http\Controllers\MachineryPurchaseController;
 use App\Http\Controllers\OptionMenuController;
@@ -165,6 +166,19 @@ Route::group(
                 'show' => 'machinerypurchase.show',
                 'update' => 'machinerypurchase.update',
                 'destroy' => 'machinerypurchase.destroy',
+            ]
+        );
+
+//        CURRENCY
+        Route::resource('currency', CurrencyController::class)->only(
+            ['index', 'show', 'store', 'update', 'destroy']
+        )->names(
+            [
+                'index' => 'currency.index',
+                'store' => 'currency.store',
+                'show' => 'currency.show',
+                'update' => 'currency.update',
+                'destroy' => 'currency.destroy',
             ]
         );
 

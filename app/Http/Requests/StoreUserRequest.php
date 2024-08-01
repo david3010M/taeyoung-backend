@@ -1,13 +1,12 @@
 <?php
 
-namespace App\Http\Requests\User;
+namespace App\Http\Requests;
 
-use App\Http\Requests\CreateRequest;
 use Illuminate\Validation\Rule;
 
 /**
  * @OA\Schema(
- *     schema="CreateUserRequest",
+ *     schema="StoreUserRequest",
  *     title="Create User Request",
  *     required={"names", "lastnames", "username", "password", "typeuser_id"},
  *     @OA\Property(property="names", type="string", example="John"),
@@ -17,7 +16,7 @@ use Illuminate\Validation\Rule;
  *     @OA\Property(property="typeuser_id", type="integer", example="1")
  * )
  */
-class CreateUserRequest extends CreateRequest
+class StoreUserRequest extends StoreRequest
 {
     public function rules(): array
     {

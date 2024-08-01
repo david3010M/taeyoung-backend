@@ -1,8 +1,6 @@
 <?php
 
-namespace App\Http\Requests\Country;
-
-use App\Http\Requests\IndexRequest;
+namespace App\Http\Requests;
 
 class IndexCountryRequest extends IndexRequest
 {

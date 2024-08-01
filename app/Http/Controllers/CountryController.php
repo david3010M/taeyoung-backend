@@ -2,16 +2,12 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Requests\Country\CountryIndexRequest;
-use App\Http\Requests\Country\CreateCountryRequest;
-use App\Http\Requests\Country\IndexCountryRequest;
-use App\Http\Requests\Country\UpdateCountryRequest;
+use App\Http\Requests\IndexCountryRequest;
+use App\Http\Requests\StoreCountryRequest;
+use App\Http\Requests\UpdateCountryRequest;
 use App\Http\Resources\CountryResource;
-use App\Http\Resources\UserResource;
 use App\Models\Country;
-use App\Models\User;
 use App\Traits\Filterable;
-use Illuminate\Http\Request;
 
 class CountryController extends Controller
 {
@@ -27,7 +23,7 @@ class CountryController extends Controller
         );
     }
 
-    public function store(CreateCountryRequest $request)
+    public function store(StoreCountryRequest $request)
     {
         $country = Country::create($request->validated());
         return response()->json(new CountryResource($country));
