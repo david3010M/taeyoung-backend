@@ -8,7 +8,7 @@ class UpdateCurrencyRequest extends UpdateRequest
     {
         return [
             'currencyFrom' => 'nullable|string|in:PEN,USD',
-            'currencyTo' => 'nullable|string|in:PEN,USD',
+            'currencyTo' => 'nullable|string|in:PEN,USD|different:currencyFrom',
             'rate' => 'nullable|numeric',
             'date' => 'nullable|date',
         ];

@@ -19,7 +19,8 @@ class CurrencyResource extends JsonResource
             'id' => $this->id,
             'currencyFrom' => $this->currencyFrom,
             'currencyTo' => $this->currencyTo,
-            'rate' => $this->rate,
+//            rate rounded to 2 decimal places
+            'rate' => round($this->rate, 2),
             'date' => Carbon::parse($this->date)->format('Y-m-d'),
         ];
     }

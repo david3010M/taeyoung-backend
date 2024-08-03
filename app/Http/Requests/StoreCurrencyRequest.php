@@ -8,7 +8,7 @@ class StoreCurrencyRequest extends StoreRequest
     {
         return [
             'currencyFrom' => 'required|string|in:PEN,USD',
-            'currencyTo' => 'required|string|in:PEN,USD',
+            'currencyTo' => 'required|string|in:PEN,USD|different:currencyFrom',
             'rate' => 'required|numeric',
             'date' => 'required|date',
         ];
