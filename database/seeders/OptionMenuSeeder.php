@@ -29,7 +29,7 @@ class OptionMenuSeeder extends Seeder
             ['id' => 14, 'name' => 'Usuarios', 'route' => 'usuarios', 'order' => 4, 'icon' => 'fas fa-cog', 'groupmenu_id' => 5],
             ['id' => 15, 'name' => 'Paises', 'route' => 'paises', 'order' => 5, 'icon' => 'fas fa-cog', 'groupmenu_id' => 5],
             ['id' => 16, 'name' => 'Tipo de Cambio', 'route' => 'tipoCambio', 'order' => 6, 'icon' => 'fas fa-cog', 'groupmenu_id' => 5],
-            ['id' => 17, 'name' => 'Proveedor', 'route' => 'proveedoor', 'order' => 7, 'icon' => 'fas fa-cog', 'groupmenu_id' => 5]
+            ['id' => 17, 'name' => 'Proveedor', 'route' => 'proveedor', 'order' => 7, 'icon' => 'fas fa-cog', 'groupmenu_id' => 5]
         ];
 
         foreach ($array as $item) {
