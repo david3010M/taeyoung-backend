@@ -11,7 +11,7 @@ class DetailSparePartController extends Controller
 {
     public function index(IndexRequest $request)
     {
-        $this->getFilteredResults(
+        return $this->getFilteredResults(
             DetailSparePart::class,
             $request,
             DetailSparePart::filters,

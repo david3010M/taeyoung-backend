@@ -40,7 +40,12 @@ class CurrencyController extends Controller
     {
         $currency = Currency::find($id);
         if (!$currency) return response()->json(['message' => 'Currency not found'], 404);
-        $currency->update($request->validated());
+
+        $data = $request->validated();
+        $data = array_filter($data, fn($value) => $value !== null);
+
+        $currency->update($data);
+
         return response()->json(new CurrencyResource($currency));
     }
 

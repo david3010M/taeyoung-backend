@@ -16,8 +16,8 @@ return new class extends Migration {
             $table->string('movementType');
             $table->decimal('purchasePrice');
             $table->decimal('salePrice');
-            $table->foreignId('order_id')->constrained('orders');
-            $table->foreignId('quotation_id')->constrained('quotations');
+            $table->foreignId('order_id')->nullable()->constrained('orders');
+            $table->foreignId('quotation_id')->nullable()->constrained('quotations');
             $table->foreignId('spare_part_id')->constrained('spare_parts');
             $table->timestamps();
             $table->softDeletes();

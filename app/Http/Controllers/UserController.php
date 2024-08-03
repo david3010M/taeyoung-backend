@@ -72,7 +72,7 @@ class UserController extends Controller
         }
 
         $data = $request->validated();
-        $data = array_merge($user->toArray(), $data);
+        $data = array_filter($data, fn($value) => $value !== null);
 
         $user->update($data);
         $user = User::find($id);

@@ -1345,7 +1345,7 @@
                     "content": {
                         "application/json": {
                             "schema": {
-                                "$ref": "#/components/schemas/CreateUserRequest"
+                                "$ref": "#/components/schemas/StoreUserRequest"
                             }
                         }
                     }
@@ -1474,7 +1474,7 @@
                 },
                 "type": "object"
             },
-            "CreateUserRequest": {
+            "StoreUserRequest": {
                 "title": "Create User Request",
                 "required": [
                     "names",
