@@ -53,6 +53,7 @@ class SparePartController extends Controller
             SparePart::class,
             $request,
             SparePart::filters,
+            SparePart::sorts,
             SparePartResource::class
         );
     }

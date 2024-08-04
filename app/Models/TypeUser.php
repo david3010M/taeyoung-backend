@@ -34,6 +34,11 @@ class TypeUser extends Model
         'name' => 'like',
     ];
 
+    const sorts = [
+        'id',
+        'name',
+    ];
+
     public function access()
     {
         return $this->hasMany(Access::class, 'typeuser_id');

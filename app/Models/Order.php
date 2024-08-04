@@ -24,6 +24,13 @@ class Order extends Model
         'typePayment',
         'comment',
         'supplier_id',
+        'quotation_id',
+    ];
+
+    protected $casts = [
+        'date' => 'datetime:Y-m-d',
+        'totalIncome' => 'decimal:2',
+        'totalExpense' => 'decimal:2',
     ];
 
     protected $hidden = [
@@ -36,6 +43,11 @@ class Order extends Model
     public function supplier()
     {
         return $this->belongsTo(Person::class, 'supplier_id');
+    }
+
+    public function quotation()
+    {
+        return $this->belongsTo(Quotation::class);
     }
 
 }

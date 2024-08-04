@@ -10,15 +10,15 @@ return new class extends Migration {
      */
     public function up(): void
     {
-        Schema::create('detail_spare_parts', function (Blueprint $table) {
+        Schema::create('detail_machineries', function (Blueprint $table) {
             $table->id();
+            $table->string('description');
             $table->integer('quantity');
-            $table->string('movementType');
+            $table->string('movementType')->default('purchase');
             $table->decimal('purchasePrice')->nullable();
             $table->decimal('salePrice')->nullable();
             $table->foreignId('order_id')->nullable()->constrained('orders');
             $table->foreignId('quotation_id')->nullable()->constrained('quotations');
-            $table->foreignId('spare_part_id')->constrained('spare_parts');
             $table->timestamps();
             $table->softDeletes();
         });
@@ -29,6 +29,6 @@ return new class extends Migration {
      */
     public function down(): void
     {
-        Schema::dropIfExists('detail_spare_parts');
+        Schema::dropIfExists('detail_machineries');
     }
 };

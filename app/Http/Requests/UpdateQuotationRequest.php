@@ -2,27 +2,32 @@
 
 namespace App\Http\Requests;
 
-use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Validation\Rule;
 
-class UpdateQuotationRequest extends FormRequest
+class UpdateQuotationRequest extends UpdateRequest
 {
-    /**
-     * Determine if the user is authorized to make this request.
-     */
-    public function authorize(): bool
-    {
-        return false;
-    }
-
-    /**
-     * Get the validation rules that apply to the request.
-     *
-     * @return array<string, \Illuminate\Contracts\Validation\ValidationRule|array<mixed>|string>
-     */
     public function rules(): array
     {
         return [
-            //
+            'detail' => 'nullable|string',
+            'currency_id' => 'nullable|exists:currencies,id',
+
+            'date' => 'nullable|date',
+            'currencyType' => 'nullable|string',
+            'price' => 'nullable|numeric',
+            'initialPayment' => 'nullable|numeric',
+            'debts' => 'nullable|int',
+            'client_id' => [
+                'nullable',
+                Rule::exists('people', 'id')->where('type', 'client')
+            ],
+            'detailMachinery' => 'nullable|array',
+            'detailMachinery.*.description' => 'required|string',
+            'detailMachinery.*.quantity' => 'required|int',
+            'detailMachinery.*.purchasePrice' => 'required|numeric',
+            'detailSpareParts' => 'nullable|array',
+            'detailSpareParts.*.quantity' => 'required|numeric',
+            'detailSpareParts.*.spare_part_id' => 'required|exists:spare_parts,id',
         ];
     }
 }

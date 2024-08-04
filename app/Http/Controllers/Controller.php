@@ -64,4 +64,11 @@ use Illuminate\Routing\Controller as BaseController;
 class Controller extends BaseController
 {
     use AuthorizesRequests, ValidatesRequests, Filterable;
+
+    public function nextCorrelative($model, $field)
+    {
+        $last = $model::orderBy($field, 'desc')->first();
+        $correlative = $last ? $last->$field + 1 : 1;
+        return str_pad($correlative, 8, '0', STR_PAD_LEFT);
+    }
 }

@@ -11,18 +11,22 @@ class QuotationResource extends JsonResource
     public function toArray(Request $request): array
     {
         return [
-//            'id' => $this->id,
+            'id' => $this->id,
             'number' => "COTI-" . $this->number,
-            'date' => Carbon::parse($this->date)->format('d-m-Y'),
-            'client' => (new ClientResource($this->client))->businessName,
             'detail' => $this->detail,
-            'initialPrice' => $this->initialPrice,
-            'paymentRemainder' => $this->paymentRemainder,
-            'price' => $this->price,
+            'date' => Carbon::parse($this->date)->format('Y-m-d'),
             'currencyType' => $this->currencyType,
+            'price' => $this->price,
+            'initialPayment' => $this->initialPayment,
+            'balance' => $this->balance,
+            'debts' => $this->debts,
             'exchangeRate' => $this->exchangeRate,
             'currency_id' => $this->currency_id,
             'client_id' => $this->client_id,
+            'client' => (new ClientResource($this->client))->businessName,
+            'detailMachinery' => DetailMachineryResource::collection($this->detailMachinery),
+            'detailSpareParts' => DetailSparePartResource::collection($this->detailSpareParts),
+            'currency' => new CurrencyResource($this->currency),
         ];
     }
 }

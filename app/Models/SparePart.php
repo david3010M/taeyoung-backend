@@ -33,8 +33,8 @@ class SparePart extends Model
     ];
 
     protected $casts = [
-        'purchasePrice' => 'float',
-        'salePrice' => 'float',
+        'purchasePrice' => 'decimal:2',
+        'salePrice' => 'decimal:2',
     ];
 
     protected $hidden = [
@@ -46,6 +46,15 @@ class SparePart extends Model
     const filters = [
         'code' => 'like',
         'name' => 'like',
+    ];
+
+    const sorts = [
+        'id',
+        'code',
+        'name',
+        'purchasePrice',
+        'salePrice',
+        'stock',
     ];
 
 }

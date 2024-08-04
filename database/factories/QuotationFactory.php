@@ -8,9 +8,6 @@ class QuotationFactory extends Factory
 {
     public function definition(): array
     {
-        $price = $this->faker->randomFloat(2, 1000, 10000);
-        $initialPayment = $price / 2;
-        $balance = $price - $initialPayment;
         $debtsToPay = $this->faker->randomElement([2, 4, 6]);
 
         static $correlativo = 0;
@@ -22,12 +19,8 @@ class QuotationFactory extends Factory
             'number' => $correlativoFormatted,
             'detail' => $this->faker->text(100),
             'date' => $this->faker->dateTimeThisYear(),
-            'currencyType' => 'USD',
-            'price' => $price,
-            'initialPayment' => $initialPayment,
-            'balance' => $balance,
+            'currencyType' => 'PEN',
             'debts' => $debtsToPay,
-            'exchangeRate' => $this->faker->randomFloat(2, 3.5, 4.5),
             'currency_id' => $this->faker->numberBetween(1, 2),
             'client_id' => $this->faker->numberBetween(1, 10),
         ];

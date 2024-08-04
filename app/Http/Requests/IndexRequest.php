@@ -2,7 +2,9 @@
 
 namespace App\Http\Requests;
 
+use Illuminate\Contracts\Validation\Validator;
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Validation\ValidationException;
 
 class IndexRequest extends FormRequest
 {
@@ -18,5 +20,14 @@ class IndexRequest extends FormRequest
             'page' => 'nullable|integer',
             'per_page' => 'nullable|integer',
         ];
+    }
+
+    public function failedValidation(Validator $validator)
+    {
+        $response = response()->json([
+            'message' => $validator->errors()->first(),
+        ], 422);
+
+        throw new ValidationException($validator, $response);
     }
 }

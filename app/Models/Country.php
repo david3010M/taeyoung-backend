@@ -34,4 +34,9 @@ class Country extends Model
     const filters = [
         'name' => 'like',
     ];
+
+    const sorts = [
+        'id',
+        'name',
+    ];
 }

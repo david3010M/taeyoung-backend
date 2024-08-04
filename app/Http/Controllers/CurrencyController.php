@@ -19,6 +19,7 @@ class CurrencyController extends Controller
             Currency::class,
             $request,
             Currency::filters,
+            Currency::sorts,
             CurrencyResource::class
         );
     }

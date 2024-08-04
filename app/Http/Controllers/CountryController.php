@@ -19,6 +19,7 @@ class CountryController extends Controller
             Country::class,
             $request,
             Country::filters,
+            Country::sorts,
             CountryResource::class
         );
     }

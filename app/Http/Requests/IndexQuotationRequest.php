@@ -12,6 +12,8 @@ class IndexQuotationRequest extends IndexRequest
             'currencyFrom' => 'nullable|string|in:USD,PEN',
             'currencyTo' => 'nullable|string|in:USD,PEN',
             'date' => 'nullable|date',
+            'sort' => 'nullable|string|in:date,currencyFrom,currencyTo,id',
+            'direction' => 'nullable|string|in:asc,desc',
         ];
     }
 }

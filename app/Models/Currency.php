@@ -26,6 +26,7 @@ class Currency extends Model
 
     protected $casts = [
         'date' => 'datetime',
+        'rate' => 'decimal:2',
     ];
 
     const filters = [
@@ -33,6 +34,14 @@ class Currency extends Model
         'currencyTo' => 'like',
         'rate' => 'like',
         'date' => '<='
+    ];
+
+    const sorts = [
+        'id',
+        'currencyFrom',
+        'currencyTo',
+        'rate',
+        'date',
     ];
 
 }

@@ -53,6 +53,14 @@ class User extends Authenticatable
         'typeuser_id' => 'like',
     ];
 
+    const sorts = [
+        'id',
+        'names',
+        'lastnames',
+        'username',
+        'typeuser_id',
+    ];
+
     public function typeuser()
     {
         return $this->belongsTo(TypeUser::class);

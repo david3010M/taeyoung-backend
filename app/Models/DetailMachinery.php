@@ -6,17 +6,17 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
-class DetailSparePart extends Model
+class DetailMachinery extends Model
 {
     use HasFactory;
     use SoftDeletes;
 
     protected $fillable = [
+        'description',
         'quantity',
         'movementType',
         'purchasePrice',
         'salePrice',
-        'spare_part_id',
         'quotation_id',
         'order_id',
     ];
@@ -24,31 +24,43 @@ class DetailSparePart extends Model
     protected $hidden = [
         'created_at',
         'updated_at',
-        'deleted_at',
+        'deleted_at'
     ];
 
     protected $casts = [
         'purchasePrice' => 'decimal:2',
-        'salePrice' => 'decimal:2',
+        'salePrice' => 'decimal:2'
     ];
 
     const filters = [
+        'description' => 'like',
         'quantity' => 'like',
         'movementType' => 'like',
         'purchasePrice' => 'like',
         'salePrice' => 'like',
         'order_id' => 'like',
-        'spare_part_id' => 'like',
+        'quotation_id' => 'like'
     ];
 
     const sorts = [
         'id',
+        'description',
         'quantity',
         'movementType',
         'purchasePrice',
         'salePrice',
         'order_id',
-        'spare_part_id',
+        'quotation_id'
     ];
+
+    public function order()
+    {
+        return $this->belongsTo(Order::class);
+    }
+
+    public function quotation()
+    {
+        return $this->belongsTo(Quotation::class);
+    }
 
 }

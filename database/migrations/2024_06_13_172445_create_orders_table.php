@@ -24,7 +24,9 @@ return new class extends Migration {
             $table->string('typePayment')->nullable(); // PAGO A SUNAT
             $table->string('comment')->nullable();
             $table->foreignId('supplier_id')->nullable()->unsigned()->constrained('people');
+
 //            COTIZATION
+            $table->foreignId('quotation_id')->nullable()->constrained('quotations');
             $table->timestamps();
             $table->softDeletes();
         });

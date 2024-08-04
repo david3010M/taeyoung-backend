@@ -46,9 +46,24 @@ trait Filterable
         return $query;
     }
 
-    protected function getFilteredResults($model, $request, $filters, $resource)
+    protected function applySorting($query, $request, $sorts)
+    {
+        $sortField = $request->query('sort');
+        $sortOrder = $request->query('direction', 'desc');
+
+        if ($sortField !== null && in_array($sortField, $sorts)) {
+            $query->orderBy($sortField, $sortOrder);
+        } else {
+            $query->orderBy('id', 'desc');
+        }
+
+        return $query;
+    }
+
+    protected function getFilteredResults($model, $request, $filters, $sorts, $resource)
     {
         $query = $this->applyFilters($model::query(), $request, $filters);
+        $query = $this->applySorting($query, $request, $sorts);
 
         $all = $request->query('all', false) === 'true';
         $results = $all ? $query->get() : $query->paginate($request->query('per_page', Constants::DEFAULT_PER_PAGE));

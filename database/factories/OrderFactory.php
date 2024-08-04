@@ -33,31 +33,45 @@ class OrderFactory extends Factory
         ];
     }
 
-    public function machineryPurchase()
+    public function purchase()
     {
         return $this->state([
-            'type' => 'machinery_purchase',
+            'type' => 'purchase',
         ]);
     }
 
-    public function machinerySale()
+    public function sale()
     {
         return $this->state([
-            'type' => 'machinery_sale',
+            'type' => 'sale',
         ]);
     }
 
-    public function sparePartPurchase()
-    {
-        return $this->state([
-            'type' => 'spare_part_purchase',
-        ]);
-    }
-
-    public function sparePartSale()
-    {
-        return $this->state([
-            'type' => 'spare_part_sale',
-        ]);
-    }
+//    public function machineryPurchase()
+//    {
+//        return $this->state([
+//            'type' => 'machinery_purchase',
+//        ]);
+//    }
+//
+//    public function machinerySale()
+//    {
+//        return $this->state([
+//            'type' => 'machinery_sale',
+//        ]);
+//    }
+//
+//    public function sparePartPurchase()
+//    {
+//        return $this->state([
+//            'type' => 'spare_part_purchase',
+//        ]);
+//    }
+//
+//    public function sparePartSale()
+//    {
+//        return $this->state([
+//            'type' => 'spare_part_sale',
+//        ]);
+//    }
 }

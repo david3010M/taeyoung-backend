@@ -15,13 +15,14 @@ class DetailSparePartController extends Controller
             DetailSparePart::class,
             $request,
             DetailSparePart::filters,
+            DetailSparePart::sorts,
             DetailSparePartResource::class
         );
     }
 
     public function store(Request $request)
     {
-        //
+
     }
 
     public function show(int $id)

@@ -19,6 +19,7 @@ class TypeUserController extends Controller
             TypeUser::class,
             $request,
             TypeUser::filters,
+            TypeUser::sorts,
             TypeUserResource::class
         );
     }

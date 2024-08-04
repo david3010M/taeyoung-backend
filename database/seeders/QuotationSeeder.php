@@ -10,6 +10,6 @@ class QuotationSeeder extends Seeder
 {
     public function run(): void
     {
-        Quotation::factory()->count(10)->create();
+        Quotation::factory()->count(20)->create();
     }
 }

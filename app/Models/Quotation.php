@@ -8,33 +8,19 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Quotation extends Model
 {
-    /**
-     * $table->id();
-     * $table->string('number');
-     * $table->string('currencyType');
-     * $table->string('price');
-     * $table->string('detail');
-     * $table->string('initialPrice');
-     * $table->string('paymentRemainder');
-     * $table->string('exchangeRate')->nullable();
-     * $table->dateTime('date');
-     *
-     * $table->foreignId('currency_id')->nullable()->constrained();
-     * $table->foreignId('client_id')->constrained();
-     * $table->timestamps();
-     */
     use HasFactory;
     use SoftDeletes;
 
     protected $fillable = [
         'number',
-        'currencyType',
-        'price',
         'detail',
-        'initialPrice',
-        'paymentRemainder',
-        'exchangeRate',
         'date',
+        'currencyType',
+        'price', // CALCULATED
+        'initialPayment', // CALCULATED
+        'balance', // CALCULATED
+        'debts',
+        'exchangeRate', // CALCULATED
         'currency_id',
         'client_id',
     ];
@@ -47,11 +33,23 @@ class Quotation extends Model
 
     protected $casts = [
         'date' => 'datetime',
+        'price' => 'decimal:2',
+        'initialPayment' => 'decimal:2',
+        'balance' => 'decimal:2',
+        'debts' => 'decimal:2',
+        'exchangeRate' => 'decimal:2',
     ];
 
     const filters = [
         'date' => '<=',
         'description' => 'like',
+    ];
+
+    const sorts = [
+        'id',
+        'date',
+        'currencyFrom',
+        'currencyTo',
     ];
 
     public function currency()
@@ -62,6 +60,16 @@ class Quotation extends Model
     public function client()
     {
         return $this->belongsTo(Person::class);
+    }
+
+    public function detailSpareParts()
+    {
+        return $this->hasMany(DetailSparePart::class);
+    }
+
+    public function detailMachinery()
+    {
+        return $this->hasMany(DetailMachinery::class);
     }
 
 

@@ -34,6 +34,7 @@ class UserController extends Controller
             User::class,
             $request,
             User::filters,
+            User::sorts,
             UserResource::class
         );
     }
