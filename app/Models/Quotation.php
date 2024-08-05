@@ -33,11 +33,6 @@ class Quotation extends Model
 
     protected $casts = [
         'date' => 'datetime',
-        'price' => 'decimal:2',
-        'initialPayment' => 'decimal:2',
-        'balance' => 'decimal:2',
-        'debts' => 'decimal:2',
-        'exchangeRate' => 'decimal:2',
     ];
 
     const filters = [
