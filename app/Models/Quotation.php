@@ -42,11 +42,13 @@ class Quotation extends Model
 
     const filters = [
         'date' => '<=',
+        'number' => 'like',
         'description' => 'like',
     ];
 
     const sorts = [
         'id',
+        'number',
         'date',
         'currencyFrom',
         'currencyTo',

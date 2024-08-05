@@ -18,6 +18,7 @@ class DetailSparePartResource extends JsonResource
             'order_id' => $this->order_id,
             'quotation_id' => $this->quotation_id,
             'spare_part_id' => $this->spare_part_id,
+            'sparePart' => new SparePartResource($this->sparePart),
         ];
     }
 }

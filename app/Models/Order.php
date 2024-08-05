@@ -13,8 +13,8 @@ class Order extends Model
 
     protected $fillable = [
         'type',
-        'date',
         'number',
+        'date',
         'documentType',
         'quantity',
         'detail',
@@ -39,6 +39,24 @@ class Order extends Model
         'deleted_at',
     ];
 
+    const filtersMachineryPurchase = [
+        'number' => 'like',
+        'date' => 'date',
+        'supplier_id' => 'equal',
+    ];
+
+    const sortMachineryPurchase = [
+        'number',
+        'date',
+        'supplier_id',
+    ];
+
+    const filtersSparePartPurchase = [
+        'number' => 'like',
+        'date' => 'date',
+        'supplier_id' => 'equal',
+    ];
+
 
     public function supplier()
     {
@@ -48,6 +66,16 @@ class Order extends Model
     public function quotation()
     {
         return $this->belongsTo(Quotation::class);
+    }
+
+    public function detailMachinery()
+    {
+        return $this->hasMany(DetailMachinery::class);
+    }
+
+    public function detailSpareParts()
+    {
+        return $this->hasMany(DetailSparePart::class);
     }
 
 }

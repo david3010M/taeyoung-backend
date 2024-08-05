@@ -46,37 +46,27 @@ use Illuminate\Http\Resources\Json\JsonResource;
  */
 class MachineryPurchaseResource extends JsonResource
 {
-    protected static $isCollection = false;
-
-    public static function collection($resource)
-    {
-        self::$isCollection = true;
-        return parent::collection($resource);
-    }
-
-    /**
-     * Transform the resource into an array.
-     *
-     * @return array<string, mixed>
-     */
     public function toArray(Request $request): array
     {
-        $data = [
+        return [
             'id' => $this->id,
             'number' => $this->number,
-            'date' => $this->date,
-            'supplier' => $this->supplier->businessName,
-            'country' => $this->supplier->country->name,
-            'features' => $this->detail,
+            'date' => Carbon::parse($this->date)->format('Y-m-d'),
+            'documentType' => $this->documentType,
             'quantity' => $this->quantity,
-            'total' => (float)$this->totalExpense,
+            'detail' => $this->detail,
+            'totalIncome' => $this->totalIncome,
+            'totalExpense' => $this->totalExpense,
+            'currency' => $this->currency,
+            'typePayment' => $this->typePayment,
+            'comment' => $this->comment,
+            'supplier_id' => $this->supplier_id,
+            'quotation_id' => $this->quotation_id,
+            'supplier' => new SupplierResource($this->supplier),
+//            'quotation' => new QuotationResource($this->quotation),
+            'quotation' => $this->quotation,
+            'detailMachinery' => DetailMachineryResource::collection($this->detailMachinery),
+            'detailSpareParts' => DetailSparePartResource::collection($this->detailSpareParts),
         ];
-
-        if (!self::$isCollection) {
-            $data['supplier_id'] = $this->supplier_id;
-            $data['date'] = Carbon::parse($this->date)->format('Y-m-d');
-        }
-
-        return $data;
     }
 }

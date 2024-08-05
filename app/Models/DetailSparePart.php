@@ -51,4 +51,19 @@ class DetailSparePart extends Model
         'spare_part_id',
     ];
 
+    public function order()
+    {
+        return $this->belongsTo(Order::class);
+    }
+
+    public function sparePart()
+    {
+        return $this->belongsTo(SparePart::class);
+    }
+
+    public function quotation()
+    {
+        return $this->belongsTo(Quotation::class);
+    }
+
 }
