@@ -39,14 +39,14 @@ class Quotation extends Model
         'date' => '<=',
         'number' => 'like',
         'description' => 'like',
+        'client.businessName' => 'like',
     ];
 
     const sorts = [
         'id',
         'number',
         'date',
-        'currencyFrom',
-        'currencyTo',
+        'client_id',
     ];
 
     public function currency()
