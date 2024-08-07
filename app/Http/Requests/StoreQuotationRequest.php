@@ -14,21 +14,19 @@ class StoreQuotationRequest extends StoreRequest
             'currency_id' => 'nullable|exists:currencies,id',
 
 //            REQUIRED
-
             'date' => 'required|date',
             'currencyType' => 'required|string',
-            'price' => 'required|numeric',
-            'initialPayment' => 'required|numeric',
-            'debts' => 'required|int',
-//            PEOPLE TABLE TYPE CLIENT
+            'initialPayment' => 'nullable|numeric',
             'client_id' => [
                 'required',
                 Rule::exists('people', 'id')->where('type', 'client')
             ],
+
+//            DETAILS
             'detailMachinery' => 'required_without:detailSpareParts|nullable|array',
             'detailMachinery.*.description' => 'required|string',
             'detailMachinery.*.quantity' => 'required|int',
-            'detailMachinery.*.purchasePrice' => 'required|numeric',
+            'detailMachinery.*.salePrice' => 'required|numeric',
             'detailSpareParts' => 'required_without:detailMachinery|nullable|array',
             'detailSpareParts.*.quantity' => 'required|numeric',
             'detailSpareParts.*.spare_part_id' => 'required|exists:spare_parts,id',

@@ -13,10 +13,10 @@ class DetailMachinerySeeder extends Seeder
 //        PURCHASE
         $quotations = Quotation::all();
         foreach ($quotations as $quotation) {
-            $detailMachinery = DetailMachinery::factory()->purchase()->create([
+            $detailMachinery = DetailMachinery::factory()->sale()->create([
                 'quotation_id' => $quotation->id,
                 'movementType' => 'purchase',
-                'purchasePrice' => rand(100, 1000),
+                'salePrice' => rand(100, 1000),
             ]);
             $price = $detailMachinery->purchasePrice * $detailMachinery->quantity;
             $quotation->update([

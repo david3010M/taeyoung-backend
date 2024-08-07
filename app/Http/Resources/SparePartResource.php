@@ -29,21 +29,14 @@ use Illuminate\Http\Resources\Json\JsonResource;
  */
 class SparePartResource extends JsonResource
 {
-    /**
-     * Transform the resource into an array.
-     *
-     * @return array<string, mixed>
-     */
     public function toArray(Request $request): array
     {
-        $formatPrice = fn($value) => 'S/ ' . number_format($value, 2);
-
         return [
             'id' => $this->id,
             'code' => $this->code,
             'name' => $this->name,
-            'purchasePrice' => $formatPrice($this->purchasePrice),
-            'salePrice' => $formatPrice($this->salePrice),
+            'purchasePrice' => $this->purchasePrice ? round($this->purchasePrice, 2) : null,
+            'salePrice' => $this->salePrice ? round($this->salePrice, 2) : null,
             'stock' => $this->stock
         ];
     }
