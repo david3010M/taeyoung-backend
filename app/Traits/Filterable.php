@@ -3,26 +3,24 @@
 namespace App\Traits;
 
 use App\Utils\Constants;
+use Illuminate\Database\Eloquent\Builder;
 
 trait Filterable
 {
     protected function applyFilters($query, $request, $filters)
     {
         foreach ($filters as $filter => $operator) {
-            // Convierte los nombres de los parámetros de relaciones a subíndices
             $paramName = str_replace('.', '_', $filter);
             $value = $request->query($paramName);
 
             if ($value !== null) {
                 if (strpos($filter, '.') !== false) {
-                    // El filtro pertenece a una relación
                     [$relation, $relationFilter] = explode('.', $filter);
 
                     $query->whereHas($relation, function ($q) use ($relationFilter, $operator, $value) {
                         $this->applyFilterCondition($q, $relationFilter, $operator, $value);
                     });
                 } else {
-                    // El filtro pertenece al modelo principal
                     $this->applyFilterCondition($query, $filter, $operator, $value);
                 }
             }
@@ -58,7 +56,6 @@ trait Filterable
                 $query->where($filter, '=', $value);
                 break;
             default:
-                // Maneja operadores adicionales si es necesario
                 break;
         }
     }
@@ -77,9 +74,15 @@ trait Filterable
         return $query;
     }
 
-    protected function getFilteredResults($model, $request, $filters, $sorts, $resource)
+    protected function getFilteredResults($modelOrQuery, $request, $filters, $sorts, $resource)
     {
-        $query = $this->applyFilters($model::query(), $request, $filters);
+        if ($modelOrQuery instanceof Builder) {
+            $query = $modelOrQuery;
+        } else {
+            $query = $modelOrQuery::query();
+        }
+
+        $query = $this->applyFilters($query, $request, $filters);
         $query = $this->applySorting($query, $request, $sorts);
 
         $all = $request->query('all', false) === 'true';

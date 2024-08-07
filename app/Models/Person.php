@@ -29,6 +29,26 @@ class Person extends Model
         'deleted_at',
     ];
 
+    const clientFilters = [
+        'ruc',
+        'businessName',
+        'email',
+        'phone',
+        'representativeDni',
+        'representativeNames',
+        'country_id',
+    ];
+
+    const clientSorts = [
+        'ruc',
+        'businessName',
+        'email',
+        'phone',
+        'representativeDni',
+        'representativeNames',
+        'country_id',
+    ];
+
     public function country()
     {
         return $this->belongsTo(Country::class);

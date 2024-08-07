@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\IndexClientRequest;
+use App\Http\Resources\ClientResource;
 use App\Http\Resources\SupplierResource;
 use App\Models\Person;
 use Illuminate\Http\Request;
@@ -40,29 +42,15 @@ class ClientController extends Controller
      *     )
      * )
      */
-    public function index(Request $request)
+    public function index(IndexClientRequest $request)
     {
-        $validator = validator($request->query(), [
-            'pagination' => 'nullable|integer',
-            'all' => 'nullable|string|in:true,false',
-        ]);
-
-        if ($validator->fails()) {
-            return response()->json(['error' => $validator->errors()->first()], 422);
-        }
-
-        $pagination = $request->query('pagination', 5);
-        $all = $request->query('all', 'false') == 'true';
-
-        $clients = Person::with('country')->where('type', 'client');
-
-        if (!$all) {
-            $clients = $clients->paginate($pagination);
-        } else {
-            $clients = $clients->get();
-        }
-
-        return SupplierResource::collection($clients);
+        return $this->getFilteredResults(
+            Person::where('type', 'client'),
+            $request,
+            Person::clientFilters,
+            Person::clientSorts,
+            ClientResource::class
+        );
     }
 
     public function store(Request $request)
