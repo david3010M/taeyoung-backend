@@ -96,7 +96,8 @@ class SparePartController extends Controller
             'name' => 'required|string',
             'purchasePrice' => 'required|numeric',
             'salePrice' => 'required|numeric',
-            'stock' => 'required|integer'
+            'stock' => 'required|integer',
+            'unit_id' => 'required|integer|exists:units,id',
         ]);
 
         if ($validator->fails()) {
@@ -109,12 +110,13 @@ class SparePartController extends Controller
             'purchasePrice' => $request->input('purchasePrice'),
             'salePrice' => $request->input('salePrice'),
             'stock' => $request->input('stock'),
+            'unit_id' => $request->input('unit_id'),
         ];
 
         $sparePart = SparePart::create($data);
         $sparePart = SparePart::find($sparePart->id);
 
-        return response()->json($sparePart);
+        return response()->json(new SparePartResource($sparePart));
     }
 
     /**
@@ -173,15 +175,15 @@ class SparePartController extends Controller
 
         $validator = validator($request->all(), [
             'code' => [
-                'required',
+                'nullable',
                 'string',
                 Rule::unique('spare_parts', 'code')->whereNull('deleted_at')->ignore($sparePart->id),
             ],
-            'name' => 'required|string',
-            'purchasePrice' => 'required|numeric',
-            'salePrice' => 'required|numeric',
-            'stock' => 'required|integer',
-
+            'name' => 'nullable|string',
+            'purchasePrice' => 'nullable|numeric',
+            'salePrice' => 'nullable|numeric',
+            'stock' => 'nullable|integer',
+            'unit_id' => 'nullable|integer|exists:units,id',
         ]);
 
         if ($validator->fails()) {
@@ -189,17 +191,18 @@ class SparePartController extends Controller
         }
 
         $data = [
-            'code' => $request->input('code'),
-            'name' => $request->input('name'),
-            'purchasePrice' => $request->input('purchasePrice'),
-            'salePrice' => $request->input('salePrice'),
-            'stock' => $request->input('stock'),
+            'code' => $request->input('code') ?? $sparePart->code,
+            'name' => $request->input('name') ?? $sparePart->name,
+            'purchasePrice' => $request->input('purchasePrice') ?? $sparePart->purchasePrice,
+            'salePrice' => $request->input('salePrice') ?? $sparePart->salePrice,
+            'stock' => $request->input('stock') ?? $sparePart->stock,
+            'unit_id' => $request->input('unit_id') ?? $sparePart->unit_id,
         ];
 
         $sparePart->update($data);
         $sparePart = SparePart::find($sparePart->id);
 
-        return response()->json($sparePart);
+        return response()->json(new SparePartResource($sparePart));
     }
 
     public function destroy(int $id)

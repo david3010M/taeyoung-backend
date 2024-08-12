@@ -17,6 +17,8 @@ return new class extends Migration {
             $table->string('movementType')->default('purchase');
             $table->decimal('purchasePrice')->nullable();
             $table->decimal('salePrice')->nullable();
+            $table->decimal('purchaseValue')->nullable();
+            $table->decimal('saleValue')->nullable();
             $table->foreignId('order_id')->nullable()->constrained('orders');
             $table->foreignId('quotation_id')->nullable()->constrained('quotations');
             $table->timestamps();

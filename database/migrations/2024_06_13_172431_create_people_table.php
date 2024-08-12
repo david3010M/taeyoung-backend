@@ -13,9 +13,13 @@ return new class extends Migration {
         Schema::create('people', function (Blueprint $table) {
             $table->id();
             $table->string('type'); // client or provider
-            $table->string('ruc'); // UNIQUE THEN
+            $table->string('ruc')->nullable();
+            $table->string('dni')->nullable();
             $table->string('businessName')->nullable();
-//            $table->string('address')->nullable();
+            $table->string('names')->nullable();
+            $table->string('fatherSurname')->nullable();
+            $table->string('motherSurname')->nullable();
+            $table->string('address')->nullable();
             $table->string('email')->nullable();
             $table->integer('phone')->nullable();
             $table->string('representativeDni')->nullable();

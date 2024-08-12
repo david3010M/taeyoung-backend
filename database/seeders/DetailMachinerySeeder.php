@@ -15,11 +15,10 @@ class DetailMachinerySeeder extends Seeder
         foreach ($quotations as $quotation) {
             $detailMachinery = DetailMachinery::factory()->sale()->create([
                 'quotation_id' => $quotation->id,
-                'movementType' => 'purchase',
-                'salePrice' => rand(100, 1000),
+                'movementType' => 'quotation'
             ]);
 
-            $totalMachinery = $detailMachinery->salePrice * $detailMachinery->quantity;
+            $totalMachinery = $detailMachinery->saleValue;
             $subtotal = $totalMachinery + $quotation->subtotal;
             $igv = $subtotal * 0.18;
             $total = $subtotal + $igv;

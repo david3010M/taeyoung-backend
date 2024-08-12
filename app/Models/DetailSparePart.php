@@ -16,6 +16,8 @@ class DetailSparePart extends Model
         'movementType',
         'purchasePrice',
         'salePrice',
+        'purchaseValue',
+        'saleValue',
         'spare_part_id',
         'quotation_id',
         'order_id',
@@ -37,6 +39,8 @@ class DetailSparePart extends Model
         'movementType' => 'like',
         'purchasePrice' => 'like',
         'salePrice' => 'like',
+        'purchaseValue' => 'like',
+        'saleValue' => 'like',
         'order_id' => 'like',
         'spare_part_id' => 'like',
     ];
@@ -47,6 +51,8 @@ class DetailSparePart extends Model
         'movementType',
         'purchasePrice',
         'salePrice',
+        'purchaseValue',
+        'saleValue',
         'order_id',
         'spare_part_id',
     ];

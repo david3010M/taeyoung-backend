@@ -261,6 +261,209 @@
                 ]
             }
         },
+        "/taeyoung-backend/public/api/searchByDni/{dni}": {
+            "get": {
+                "tags": [
+                    "Search"
+                ],
+                "summary": "Search information by DNI",
+                "description": "Search information about a person by their DNI number.",
+                "operationId": "bd8cc3277dea38f8d0960e352a162f8b",
+                "parameters": [
+                    {
+                        "name": "dni",
+                        "in": "path",
+                        "description": "DNI number of the person to search",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Information found successfully.",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "array",
+                                    "items": {
+                                        "properties": {
+                                            "code": {
+                                                "type": "integer",
+                                                "example": 0
+                                            },
+                                            "dni": {
+                                                "type": "string",
+                                                "example": "string"
+                                            },
+                                            "apepat": {
+                                                "type": "string",
+                                                "example": "string"
+                                            },
+                                            "apemat": {
+                                                "type": "string",
+                                                "example": "string"
+                                            },
+                                            "apcas": {
+                                                "type": "string",
+                                                "example": ""
+                                            },
+                                            "nombres": {
+                                                "type": "string",
+                                                "example": "string"
+                                            },
+                                            "fecnac": {
+                                                "type": "string",
+                                                "format": "date"
+                                            },
+                                            "ubigeo": {
+                                                "type": "integer"
+                                            }
+                                        },
+                                        "type": "object"
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "Validation error",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "error": {
+                                            "type": "string",
+                                            "example": "The given data was invalid."
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthenticated.",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "msg": {
+                                            "type": "string",
+                                            "example": "Unauthenticated."
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
+        "/taeyoung-backend/public/api/searchByRuc/{ruc}": {
+            "get": {
+                "tags": [
+                    "Search"
+                ],
+                "summary": "Search information by RUC",
+                "description": "Search information about a person by their RUC number.",
+                "operationId": "6cf1264264f79f452b70f4b2856e9dc3",
+                "parameters": [
+                    {
+                        "name": "ruc",
+                        "in": "path",
+                        "description": "RUC number of the person to search",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Information found successfully.",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "array",
+                                    "items": {
+                                        "properties": {
+                                            "code": {
+                                                "type": "integer",
+                                                "example": 0
+                                            },
+                                            "RUC": {
+                                                "type": "string",
+                                                "example": "string"
+                                            },
+                                            "RazonSocial": {
+                                                "type": "string",
+                                                "example": "string"
+                                            },
+                                            "Direccion": {
+                                                "type": "string",
+                                                "example": "string"
+                                            },
+                                            "Tipo": {
+                                                "type": "string"
+                                            },
+                                            "Inscripcion": {
+                                                "type": "string"
+                                            }
+                                        },
+                                        "type": "object"
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthenticated.",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "msg": {
+                                            "type": "string",
+                                            "example": "Unauthenticated."
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "Validation error",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "error": {
+                                            "type": "string",
+                                            "example": "The given data was invalid."
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
         "/taeyoung-backend/public/api/spareparts": {
             "get": {
                 "tags": [

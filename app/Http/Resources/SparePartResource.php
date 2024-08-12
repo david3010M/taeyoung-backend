@@ -37,7 +37,11 @@ class SparePartResource extends JsonResource
             'name' => $this->name,
             'purchasePrice' => $this->purchasePrice ? round($this->purchasePrice, 2) : null,
             'salePrice' => $this->salePrice ? round($this->salePrice, 2) : null,
-            'stock' => $this->stock
+            'purchaseValue' => $this->purchaseValue ? round($this->purchaseValue, 2) : null,
+            'saleValue' => $this->saleValue ? round($this->saleValue, 2) : null,
+            'stock' => $this->stock,
+            'unit_id' => $this->unit_id,
+            'unit' => $this->unit,
         ];
     }
 }

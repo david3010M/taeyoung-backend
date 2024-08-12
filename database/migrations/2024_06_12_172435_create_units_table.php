@@ -10,15 +10,10 @@ return new class extends Migration {
      */
     public function up(): void
     {
-        Schema::create('spare_parts', function (Blueprint $table) {
+        Schema::create('units', function (Blueprint $table) {
             $table->id();
-            $table->string('code');
             $table->string('name');
-            $table->decimal('purchasePrice');
-            $table->decimal('salePrice');
-            $table->integer('stock');
-//            $table->string('description')->nullable();
-            $table->foreignId('unit_id')->constrained('units');
+            $table->string('abbreviation');
             $table->timestamps();
             $table->softDeletes();
         });
@@ -29,6 +24,6 @@ return new class extends Migration {
      */
     public function down(): void
     {
-        Schema::dropIfExists('spare_parts');
+        Schema::dropIfExists('units');
     }
 };

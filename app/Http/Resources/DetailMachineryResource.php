@@ -30,7 +30,9 @@ class DetailMachineryResource extends JsonResource
             'quantity' => $this->quantity,
             'movementType' => $this->movementType,
             'purchasePrice' => $this->purchasePrice ? round($this->purchasePrice, 2) : null,
-            'salePrice' => $this->salePrice ? round($this->salePrice) : null,
+            'salePrice' => $this->salePrice ? round($this->salePrice, 2) : null,
+            'purchaseValue' => $this->purchaseValue ? round($this->purchaseValue, 2) : null,
+            'saleValue' => $this->saleValue ? round($this->saleValue, 2) : null,
             'order_id' => $this->order_id,
             'quotation_id' => $this->quotation_id
         ];

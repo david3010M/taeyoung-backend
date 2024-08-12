@@ -16,7 +16,7 @@ class DetailSparePartSeeder extends Seeder
             $detailSparePart = DetailSparePart::factory()->sale()->create([
                 'quotation_id' => $quotation->id,
             ]);
-            $totalSparePart = $detailSparePart->salePrice * $detailSparePart->quantity;
+            $totalSparePart = $detailSparePart->saleValue;
             $subtotal = $totalSparePart + $quotation->subtotal;
             $igv = $subtotal * 0.18;
             $total = $subtotal + $igv;

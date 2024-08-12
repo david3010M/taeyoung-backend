@@ -25,6 +25,7 @@ class DetailSparePartFactory extends Factory
             'movementType' => 'purchase',
             'quantity' => $quantity,
             'purchasePrice' => $purchasePrice,
+            'purchaseValue' => $quantity * $purchasePrice,
             'spare_part_id' => $sparePart->id,
         ]);
     }
@@ -39,6 +40,7 @@ class DetailSparePartFactory extends Factory
             'movementType' => 'sale',
             'quantity' => $quantity,
             'salePrice' => $salePrice,
+            'saleValue' => $quantity * $salePrice,
             'spare_part_id' => $sparePart->id,
         ]);
     }

@@ -51,6 +51,7 @@ class QuotationController extends Controller
                     'quantity' => $detail['quantity'],
                     'movementType' => 'quotation',
                     'salePrice' => $detail['salePrice'],
+                    'saleValue' => $detail['salePrice'] * $detail['quantity'],
                     'quotation_id' => $quotation->id,
                 ]);
                 $totalMachinery += $detailMachinery->salePrice * $detailMachinery->quantity;
@@ -107,9 +108,10 @@ class QuotationController extends Controller
                     'quantity' => $detail['quantity'],
                     'movementType' => 'quotation',
                     'salePrice' => $detail['salePrice'],
+                    'saleValue' => $detail['salePrice'] * $detail['quantity'],
                     'quotation_id' => $quotation->id,
                 ]);
-                $totalMachinery += $detailMachinery->salePrice * $detailMachinery->quantity;
+                $totalMachinery += $detailMachinery->saleValue;
             }
         }
 
@@ -157,10 +159,11 @@ class QuotationController extends Controller
                 'quantity' => $detail['quantity'],
                 'movementType' => 'quotation',
                 'salePrice' => $sparePart->salePrice,
+                'saleValue' => $sparePart->salePrice * $detail['quantity'],
                 'spare_part_id' => $detail['spare_part_id'],
                 'quotation_id' => $quotation->id,
             ]);
-            $totalSpareParts += $detailSparePart->salePrice * $detailSparePart->quantity;
+            $totalSpareParts += $detailSparePart->saleValue;
         }
         return $totalSpareParts;
     }

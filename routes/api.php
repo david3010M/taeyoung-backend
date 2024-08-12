@@ -16,6 +16,7 @@ use App\Http\Controllers\SearchController;
 use App\Http\Controllers\SparePartController;
 use App\Http\Controllers\SupplierController;
 use App\Http\Controllers\TypeUserController;
+use App\Http\Controllers\UnitController;
 use App\Http\Controllers\UserController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
@@ -147,6 +148,19 @@ Route::group(
                 'show' => 'client.show',
                 'update' => 'client.update',
                 'destroy' => 'client.destroy',
+            ]
+        );
+
+//        UNIT
+        Route::resource('unit', UnitController::class)->only(
+            ['index', 'show', 'store', 'update', 'destroy']
+        )->names(
+            [
+                'index' => 'unit.index',
+                'store' => 'unit.store',
+                'show' => 'unit.show',
+                'update' => 'unit.update',
+                'destroy' => 'unit.destroy',
             ]
         );
 

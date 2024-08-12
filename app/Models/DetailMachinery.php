@@ -17,6 +17,8 @@ class DetailMachinery extends Model
         'movementType',
         'purchasePrice',
         'salePrice',
+        'purchaseValue',
+        'saleValue',
         'quotation_id',
         'order_id',
     ];
@@ -38,6 +40,8 @@ class DetailMachinery extends Model
         'movementType' => 'like',
         'purchasePrice' => 'like',
         'salePrice' => 'like',
+        'purchaseValue' => 'like',
+        'saleValue' => 'like',
         'order_id' => 'like',
         'quotation_id' => 'like'
     ];
@@ -49,6 +53,8 @@ class DetailMachinery extends Model
         'movementType',
         'purchasePrice',
         'salePrice',
+        'purchaseValue',
+        'saleValue',
         'order_id',
         'quotation_id'
     ];

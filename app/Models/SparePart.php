@@ -30,6 +30,7 @@ class SparePart extends Model
         'purchasePrice',
         'salePrice',
         'stock',
+        'unit_id',
     ];
 
     protected $casts = [
@@ -56,5 +57,10 @@ class SparePart extends Model
         'salePrice',
         'stock',
     ];
+
+    public function unit()
+    {
+        return $this->belongsTo(Unit::class);
+    }
 
 }
