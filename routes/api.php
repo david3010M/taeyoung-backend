@@ -9,6 +9,7 @@ use App\Http\Controllers\DetailSparePartController;
 use App\Http\Controllers\GroupMenuController;
 use App\Http\Controllers\MachineryPurchaseController;
 use App\Http\Controllers\OptionMenuController;
+use App\Http\Controllers\PaymentConceptController;
 use App\Http\Controllers\PdfController;
 use App\Http\Controllers\PersonController;
 use App\Http\Controllers\QuotationController;
@@ -226,6 +227,19 @@ Route::group(
                 'show' => 'detailSparePart.show',
                 'update' => 'detailSparePart.update',
                 'destroy' => 'detailSparePart.destroy',
+            ]
+        );
+
+//        PAYMENT CONCEPT
+        Route::resource('paymentConcept', PaymentConceptController::class)->only(
+            ['index', 'show', 'store', 'update', 'destroy']
+        )->names(
+            [
+                'index' => 'paymentConcept.index',
+                'store' => 'paymentConcept.store',
+                'show' => 'paymentConcept.show',
+                'update' => 'paymentConcept.update',
+                'destroy' => 'paymentConcept.destroy',
             ]
         );
 
