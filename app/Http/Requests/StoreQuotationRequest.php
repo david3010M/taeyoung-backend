@@ -9,17 +9,14 @@ class StoreQuotationRequest extends StoreRequest
     public function rules(): array
     {
         return [
-//            NULLABLE
-            'detail' => 'nullable|string',
-            'currency_id' => 'nullable|exists:currencies,id',
-
-//            REQUIRED
             'date' => 'required|date',
-            'currencyType' => 'required|string',
-            'initialPayment' => 'nullable|numeric',
+            'detail' => 'nullable|string',
+            'discount' => 'nullable|numeric',
+            'currencyType' => 'nullable|string',
             'client_id' => [
                 'required',
-                Rule::exists('people', 'id')->where('type', 'client')
+                Rule::exists('people', 'id')
+                    ->where('type', 'client')
             ],
 
 //            DETAILS

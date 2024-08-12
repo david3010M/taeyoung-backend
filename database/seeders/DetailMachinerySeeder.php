@@ -18,9 +18,17 @@ class DetailMachinerySeeder extends Seeder
                 'movementType' => 'purchase',
                 'salePrice' => rand(100, 1000),
             ]);
-            $price = $detailMachinery->purchasePrice * $detailMachinery->quantity;
+
+            $totalMachinery = $detailMachinery->salePrice * $detailMachinery->quantity;
+            $subtotal = $totalMachinery + $quotation->subtotal;
+            $igv = $subtotal * 0.18;
+            $total = $subtotal + $igv;
+
             $quotation->update([
-                'price' => $price + $quotation->price,
+                'totalMachinery' => $totalMachinery,
+                'subtotal' => $subtotal,
+                'igv' => $igv,
+                'total' => $total
             ]);
         }
     }

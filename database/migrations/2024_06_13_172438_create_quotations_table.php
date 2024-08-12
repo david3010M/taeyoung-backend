@@ -14,17 +14,20 @@ return new class extends Migration {
         Schema::create('quotations', function (Blueprint $table) {
             $table->id();
             $table->string('number');
-            $table->string('detail')->nullable();
             $table->dateTime('date');
-            $table->string('currencyType')->nullable();
-            $table->string('price')->nullable();
-            $table->string('initialPayment')->nullable();
-            $table->string('balance')->nullable();
-            $table->string('debts')->nullable();
-            $table->string('exchangeRate')->nullable();
+            $table->string('detail')->nullable();
 
-            $table->foreignId('currency_id')->nullable()->constrained();
+            $table->string('paymentType')->nullable(); // CONTADO O CREDITO
+            $table->string('currencyType')->nullable();
+            $table->decimal('totalMachinery')->nullable();
+            $table->decimal('totalSpareParts')->nullable();
+            $table->decimal('subtotal')->nullable()->default(0);
+            $table->decimal('igv')->nullable()->default(0);
+            $table->decimal('discount')->nullable()->default(0);
+            $table->decimal('total')->nullable()->default(0);
+
             $table->foreignId('client_id')->constrained('people');
+
             $table->timestamps();
             $table->softDeletes();
         });

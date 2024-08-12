@@ -15,18 +15,16 @@ class OrderSeeder extends Seeder
         $quotations = Quotation::all();
 
         foreach ($quotations as $quotation) {
-            $price = $quotation->price;
-            $totalIncome = $price * 1.2;
-            $totalExpense = $price * 1;
+            $total = $quotation->total;
+            $totalIncome = $total;
+            $totalExpense = $total;
             $quotation->update([
-                'price' => $totalIncome,
-                'initialPayment' => $totalIncome * 0.5,
-                'balance' => $totalIncome * 0.5,
+                'total' => $totalIncome,
             ]);
 
             $order = Order::factory()->create(
                 [
-                    'type' => 'purchase',
+                    'type' => 'sale',
                     'quantity' => 1,
                     'totalIncome' => $totalIncome,
                     'totalExpense' => $totalExpense,

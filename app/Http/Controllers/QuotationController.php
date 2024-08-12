@@ -30,17 +30,16 @@ class QuotationController extends Controller
     {
         $dataQuotation = [
             'number' => $this->nextCorrelative(Quotation::class, 'number'),
-            'detail' => $request->input('detail'),
             'date' => $request->input('date'),
+            'detail' => $request->input('detail'),
             'currencyType' => $request->input('currencyType'),
-            'initialPayment' => $request->input('initialPayment'),
-            'debts' => $request->input('debts'),
+            'discount' => $request->input('discount'),
             'client_id' => $request->input('client_id'),
-            'currency_id' => $request->input('currency_id'),
         ];
 
         $quotation = Quotation::create($dataQuotation);
-        $totalPrice = 0;
+        $totalMachinery = 0;
+        $totalSpareParts = 0;
 
         $detailMachinery = $request->input('detailMachinery');
         $detailSpareParts = $request->input('detailSpareParts');
@@ -54,15 +53,20 @@ class QuotationController extends Controller
                     'salePrice' => $detail['salePrice'],
                     'quotation_id' => $quotation->id,
                 ]);
-                $totalPrice += $detailMachinery->salePrice * $detailMachinery->quantity;
+                $totalMachinery += $detailMachinery->salePrice * $detailMachinery->quantity;
             }
         }
 
         if ($detailSpareParts) {
-            $this->addDetailSpareParts($detailSpareParts, $quotation, $totalPrice);
+            $totalSpareParts = $this->addDetailSpareParts($detailSpareParts, $quotation);
         }
 
-        $quotation->balance = $quotation->price - $quotation->initialPayment;
+        $quotation->totalSpareParts = $totalSpareParts;
+        $quotation->totalMachinery = $totalMachinery;
+        $quotation->subtotal = $totalMachinery + $totalSpareParts;
+        $quotation->igv = $quotation->subtotal * 0.18;
+        $quotation->discount = (float)$request->input('discount');
+        $quotation->total = $quotation->subtotal + $quotation->igv - $quotation->discount;
         $quotation->update();
 
         $quotation = Quotation::find($quotation->id);
@@ -85,14 +89,12 @@ class QuotationController extends Controller
             'detail' => $request->input('detail') ?? $quotation->detail,
             'date' => $request->input('date') ?? $quotation->date,
             'currencyType' => $request->input('currencyType') ?? $quotation->currencyType,
-            'price' => $request->input('price') ?? $quotation->price,
-            'initialPayment' => $request->input('initialPayment') ?? $quotation->initialPayment,
-            'debts' => $request->input('debts') ?? $quotation->debts,
-            'client_id' => $request->input('client_id') ?? $quotation->client_id,
-            'currency_id' => $request->input('currency_id') ?? $quotation->currency_id
+            'discount' => $request->input('discount') ?? $quotation->discount,
+//            'client_id' => $request->input('client_id') ?? $quotation->client_id,
         ];
         $quotation->update($data);
-        $totalPrice = 0;
+        $totalMachinery = 0;
+        $totalSpareParts = 0;
 
         $detailMachinery = $request->input('detailMachinery');
         $detailSpareParts = $request->input('detailSpareParts');
@@ -107,17 +109,23 @@ class QuotationController extends Controller
                     'salePrice' => $detail['salePrice'],
                     'quotation_id' => $quotation->id,
                 ]);
-                $totalPrice += $detailMachinery->salePrice * $detailMachinery->quantity;
+                $totalMachinery += $detailMachinery->salePrice * $detailMachinery->quantity;
             }
         }
 
         if ($detailSpareParts) {
             $quotation->detailSpareParts()->delete();
-            $this->addDetailSpareParts($detailSpareParts, $quotation, $totalPrice);
+            $totalSpareParts = $this->addDetailSpareParts($detailSpareParts, $quotation);
         }
 
-        $quotation->balance = $quotation->price - $quotation->initialPayment;
+        $quotation->totalSpareParts = $totalSpareParts;
+        $quotation->totalMachinery = $totalMachinery;
+        $quotation->subtotal = $totalMachinery + $totalSpareParts;
+        $quotation->igv = $quotation->subtotal * 0.18;
+        $quotation->discount = (float)$request->input('discount');
+        $quotation->total = $quotation->subtotal + $quotation->igv - $quotation->discount;
         $quotation->update();
+
 
         $quotation = Quotation::find($quotation->id);
         return response()->json(new QuotationResource($quotation));
@@ -131,9 +139,10 @@ class QuotationController extends Controller
         return response()->json(['message' => 'Quotation deleted']);
     }
 
-    private function addDetailSpareParts(mixed $detailSpareParts, $quotation, $totalPrice): void
+    private function addDetailSpareParts(mixed $detailSpareParts, $quotation)
     {
         $detailSparePartsValidate = [];
+        $totalSpareParts = 0;
         foreach ($detailSpareParts as $detail) {
             if (array_key_exists($detail['spare_part_id'], $detailSparePartsValidate)) {
                 $detailSparePartsValidate[$detail['spare_part_id']]['quantity'] += $detail['quantity'];
@@ -151,7 +160,8 @@ class QuotationController extends Controller
                 'spare_part_id' => $detail['spare_part_id'],
                 'quotation_id' => $quotation->id,
             ]);
-            $totalPrice += $detailSparePart->salePrice * $detailSparePart->quantity;
+            $totalSpareParts += $detailSparePart->salePrice * $detailSparePart->quantity;
         }
+        return $totalSpareParts;
     }
 }

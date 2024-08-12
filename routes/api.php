@@ -12,6 +12,7 @@ use App\Http\Controllers\OptionMenuController;
 use App\Http\Controllers\PdfController;
 use App\Http\Controllers\PersonController;
 use App\Http\Controllers\QuotationController;
+use App\Http\Controllers\SearchController;
 use App\Http\Controllers\SparePartController;
 use App\Http\Controllers\SupplierController;
 use App\Http\Controllers\TypeUserController;
@@ -40,6 +41,10 @@ Route::group(
 
         Route::get('/authenticate', [AuthController::class, 'authenticate'])->name('authenticate');
         Route::get('/logout', [AuthController::class, 'logout'])->name('logout');
+
+//         SEARCH
+        Route::get('searchByDni/{dni}', [SearchController::class, 'searchByDni']);
+        Route::get('searchByRuc/{ruc}', [SearchController::class, 'searchByRuc']);
 
 //        GROUP MENU
         Route::resource('groupmenu', GroupMenuController::class)->only(

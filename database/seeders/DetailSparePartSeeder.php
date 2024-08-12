@@ -2,11 +2,8 @@
 
 namespace Database\Seeders;
 
-use App\Models\DetailMachinery;
 use App\Models\DetailSparePart;
-use App\Models\Order;
 use App\Models\Quotation;
-use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 
 class DetailSparePartSeeder extends Seeder
@@ -19,9 +16,16 @@ class DetailSparePartSeeder extends Seeder
             $detailSparePart = DetailSparePart::factory()->sale()->create([
                 'quotation_id' => $quotation->id,
             ]);
-            $price = $detailSparePart->salePrice * $detailSparePart->quantity;
+            $totalSparePart = $detailSparePart->salePrice * $detailSparePart->quantity;
+            $subtotal = $totalSparePart + $quotation->subtotal;
+            $igv = $subtotal * 0.18;
+            $total = $subtotal + $igv;
+
             $quotation->update([
-                'price' => $price + $quotation->price,
+                'totalSpareParts' => $totalSparePart,
+                'subtotal' => $subtotal,
+                'igv' => $igv,
+                'total' => $total
             ]);
         }
     }

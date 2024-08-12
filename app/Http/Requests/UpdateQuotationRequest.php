@@ -9,17 +9,14 @@ class UpdateQuotationRequest extends UpdateRequest
     public function rules(): array
     {
         return [
+            'date' => 'required|date',
             'detail' => 'nullable|string',
-            'currency_id' => 'nullable|exists:currencies,id',
-
-            'date' => 'nullable|date',
+            'discount' => 'nullable|numeric',
             'currencyType' => 'nullable|string',
-            'price' => 'nullable|numeric',
-            'initialPayment' => 'nullable|numeric',
-            'debts' => 'nullable|int',
             'client_id' => [
                 'nullable',
-                Rule::exists('people', 'id')->where('type', 'client')
+                Rule::exists('people', 'id')
+                    ->where('type', 'client')
             ],
             'detailMachinery' => 'nullable|array',
             'detailMachinery.*.description' => 'required|string',
