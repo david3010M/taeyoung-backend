@@ -26,21 +26,29 @@ class PaymentConceptController extends Controller
         $number = $this->nextCorrelative(PaymentConcept::class, 'number');
         $paymentConcept = PaymentConcept::create(array_merge($request->validated(), ['number' => $number]));
         $paymentConcept = PaymentConcept::find($paymentConcept->id);
-        return new PaymentConceptResource($paymentConcept);
+        return response()->json(new PaymentConceptResource($paymentConcept));
     }
 
     public function show(int $id)
     {
-        //
+        $paymentConcept = PaymentConcept::find($id);
+        if (!$paymentConcept) return response()->json(['message' => 'Payment concept not found'], 404);
+        return response()->json(new PaymentConceptResource($paymentConcept));
     }
 
     public function update(UpdatePaymentConceptRequest $request, int $id)
     {
-        //
+        $paymentConcept = PaymentConcept::find($id);
+        $paymentConcept->update($request->validated());
+        $paymentConcept = PaymentConcept::find($paymentConcept->id);
+        return response()->json(new PaymentConceptResource($paymentConcept));
     }
 
     public function destroy(int $id)
     {
-        //
+        $paymentConcept = PaymentConcept::find($id);
+        if (!$paymentConcept) return response()->json(['message' => 'Payment concept not found'], 404);
+        $paymentConcept->delete();
+        return response()->json(['message' => 'Payment concept deleted']);
     }
 }
