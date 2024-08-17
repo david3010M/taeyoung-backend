@@ -12,13 +12,13 @@ return new class extends Migration {
     {
         Schema::create('spare_parts', function (Blueprint $table) {
             $table->id();
-            $table->string('code');
+            $table->string('code')->nullable();
             $table->string('name');
             $table->decimal('purchasePrice');
             $table->decimal('salePrice');
-            $table->integer('stock');
+            $table->integer('stock')->nullable();
 //            $table->string('description')->nullable();
-            $table->foreignId('unit_id')->constrained('units');
+            $table->foreignId('unit_id')->nullable()->default(1)->constrained('units');
             $table->timestamps();
             $table->softDeletes();
         });

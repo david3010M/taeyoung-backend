@@ -13,6 +13,7 @@ class Person extends Model
 
     protected $fillable = [
         'type',
+        'typeDocument',
         'dni',
         'ruc',
         'names',

@@ -39,18 +39,18 @@ class ClientResource extends JsonResource
     {
         return [
             'id' => $this->id,
-            'type' => $this->type,
-            'dni' => $this->type === 'DNI' ? $this->dni : null,
-            'ruc' => $this->type === 'RUC' ? $this->ruc : null,
-            'names' => $this->type === 'DNI' ? $this->names : null,
-            'fatherSurname' => $this->type === 'DNI' ? $this->fatherSurname : null,
-            'motherSurname' => $this->type === 'DNI' ? $this->motherSurname : null,
-            'businessName' => $this->type === 'RUC' ? $this->businessName : null,
+            'typeDocument' => $this->typeDocument,
+            'dni' => $this->typeDocument === 'DNI' ? $this->dni : null,
+            'ruc' => $this->typeDocument === 'RUC' ? $this->ruc : null,
+            'names' => $this->typeDocument === 'DNI' ? $this->names : null,
+            'fatherSurname' => $this->typeDocument === 'DNI' ? $this->fatherSurname : null,
+            'motherSurname' => $this->typeDocument === 'DNI' ? $this->motherSurname : null,
+            'businessName' => $this->typeDocument === 'RUC' ? $this->businessName : null,
             'address' => $this->address,
             'email' => $this->email,
             'phone' => $this->phone,
-            'representativeDni' => $this->type === 'RUC' ? $this->representativeDni : null,
-            'representativeNames' => $this->type === 'RUC' ? $this->representativeNames : null,
+            'representativeDni' => $this->typeDocument === 'RUC' ? $this->representativeDni : null,
+            'representativeNames' => $this->typeDocument === 'RUC' ? $this->representativeNames : null,
             'country' => (new CountryResource($this->country))->name,
         ];
     }

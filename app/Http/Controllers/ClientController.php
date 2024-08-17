@@ -54,7 +54,10 @@ class ClientController extends Controller
 
     public function store(StoreClientRequest $request)
     {
-        $client = Person::create($request->validated());
+        if ($request->typeDocument === 'DNI') $request->merge(['ruc' => null, 'businessName' => null, 'representativeDni' => null, 'representativeNames' => null]);
+        else $request->merge(['dni' => null, 'names' => null, 'fatherSurname' => null, 'motherSurname' => null]);
+        $request->merge(['type' => 'client']);
+        $client = Person::create($request->all());
         $client = Person::with('country')->find($client->id);
         return response()->json($client);
     }
@@ -70,7 +73,9 @@ class ClientController extends Controller
     {
         $client = Person::where('type', 'client')->find($id);
         if (!$client) return response()->json(['message' => 'Client not found'], 404);
-        $client->update($request->validated());
+        if ($request->typeDocument === 'DNI') $request->merge(['ruc' => null, 'businessName' => null, 'representativeDni' => null, 'representativeNames' => null]);
+        else $request->merge(['dni' => null, 'names' => null, 'fatherSurname' => null, 'motherSurname' => null]);
+        $client->update($request->all());
         $client = Person::with('country')->where('type', 'client')->find($id);
         return response()->json($client);
     }

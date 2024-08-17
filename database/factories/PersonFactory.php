@@ -2,6 +2,7 @@
 
 namespace Database\Factories;
 
+use App\Models\Country;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 /**
@@ -16,15 +17,23 @@ class PersonFactory extends Factory
      */
     public function definition(): array
     {
+        $countries = Country::all();
+        $typeDocument = $this->faker->randomElement(['DNI', 'RUC']);
         return [
             'type' => 'client',
-            'ruc' => $this->faker->unique()->numberBetween(10000000000, 99999999999),
-            'businessName' => $this->faker->company(),
-            'email' => $this->faker->unique()->safeEmail(),
-            'phone' => $this->faker->unique()->numberBetween(900000000, 999999999),
-            'representativeDni' => $this->faker->unique()->numberBetween(10000000, 99999999),
-            'representativeNames' => $this->faker->name(),
-            'country_id' => $this->faker->numberBetween(1, 4),
+            'typeDocument' => $typeDocument,
+            'dni' => $typeDocument === 'DNI' ? $this->faker->unique()->numberBetween(10000000, 99999999) : null,
+            'ruc' => $typeDocument === 'RUC' ? $this->faker->unique()->numberBetween(10000000000, 99999999999) : null,
+            'businessName' => $typeDocument === 'RUC' ? $this->faker->company : null,
+            'names' => $typeDocument === 'DNI' ? $this->faker->firstName : null,
+            'fatherSurname' => $typeDocument === 'DNI' ? $this->faker->lastName : null,
+            'motherSurname' => $typeDocument === 'DNI' ? $this->faker->lastName : null,
+            'address' => $this->faker->address,
+            'email' => $this->faker->unique()->safeEmail,
+            'phone' => $this->faker->unique()->numberBetween(100000000, 999999999),
+            'representativeDni' => $typeDocument === 'RUC' ? $this->faker->unique()->numberBetween(10000000, 99999999) : null,
+            'representativeNames' => $typeDocument === 'RUC' ? $this->faker->name : null,
+            'country_id' => $countries->random()->id,
         ];
     }
 }

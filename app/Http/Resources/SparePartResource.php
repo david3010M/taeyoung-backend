@@ -33,7 +33,7 @@ class SparePartResource extends JsonResource
     {
         return [
             'id' => $this->id,
-            'code' => $this->code,
+            'code' => 'REPU-' . $this->code,
             'name' => $this->name,
             'purchasePrice' => $this->purchasePrice ? round($this->purchasePrice, 2) : null,
             'salePrice' => $this->salePrice ? round($this->salePrice, 2) : null,

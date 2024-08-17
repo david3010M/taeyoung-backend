@@ -9,27 +9,27 @@ class StoreClientRequest extends StoreRequest
     public function rules(): array
     {
         return [
-            'type' => 'required|string|in:DNI,RUC',
+            'typeDocument' => 'required|string|in:DNI,RUC',
             'dni' => [
-                'requiredIf:type,DNI',
+                'requiredIf:typeDocument,DNI',
                 'string',
                 'min:8',
                 'max:8',
-                Rule::unique('people')->where('type', 'client')
+                Rule::unique('people', 'dni')
+                    ->where('type', 'client')
                     ->whereNull('deleted_at')
             ],
             'ruc' => [
-                'requiredIf:type,RUC',
+                'requiredIf:typeDocument,RUC',
                 'string',
                 'min:11',
                 'max:11',
-                Rule::unique('people')->where('type', 'client')
-                    ->whereNull('deleted_at')
+                Rule::unique('people', 'ruc')->whereNull('deleted_at')
             ],
-            'names' => 'requiredIf:type,DNI|string',
-            'fatherSurname' => 'requiredIf:type,DNI|string',
-            'motherSurname' => 'requiredIf:type,DNI|string',
-            'businessName' => 'requiredIf:type,RUC|string',
+            'names' => 'requiredIf:typeDocument,DNI|string',
+            'fatherSurname' => 'requiredIf:typeDocument,DNI|string',
+            'motherSurname' => 'requiredIf:typeDocument,DNI|string',
+            'businessName' => 'requiredIf:typeDocument,RUC|string',
             'address' => 'nullable|string',
             'email' => 'nullable|email',
             'phone' => 'nullable|integer',

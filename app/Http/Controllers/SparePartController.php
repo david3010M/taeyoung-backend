@@ -3,6 +3,8 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\IndexSparePartRequest;
+use App\Http\Requests\StoreSparePartRequest;
+use App\Http\Requests\UpdateSparePartRequest;
 use App\Http\Resources\QuotationResource;
 use App\Http\Resources\SparePartResource;
 use App\Models\Quotation;
@@ -85,37 +87,11 @@ class SparePartController extends Controller
      *     )
      * )
      */
-    public function store(Request $request)
+    public function store(StoreSparePartRequest $request)
     {
-        $validator = validator($request->all(), [
-            'code' => [
-                'required',
-                'string',
-                Rule::unique('spare_parts', 'code')->whereNull('deleted_at'),
-            ],
-            'name' => 'required|string',
-            'purchasePrice' => 'required|numeric',
-            'salePrice' => 'required|numeric',
-            'stock' => 'required|integer',
-            'unit_id' => 'required|integer|exists:units,id',
-        ]);
-
-        if ($validator->fails()) {
-            return response()->json(['error' => $validator->errors()->first()], 422);
-        }
-
-        $data = [
-            'code' => $request->input('code'),
-            'name' => $request->input('name'),
-            'purchasePrice' => $request->input('purchasePrice'),
-            'salePrice' => $request->input('salePrice'),
-            'stock' => $request->input('stock'),
-            'unit_id' => $request->input('unit_id'),
-        ];
-
-        $sparePart = SparePart::create($data);
+        $request->merge(['code' => $this->nextCorrelative(SparePart::class, 'code')]);
+        $sparePart = SparePart::create($request->all());
         $sparePart = SparePart::find($sparePart->id);
-
         return response()->json(new SparePartResource($sparePart));
     }
 
@@ -157,51 +133,16 @@ class SparePartController extends Controller
     public function show(int $id)
     {
         $sparePart = SparePart::find($id);
-
-        if ($sparePart === null) {
-            return response()->json(['message' => 'Spare part not found'], 404);
-        }
-
-        return response()->json($sparePart);
+        if (!$sparePart) return response()->json(['message' => 'Spare part not found'], 404);
+        return response()->json(new SparePartResource($sparePart));
     }
 
-    public function update(Request $request, int $id)
+    public function update(UpdateSparePartRequest $request, int $id)
     {
         $sparePart = SparePart::find($id);
-
-        if ($sparePart === null) {
-            return response()->json(['message' => 'Spare part not found'], 404);
-        }
-
-        $validator = validator($request->all(), [
-            'code' => [
-                'nullable',
-                'string',
-                Rule::unique('spare_parts', 'code')->whereNull('deleted_at')->ignore($sparePart->id),
-            ],
-            'name' => 'nullable|string',
-            'purchasePrice' => 'nullable|numeric',
-            'salePrice' => 'nullable|numeric',
-            'stock' => 'nullable|integer',
-            'unit_id' => 'nullable|integer|exists:units,id',
-        ]);
-
-        if ($validator->fails()) {
-            return response()->json(['error' => $validator->errors()->first()], 422);
-        }
-
-        $data = [
-            'code' => $request->input('code') ?? $sparePart->code,
-            'name' => $request->input('name') ?? $sparePart->name,
-            'purchasePrice' => $request->input('purchasePrice') ?? $sparePart->purchasePrice,
-            'salePrice' => $request->input('salePrice') ?? $sparePart->salePrice,
-            'stock' => $request->input('stock') ?? $sparePart->stock,
-            'unit_id' => $request->input('unit_id') ?? $sparePart->unit_id,
-        ];
-
-        $sparePart->update($data);
+        if (!$sparePart) return response()->json(['message' => 'Spare part not found'], 404);
+        $sparePart->update($request->all());
         $sparePart = SparePart::find($sparePart->id);
-
         return response()->json(new SparePartResource($sparePart));
     }
 
