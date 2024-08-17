@@ -3,11 +3,10 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\IndexClientRequest;
+use App\Http\Requests\StoreClientRequest;
+use App\Http\Requests\UpdateClientRequest;
 use App\Http\Resources\ClientResource;
-use App\Http\Resources\SupplierResource;
 use App\Models\Person;
-use Illuminate\Http\Request;
-use Illuminate\Validation\Rule;
 
 class ClientController extends Controller
 {
@@ -53,112 +52,34 @@ class ClientController extends Controller
         );
     }
 
-    public function store(Request $request)
+    public function store(StoreClientRequest $request)
     {
-        $validator = validator()->make($request->all(), [
-            'ruc' => [
-                'required',
-                'string',
-                'max:11',
-                Rule::unique('people')->where('type', 'client')
-                    ->whereNull('deleted_at')
-            ],
-            'businessName' => 'required|string',
-            'email' => 'nullable|email',
-            'phone' => 'nullable|integer',
-            'representativeDni' => 'nullable|string',
-            'representativeNames' => 'nullable|string',
-            'country_id' => 'required|integer',
-        ]);
-
-        if ($validator->fails()) {
-            return response()->json(['error' => $validator->errors()->first()], 422);
-        }
-
-        $data = [
-            'type' => 'client',
-            'ruc' => $request->input('ruc'),
-            'businessName' => $request->input('businessName'),
-            'email' => $request->input('email'),
-            'phone' => $request->input('phone'),
-            'representativeDni' => $request->input('representativeDni'),
-            'representativeNames' => $request->input('representativeNames'),
-            'country_id' => $request->input('country_id'),
-        ];
-
-        $supplier = Person::create($data);
-        $supplier = Person::with('country')->find($supplier->id);
-
-        return response()->json($supplier);
+        $client = Person::create($request->validated());
+        $client = Person::with('country')->find($client->id);
+        return response()->json($client);
     }
 
     public function show(string $id)
     {
         $client = Person::with('country')->where('type', 'client')->find($id);
-
-        if (!$client) {
-            return response()->json(['message' => 'Client not found'], 404);
-        }
-
+        if (!$client) return response()->json(['message' => 'Client not found'], 404);
         return response()->json($client);
     }
 
-    public function update(Request $request, string $id)
+    public function update(UpdateClientRequest $request, string $id)
     {
         $client = Person::where('type', 'client')->find($id);
-
-        if (!$client) {
-            return response()->json(['message' => 'Client not found'], 404);
-        }
-
-        $validator = validator()->make($request->all(), [
-            'ruc' => [
-                'required',
-                'string',
-                'max:11',
-                Rule::unique('people')->where('type', 'client')
-                    ->whereNull('deleted_at')
-                    ->ignore($id)
-            ],
-            'businessName' => 'required|string',
-            'email' => 'nullable|email',
-            'phone' => 'nullable|integer',
-            'representativeDni' => 'nullable|string',
-            'representativeNames' => 'nullable|string',
-            'country_id' => 'required|integer',
-        ]);
-
-        if ($validator->fails()) {
-            return response()->json(['error' => $validator->errors()->first()], 422);
-        }
-
-        $data = [
-            'type' => 'client',
-            'ruc' => $request->input('ruc'),
-            'businessName' => $request->input('businessName'),
-            'email' => $request->input('email'),
-            'phone' => $request->input('phone'),
-            'representativeDni' => $request->input('representativeDni'),
-            'representativeNames' => $request->input('representativeNames'),
-            'country_id' => $request->input('country_id'),
-        ];
-
-        $client->update($data);
+        if (!$client) return response()->json(['message' => 'Client not found'], 404);
+        $client->update($request->validated());
         $client = Person::with('country')->where('type', 'client')->find($id);
-
         return response()->json($client);
     }
 
     public function destroy(string $id)
     {
         $client = Person::where('type', 'client')->find($id);
-
-        if (!$client) {
-            return response()->json(['message' => 'Client not found'], 404);
-        }
-
+        if (!$client) return response()->json(['message' => 'Client not found'], 404);
         $client->delete();
-
         return response()->json(['message' => 'Client deleted']);
     }
 }

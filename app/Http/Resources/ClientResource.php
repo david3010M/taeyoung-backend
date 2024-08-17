@@ -10,10 +10,18 @@ use Illuminate\Http\Resources\Json\JsonResource;
  *     schema="Client",
  *     required={"id", "ruc", "businessName", "email", "phone", "country"},
  *     @OA\Property(property="id", type="integer", example="1"),
+ *     @OA\Property(property="type", type="string", example="RUC"),
+ *     @OA\Property(property="dni", type="string", example="12345678"),
  *     @OA\Property(property="ruc", type="string", example="12345678901"),
+ *     @OA\Property(property="names", type="string", example="Names"),
+ *     @OA\Property(property="fatherSurname", type="string", example="Father Surname"),
+ *     @OA\Property(property="motherSurname", type="string", example="Mother Surname"),
  *     @OA\Property(property="businessName", type="string", example="Business Name"),
+ *     @OA\Property(property="address", type="string", example="Address"),
  *     @OA\Property(property="email", type="string", example="mail@gmail.com"),
  *     @OA\Property(property="phone", type="integer", example="123456789"),
+ *     @OA\Property(property="representativeDni", type="string", example="12345678"),
+ *     @OA\Property(property="representativeNames", type="string", example="Representative Names"),
  *     @OA\Property(property="country", type="string", example="Peru")
  * )
  *
@@ -31,10 +39,18 @@ class ClientResource extends JsonResource
     {
         return [
             'id' => $this->id,
-            'ruc' => $this->ruc,
-            'businessName' => $this->businessName,
+            'type' => $this->type,
+            'dni' => $this->type === 'DNI' ? $this->dni : null,
+            'ruc' => $this->type === 'RUC' ? $this->ruc : null,
+            'names' => $this->type === 'DNI' ? $this->names : null,
+            'fatherSurname' => $this->type === 'DNI' ? $this->fatherSurname : null,
+            'motherSurname' => $this->type === 'DNI' ? $this->motherSurname : null,
+            'businessName' => $this->type === 'RUC' ? $this->businessName : null,
+            'address' => $this->address,
             'email' => $this->email,
             'phone' => $this->phone,
+            'representativeDni' => $this->type === 'RUC' ? $this->representativeDni : null,
+            'representativeNames' => $this->type === 'RUC' ? $this->representativeNames : null,
             'country' => (new CountryResource($this->country))->name,
         ];
     }
