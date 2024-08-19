@@ -5,25 +5,27 @@ namespace App\Http\Resources;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
 
+/**
+ * @OA\Schema (
+ *     schema="DetailMachineryResource",
+ *     title="DetailMachineryResource",
+ *     description="Detail Machinery resource",
+ *     @OA\Property (property="id", type="integer", example="1"),
+ *     @OA\Property (property="description", type="string", example="This is a description"),
+ *     @OA\Property (property="quantity", type="integer", example="1"),
+ *     @OA\Property (property="movementType", type="string", example="Ingreso"),
+ *     @OA\Property (property="purchasePrice", type="number", example="100"),
+ *     @OA\Property (property="salePrice", type="number", example="100"),
+ *     @OA\Property (property="purchaseValue", type="number", example="100"),
+ *     @OA\Property (property="saleValue", type="number", example="100"),
+ *     @OA\Property (property="order_id", type="integer", example="1"),
+ *     @OA\Property (property="quotation_id", type="integer", example="21")
+ * )
+ */
 class DetailMachineryResource extends JsonResource
 {
-    /**
-     * Transform the resource into an array.
-     *
-     * @return array<string, mixed>
-     */
     public function toArray(Request $request): array
     {
-        /**
-         * "id": 20,
-         * "description": "Facere quaerat natus est repellat dolore libero provident.",
-         * "quantity": 8,
-         * "movementType": "purchase",
-         * "purchasePrice": null,
-         * "salePrice": "283.00",
-         * "order_id": 20,
-         * "quotation_id": 20
-         */
         return [
             'id' => $this->id,
             'description' => $this->description,

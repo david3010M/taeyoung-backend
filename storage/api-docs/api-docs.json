@@ -261,6 +261,363 @@
                 ]
             }
         },
+        "/taeyoung-backend/public/api/machineryPurchase": {
+            "get": {
+                "tags": [
+                    "MachineryPurchase"
+                ],
+                "summary": "List machinery purchases",
+                "description": "Returns a list of machinery purchases.",
+                "operationId": "39fbca5bc269aed2c7dcb1d192e38e76",
+                "parameters": [
+                    {
+                        "parameter": "page",
+                        "name": "page",
+                        "in": "query",
+                        "description": "Page number",
+                        "required": false,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    },
+                    {
+                        "parameter": "per_page",
+                        "name": "per_page",
+                        "in": "query",
+                        "description": "Items per page",
+                        "required": false,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    },
+                    {
+                        "parameter": "sort",
+                        "name": "sort",
+                        "in": "query",
+                        "description": "Sort by column",
+                        "required": false,
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "parameter": "direction",
+                        "name": "direction",
+                        "in": "query",
+                        "description": "Sort direction",
+                        "required": false,
+                        "schema": {
+                            "type": "string",
+                            "enum": [
+                                "asc",
+                                "desc"
+                            ]
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Successful operation",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/MachineryPurchaseCollection"
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthenticated",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/Unauthenticated"
+                                }
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "Validation error",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ValidationError"
+                                }
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            },
+            "post": {
+                "tags": [
+                    "MachineryPurchase"
+                ],
+                "summary": "Store machinery purchase",
+                "description": "Store a new machinery purchase.",
+                "operationId": "1b26361b60e090275637592587d4ef76",
+                "requestBody": {
+                    "description": "Machinery purchase data",
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/StoreMachineryPurchaseRequest"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Successful operation",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/MachineryPurchaseResource"
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthenticated",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/Unauthenticated"
+                                }
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "Validation error",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ValidationError"
+                                }
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
+        "/taeyoung-backend/public/api/machineryPurchase/{id}": {
+            "get": {
+                "tags": [
+                    "MachineryPurchase"
+                ],
+                "summary": "Show machinery purchase",
+                "description": "Returns a machinery purchase.",
+                "operationId": "71218e6e690a0537ab9801c72e6d6f6f",
+                "parameters": [
+                    {
+                        "parameter": "id",
+                        "name": "id",
+                        "in": "path",
+                        "description": "Machinery purchase ID",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Successful operation",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/MachineryPurchaseResource"
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthenticated",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/Unauthenticated"
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Machinery purchase not found",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Machinery purchase not found"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            },
+            "put": {
+                "tags": [
+                    "MachineryPurchase"
+                ],
+                "summary": "Update machinery purchase",
+                "description": "Update a machinery purchase.",
+                "operationId": "e6616a4013d86221fd6e9f487f6c40c2",
+                "parameters": [
+                    {
+                        "parameter": "id",
+                        "name": "id",
+                        "in": "path",
+                        "description": "Machinery purchase ID",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "requestBody": {
+                    "description": "Machinery purchase data",
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/UpdateMachineryPurchaseRequest"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Successful operation",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/MachineryPurchaseResource"
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthenticated",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/Unauthenticated"
+                                }
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "Validation error",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ValidationError"
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Machinery purchase not found",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Machinery purchase not found"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            },
+            "delete": {
+                "tags": [
+                    "MachineryPurchase"
+                ],
+                "summary": "Destroy machinery purchase",
+                "description": "Destroy a machinery purchase.",
+                "operationId": "8a9377519d5e8919f8c3fc5d34a44c1c",
+                "parameters": [
+                    {
+                        "parameter": "id",
+                        "name": "id",
+                        "in": "path",
+                        "description": "Machinery purchase ID",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Successful operation",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Machinery purchase deleted"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Machinery purchase not found",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Machinery purchase not found"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
         "/taeyoung-backend/public/api/searchByDni/{dni}": {
             "get": {
                 "tags": [
@@ -1280,6 +1637,73 @@
                 },
                 "type": "object"
             },
+            "StoreMachineryPurchaseRequest": {
+                "required": [
+                    "date",
+                    "detailMachinery",
+                    "supplier_id"
+                ],
+                "properties": {
+                    "quotation_id": {
+                        "type": "integer",
+                        "example": "21"
+                    },
+                    "date": {
+                        "type": "string",
+                        "format": "date",
+                        "example": "2024-08-19"
+                    },
+                    "detail": {
+                        "type": "string",
+                        "example": "This is a detail"
+                    },
+                    "currencyType": {
+                        "type": "string",
+                        "example": "USD"
+                    },
+                    "supplier_id": {
+                        "type": "integer",
+                        "example": "1"
+                    },
+                    "detailMachinery": {
+                        "type": "array",
+                        "items": {
+                            "properties": {
+                                "description": {
+                                    "type": "string",
+                                    "example": "This is a description"
+                                },
+                                "quantity": {
+                                    "type": "integer",
+                                    "example": "1"
+                                },
+                                "purchasePrice": {
+                                    "type": "number",
+                                    "example": "100"
+                                }
+                            },
+                            "type": "object"
+                        }
+                    },
+                    "detailSpareParts": {
+                        "type": "array",
+                        "items": {
+                            "properties": {
+                                "quantity": {
+                                    "type": "integer",
+                                    "example": "2"
+                                },
+                                "spare_part_id": {
+                                    "type": "integer",
+                                    "example": "1"
+                                }
+                            },
+                            "type": "object"
+                        }
+                    }
+                },
+                "type": "object"
+            },
             "StoreUserRequest": {
                 "title": "Create User Request",
                 "required": [
@@ -1313,6 +1737,68 @@
                 },
                 "type": "object"
             },
+            "UpdateMachineryPurchaseRequest": {
+                "properties": {
+                    "quotation_id": {
+                        "type": "integer",
+                        "example": "21"
+                    },
+                    "date": {
+                        "type": "string",
+                        "format": "date",
+                        "example": "2024-08-19"
+                    },
+                    "detail": {
+                        "type": "string",
+                        "example": "This is a detail"
+                    },
+                    "currencyType": {
+                        "type": "string",
+                        "example": "USD"
+                    },
+                    "supplier_id": {
+                        "type": "integer",
+                        "example": "1"
+                    },
+                    "detailMachinery": {
+                        "type": "array",
+                        "items": {
+                            "properties": {
+                                "description": {
+                                    "type": "string",
+                                    "example": "This is a description"
+                                },
+                                "quantity": {
+                                    "type": "integer",
+                                    "example": "1"
+                                },
+                                "purchasePrice": {
+                                    "type": "number",
+                                    "example": "100"
+                                }
+                            },
+                            "type": "object"
+                        }
+                    },
+                    "detailSpareParts": {
+                        "type": "array",
+                        "items": {
+                            "properties": {
+                                "quantity": {
+                                    "type": "integer",
+                                    "example": "3"
+                                },
+                                "spare_part_id": {
+                                    "type": "integer",
+                                    "example": "1"
+                                }
+                            },
+                            "type": "object"
+                        }
+                    }
+                },
+                "type": "object"
+            },
             "Client": {
                 "required": [
                     "id",
@@ -1327,13 +1813,37 @@
                         "type": "integer",
                         "example": "1"
                     },
+                    "type": {
+                        "type": "string",
+                        "example": "RUC"
+                    },
+                    "dni": {
+                        "type": "string",
+                        "example": "12345678"
+                    },
                     "ruc": {
                         "type": "string",
                         "example": "12345678901"
                     },
+                    "names": {
+                        "type": "string",
+                        "example": "Names"
+                    },
+                    "fatherSurname": {
+                        "type": "string",
+                        "example": "Father Surname"
+                    },
+                    "motherSurname": {
+                        "type": "string",
+                        "example": "Mother Surname"
+                    },
                     "businessName": {
                         "type": "string",
                         "example": "Business Name"
+                    },
+                    "address": {
+                        "type": "string",
+                        "example": "Address"
                     },
                     "email": {
                         "type": "string",
@@ -1342,6 +1852,14 @@
                     "phone": {
                         "type": "integer",
                         "example": "123456789"
+                    },
+                    "representativeDni": {
+                        "type": "string",
+                        "example": "12345678"
+                    },
+                    "representativeNames": {
+                        "type": "string",
+                        "example": "Representative Names"
                     },
                     "country": {
                         "type": "string",
@@ -1367,6 +1885,103 @@
                 },
                 "type": "object"
             },
+            "DetailMachineryResource": {
+                "title": "DetailMachineryResource",
+                "description": "Detail Machinery resource",
+                "properties": {
+                    "id": {
+                        "type": "integer",
+                        "example": "1"
+                    },
+                    "description": {
+                        "type": "string",
+                        "example": "This is a description"
+                    },
+                    "quantity": {
+                        "type": "integer",
+                        "example": "1"
+                    },
+                    "movementType": {
+                        "type": "string",
+                        "example": "Ingreso"
+                    },
+                    "purchasePrice": {
+                        "type": "number",
+                        "example": "100"
+                    },
+                    "salePrice": {
+                        "type": "number",
+                        "example": "100"
+                    },
+                    "purchaseValue": {
+                        "type": "number",
+                        "example": "100"
+                    },
+                    "saleValue": {
+                        "type": "number",
+                        "example": "100"
+                    },
+                    "order_id": {
+                        "type": "integer",
+                        "example": "1"
+                    },
+                    "quotation_id": {
+                        "type": "integer",
+                        "example": "21"
+                    }
+                },
+                "type": "object"
+            },
+            "DetailSparePartResource": {
+                "title": "DetailSparePartResource",
+                "description": "Detail Spare Part resource",
+                "properties": {
+                    "id": {
+                        "type": "integer",
+                        "example": "1"
+                    },
+                    "quantity": {
+                        "type": "integer",
+                        "example": "1"
+                    },
+                    "movementType": {
+                        "type": "string",
+                        "example": "Ingreso"
+                    },
+                    "purchasePrice": {
+                        "type": "number",
+                        "example": "100"
+                    },
+                    "salePrice": {
+                        "type": "number",
+                        "example": "100"
+                    },
+                    "purchaseValue": {
+                        "type": "number",
+                        "example": "100"
+                    },
+                    "saleValue": {
+                        "type": "number",
+                        "example": "100"
+                    },
+                    "order_id": {
+                        "type": "integer",
+                        "example": "1"
+                    },
+                    "quotation_id": {
+                        "type": "integer",
+                        "example": "21"
+                    },
+                    "spare_part_id": {
+                        "type": "integer",
+                        "example": "1"
+                    },
+                    "sparePart": {
+                        "$ref": "#/components/schemas/SparePartResource"
+                    }
+                },
+                "type": "object"
+            },
             "MachineryPurchaseResource": {
                 "title": "MachineryPurchaseResource",
                 "description": "Machinery Purchase resource",
@@ -1377,37 +1992,92 @@
                     },
                     "number": {
                         "type": "string",
-                        "example": "123456"
+                        "example": "COMAQ-0001"
                     },
                     "date": {
                         "type": "string",
-                        "example": "2021-09-01"
+                        "format": "date",
+                        "example": "2024-08-19"
                     },
-                    "supplier": {
+                    "detail": {
                         "type": "string",
-                        "example": "Supplier Name"
+                        "example": "This is a detail"
                     },
-                    "country": {
+                    "paymentType": {
                         "type": "string",
-                        "example": "Country Name"
+                        "example": "Contado"
                     },
-                    "features": {
+                    "currencyType": {
                         "type": "string",
-                        "example": "Features"
+                        "example": "USD"
                     },
-                    "quantity": {
-                        "type": "integer",
-                        "example": "1"
+                    "totalMachinery": {
+                        "type": "number",
+                        "example": "100"
+                    },
+                    "totalSpareParts": {
+                        "type": "number",
+                        "example": "100"
+                    },
+                    "subtotal": {
+                        "type": "number",
+                        "example": "100"
+                    },
+                    "igv": {
+                        "type": "number",
+                        "example": "18"
+                    },
+                    "discount": {
+                        "type": "number",
+                        "example": "0"
                     },
                     "total": {
                         "type": "number",
-                        "example": "1000.00"
+                        "example": "118"
+                    },
+                    "totalIncome": {
+                        "type": "number",
+                        "example": "0"
+                    },
+                    "totalExpense": {
+                        "type": "number",
+                        "example": "0"
+                    },
+                    "comment": {
+                        "type": "string",
+                        "example": "This is a comment"
+                    },
+                    "supplier_id": {
+                        "type": "integer",
+                        "example": "1"
+                    },
+                    "quotation_id": {
+                        "type": "integer",
+                        "example": "21"
+                    },
+                    "supplier": {
+                        "$ref": "#/components/schemas/SupplierResource"
+                    },
+                    "quotation": {
+                        "$ref": "#/components/schemas/Quotation"
+                    },
+                    "detailMachinery": {
+                        "type": "array",
+                        "items": {
+                            "$ref": "#/components/schemas/DetailMachineryResource"
+                        }
+                    },
+                    "detailSpareParts": {
+                        "type": "array",
+                        "items": {
+                            "$ref": "#/components/schemas/DetailSparePartResource"
+                        }
                     }
                 },
                 "type": "object"
             },
-            "MachineryPurchaseResourceCollection": {
-                "title": "MachineryPurchaseResourceCollection",
+            "MachineryPurchaseCollection": {
+                "title": "MachineryPurchaseCollection",
                 "description": "Machinery Purchase resource collection",
                 "properties": {
                     "data": {
@@ -1421,45 +2091,6 @@
                     },
                     "meta": {
                         "$ref": "#/components/schemas/PaginationMeta"
-                    }
-                },
-                "type": "object"
-            },
-            "MachineryPurchaseRequest": {
-                "title": "MachineryPurchaseRequest",
-                "description": "Machinery Purchase request",
-                "required": [
-                    "number",
-                    "date",
-                    "quantity",
-                    "features",
-                    "total",
-                    "supplier_id"
-                ],
-                "properties": {
-                    "number": {
-                        "type": "string",
-                        "example": "COMAQ-0000099"
-                    },
-                    "date": {
-                        "type": "string",
-                        "example": "2021-09-01"
-                    },
-                    "quantity": {
-                        "type": "integer",
-                        "example": "1"
-                    },
-                    "features": {
-                        "type": "string",
-                        "example": "Features"
-                    },
-                    "total": {
-                        "type": "number",
-                        "example": "999.99"
-                    },
-                    "supplier_id": {
-                        "type": "integer",
-                        "example": "1"
                     }
                 },
                 "type": "object"
@@ -1736,6 +2367,75 @@
                     },
                     "groupmenu_id": {
                         "type": "string",
+                        "example": "1"
+                    }
+                },
+                "type": "object"
+            },
+            "Quotation": {
+                "required": [
+                    "date",
+                    "currencyType",
+                    "price",
+                    "initialPayment",
+                    "balance",
+                    "debts",
+                    "exchangeRate",
+                    "currency_id",
+                    "client_id"
+                ],
+                "properties": {
+                    "id": {
+                        "type": "integer",
+                        "example": "1"
+                    },
+                    "number": {
+                        "type": "string",
+                        "example": "Q-0001"
+                    },
+                    "date": {
+                        "type": "string",
+                        "format": "date",
+                        "example": "2024-08-19"
+                    },
+                    "detail": {
+                        "type": "string",
+                        "example": "This is a detail"
+                    },
+                    "currencyType": {
+                        "type": "string",
+                        "example": "USD"
+                    },
+                    "paymentType": {
+                        "type": "string",
+                        "example": "Contado"
+                    },
+                    "totalMachinery": {
+                        "type": "number",
+                        "example": "100"
+                    },
+                    "totalSpareParts": {
+                        "type": "number",
+                        "example": "100"
+                    },
+                    "subtotal": {
+                        "type": "number",
+                        "example": "100"
+                    },
+                    "igv": {
+                        "type": "number",
+                        "example": "18"
+                    },
+                    "discount": {
+                        "type": "number",
+                        "example": "0"
+                    },
+                    "total": {
+                        "type": "number",
+                        "example": "118"
+                    },
+                    "client_id": {
+                        "type": "integer",
                         "example": "1"
                     }
                 },

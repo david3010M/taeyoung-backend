@@ -11,36 +11,36 @@ use Illuminate\Http\Resources\Json\JsonResource;
  *     schema="MachineryPurchaseResource",
  *     title="MachineryPurchaseResource",
  *     description="Machinery Purchase resource",
- *     @OA\Property (property="id", type="integer", example="1" ),
- *     @OA\Property (property="number", type="string", example="123456" ),
- *     @OA\Property (property="date", type="string", example="2021-09-01" ),
- *     @OA\Property (property="supplier", type="string", example="Supplier Name" ),
- *     @OA\Property (property="country", type="string", example="Country Name" ),
- *     @OA\Property (property="features", type="string", example="Features" ),
- *     @OA\Property (property="quantity", type="integer", example="1" ),
- *     @OA\Property (property="total", type="number", example="1000.00" )
+ *     @OA\Property (property="id", type="integer", example="1"),
+ *     @OA\Property (property="number", type="string", example="COMAQ-0001"),
+ *     @OA\Property (property="date", type="string", format="date", example="2024-08-19"),
+ *     @OA\Property (property="detail", type="string", example="This is a detail"),
+ *     @OA\Property (property="paymentType", type="string", example="Contado"),
+ *     @OA\Property (property="currencyType", type="string", example="USD"),
+ *     @OA\Property (property="totalMachinery", type="number", example="100"),
+ *     @OA\Property (property="totalSpareParts", type="number", example="100"),
+ *     @OA\Property (property="subtotal", type="number", example="100"),
+ *     @OA\Property (property="igv", type="number", example="18"),
+ *     @OA\Property (property="discount", type="number", example="0"),
+ *     @OA\Property (property="total", type="number", example="118"),
+ *     @OA\Property (property="totalIncome", type="number", example="0"),
+ *     @OA\Property (property="totalExpense", type="number", example="0"),
+ *     @OA\Property (property="comment", type="string", example="This is a comment"),
+ *     @OA\Property (property="supplier_id", type="integer", example="1"),
+ *     @OA\Property (property="quotation_id", type="integer", example="21"),
+ *     @OA\Property (property="supplier", type="object", ref="#/components/schemas/SupplierResource"),
+ *     @OA\Property (property="quotation", type="object", ref="#/components/schemas/Quotation"),
+ *     @OA\Property (property="detailMachinery", type="array", @OA\Items(ref="#/components/schemas/DetailMachineryResource")),
+ *     @OA\Property (property="detailSpareParts", type="array", @OA\Items(ref="#/components/schemas/DetailSparePartResource"))
  * )
  *
  * @OA\Schema (
- *     schema="MachineryPurchaseResourceCollection",
- *     title="MachineryPurchaseResourceCollection",
+ *     schema="MachineryPurchaseCollection",
+ *     title="MachineryPurchaseCollection",
  *     description="Machinery Purchase resource collection",
  *     @OA\Property (property="data", type="array", @OA\Items(ref="#/components/schemas/MachineryPurchaseResource")),
  *     @OA\Property (property="links", type="object", ref="#/components/schemas/PaginationLinks"),
  *     @OA\Property (property="meta", type="object", ref="#/components/schemas/PaginationMeta")
- * )
- *
- * @OA\Schema (
- *     schema="MachineryPurchaseRequest",
- *     title="MachineryPurchaseRequest",
- *     description="Machinery Purchase request",
- *     required={"number", "date", "quantity", "features", "total", "supplier_id"},
- *     @OA\Property (property="number", type="string", example="COMAQ-0000099" ),
- *     @OA\Property (property="date", type="string", example="2021-09-01" ),
- *     @OA\Property (property="quantity", type="integer", example="1" ),
- *     @OA\Property (property="features", type="string", example="Features" ),
- *     @OA\Property (property="total", type="number", example="999.99" ),
- *     @OA\Property (property="supplier_id", type="integer", example="1" )
  * )
  *
  */
@@ -50,20 +50,29 @@ class MachineryPurchaseResource extends JsonResource
     {
         return [
             'id' => $this->id,
-            'number' => $this->number,
+            'number' => "COMAQ-" . $this->number,
             'date' => Carbon::parse($this->date)->format('Y-m-d'),
-            'documentType' => $this->documentType,
-            'quantity' => $this->quantity,
             'detail' => $this->detail,
-            'totalIncome' => $this->totalIncome,
-            'totalExpense' => $this->totalExpense,
-            'currency' => $this->currency,
-            'typePayment' => $this->typePayment,
+
+            'paymentType' => $this->paymentType,
+            'currencyType' => $this->currencyType,
+            'totalMachinery' => round($this->totalMachinery, 2),
+            'totalSpareParts' => round($this->totalSpareParts, 2),
+
+            'subtotal' => round($this->subtotal, 2),
+            'igv' => round($this->igv, 2),
+            'discount' => round($this->discount, 2),
+            'total' => round($this->total, 2),
+
+            'totalIncome' => round($this->totalIncome, 2),
+            'totalExpense' => round($this->totalExpense, 2),
+
             'comment' => $this->comment,
+
             'supplier_id' => $this->supplier_id,
             'quotation_id' => $this->quotation_id,
+
             'supplier' => new SupplierResource($this->supplier),
-//            'quotation' => new QuotationResource($this->quotation),
             'quotation' => $this->quotation,
             'detailMachinery' => DetailMachineryResource::collection($this->detailMachinery),
             'detailSpareParts' => DetailSparePartResource::collection($this->detailSpareParts),

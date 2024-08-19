@@ -12,19 +12,29 @@ class Order extends Model
     use SoftDeletes;
 
     protected $fillable = [
-        'type',
         'number',
         'date',
-        'documentType',
-        'quantity',
         'detail',
+
+        'type',
+        'documentType',
+        'paymentType',
+        'currencyType',
+
+        'totalMachinery',
+        'totalSpareParts',
+
+        'subtotal',
+        'igv',
+        'discount',
+        'total',
         'totalIncome',
         'totalExpense',
-        'currency',
-        'typePayment',
+
         'comment',
         'supplier_id',
         'quotation_id',
+        'client_id',
     ];
 
     protected $casts = [
@@ -41,11 +51,12 @@ class Order extends Model
 
     const filtersMachineryPurchase = [
         'number' => 'like',
-        'date' => 'date',
-        'supplier_id' => 'equal',
+        'date' => 'like',
+        'supplier_id' => '=',
     ];
 
     const sortMachineryPurchase = [
+        'id',
         'number',
         'date',
         'supplier_id',

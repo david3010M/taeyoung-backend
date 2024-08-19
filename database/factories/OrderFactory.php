@@ -4,74 +4,51 @@ namespace Database\Factories;
 
 use App\Models\Order;
 use App\Models\Person;
+use App\Models\Quotation;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
-/**
- * @extends \Illuminate\Database\Eloquent\Factories\Factory<\App\Models\Order>
- */
 class OrderFactory extends Factory
 {
     protected $model = Order::class;
 
     public function definition()
     {
-        $minSupplierId = Person::where('type', 'supplier')->min('id');
-        $maxSupplierId = Person::where('type', 'supplier')->max('id');
+        static $correlativo = 0;
+        $correlativo++;
+        $correlativoFormatted = str_pad($correlativo, 8, '0', STR_PAD_LEFT);
 
         return [
+            'number' => $correlativoFormatted,
             'date' => $this->faker->date(),
-            'number' => $this->faker->unique()->numberBetween(1000, 9999),
-            'documentType' => $this->faker->randomElement(['invoice', 'receipt']),
             'detail' => $this->faker->sentence(15),
-            'quantity' => $this->faker->numberBetween(1, 100),
-            'totalIncome' => $this->faker->randomFloat(2, 1000, 100000),
-            'totalExpense' => $this->faker->randomFloat(2, 500, 50000),
-            'currency' => $this->faker->randomElement(['USD', 'EUR']),
-            'typePayment' => $this->faker->randomElement(['cash', 'credit']),
+
+            'documentType' => $this->faker->randomElement(['invoice', 'receipt']),
+            'paymentType' => $this->faker->randomElement(['cash', 'credit']),
+            'currencyType' => $this->faker->randomElement(['USD', 'PEN']),
+
+            'totalMachinery' => $this->faker->randomFloat(2, 1000, 100000),
+            'totalSpareParts' => $this->faker->randomFloat(2, 500, 50000),
+
+//            'subtotal' => $this->faker->randomFloat(2, 1000, 100000),
+//            'igv' => $this->faker->randomFloat(2, 100, 10000),
+//            'discount' => $this->faker->randomFloat(2, 100, 10000),
+//            'total' => $this->faker->randomFloat(2, 1000, 100000),
+
+//            'totalIncome' => $this->faker->randomFloat(2, 1000, 100000),
+//            'totalExpense' => $this->faker->randomFloat(2, 1000, 100000),
+
             'comment' => $this->faker->sentence(10),
-            'supplier_id' => $this->faker->numberBetween($minSupplierId, $maxSupplierId),
         ];
     }
 
-    public function purchase()
+    public function machineryPurchase()
     {
-        return $this->state([
-            'type' => 'purchase',
-        ]);
+        return $this->state(function (array $attributes) {
+            $suppliers = Person::where('type', 'supplier')->get();
+            return [
+                'type' => 'machineryPurchase',
+                'supplier_id' => $suppliers->random()->id,
+            ];
+        });
     }
-
-    public function sale()
-    {
-        return $this->state([
-            'type' => 'sale',
-        ]);
-    }
-
-//    public function machineryPurchase()
-//    {
-//        return $this->state([
-//            'type' => 'machinery_purchase',
-//        ]);
-//    }
-//
-//    public function machinerySale()
-//    {
-//        return $this->state([
-//            'type' => 'machinery_sale',
-//        ]);
-//    }
-//
-//    public function sparePartPurchase()
-//    {
-//        return $this->state([
-//            'type' => 'spare_part_purchase',
-//        ]);
-//    }
-//
-//    public function sparePartSale()
-//    {
-//        return $this->state([
-//            'type' => 'spare_part_sale',
-//        ]);
-//    }
 }

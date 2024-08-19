@@ -17,8 +17,8 @@ return new class extends Migration {
             $table->dateTime('date');
             $table->string('detail')->nullable();
 
-            $table->string('paymentType')->nullable(); // CONTADO O CREDITO
             $table->string('currencyType')->nullable();
+            $table->string('paymentType')->nullable(); // CONTADO O CREDITO
             $table->decimal('totalMachinery')->nullable();
             $table->decimal('totalSpareParts')->nullable();
             $table->decimal('subtotal')->nullable()->default(0);

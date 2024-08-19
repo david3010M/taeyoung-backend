@@ -8,8 +8,6 @@ class QuotationFactory extends Factory
 {
     public function definition(): array
     {
-        $debtsToPay = $this->faker->randomElement([2, 4, 6]);
-
         static $correlativo = 0;
 
         $correlativo++;

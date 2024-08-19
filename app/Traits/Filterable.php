@@ -68,7 +68,7 @@ trait Filterable
         if ($sortField !== null && in_array($sortField, $sorts)) {
             $query->orderBy($sortField, $sortOrder);
         } else {
-            $query->orderBy('id', 'desc');
+            $query->orderBy('id', $sortOrder);
         }
 
         return $query;

@@ -2,9 +2,11 @@
 
 namespace Database\Seeders;
 
+use App\Models\DetailMachinery;
+use App\Models\DetailSparePart;
 use App\Models\Order;
+use App\Models\Person;
 use App\Models\Quotation;
-use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 
 class OrderSeeder extends Seeder
@@ -13,33 +15,49 @@ class OrderSeeder extends Seeder
     {
 //        PURCHASE
         $quotations = Quotation::all();
-
         foreach ($quotations as $quotation) {
-            $total = $quotation->total;
-            $totalIncome = $total;
-            $totalExpense = $total;
-            $quotation->update([
-                'total' => $totalIncome,
+            $order = Order::factory()->machineryPurchase()->create();
+            $detailSpareParts = $quotation->detailSpareParts;
+            $detailMachinery = $quotation->detailMachinery;
+            foreach ($detailSpareParts as $detail) {
+                DetailSparePart::create(
+                    [
+                        'quantity' => $detail->quantity,
+                        'movementType' => 'purchase',
+                        'purchasePrice' => $detail->purchasePrice,
+                        'salePrice' => $detail->salePrice,
+                        'purchaseValue' => $detail->purchaseValue,
+                        'saleValue' => $detail->saleValue,
+                        'spare_part_id' => $detail->spare_part_id,
+                        'quotation_id' => $detail->quotation_id,
+                        'order_id' => $order->id,
+                    ]
+                );
+            }
+
+            foreach ($detailMachinery as $detail) {
+                DetailMachinery::create(
+                    [
+                        'description' => $detail->description,
+                        'quantity' => $detail->quantity,
+                        'movementType' => 'purchase',
+                        'purchasePrice' => $detail->purchasePrice,
+                        'salePrice' => $detail->salePrice,
+                        'purchaseValue' => $detail->purchaseValue,
+                        'saleValue' => $detail->saleValue,
+                        'quotation_id' => $detail->quotation_id,
+                        'order_id' => $order->id,
+                    ]
+                );
+            }
+
+            $order->update([
+                'totalMachinery' => $order->detailMachinery->sum('purchaseValue'),
+                'totalSpareParts' => $order->detailSpareParts->sum('purchaseValue'),
+                'total' => $order->detailMachinery->sum('purchaseValue') + $order->detailSpareParts->sum('purchaseValue'),
+                'quotation_id' => $quotation->id,
+                'totalExpense' => $order->detailMachinery->sum('purchaseValue') + $order->detailSpareParts->sum('purchaseValue'),
             ]);
-
-            $order = Order::factory()->create(
-                [
-                    'type' => 'sale',
-                    'quantity' => 1,
-                    'totalIncome' => $totalIncome,
-                    'totalExpense' => $totalExpense,
-                    'currency' => $quotation->currencyType,
-                    'quotation_id' => $quotation->id,
-                ]
-            );
-
-            $quotation->detailSpareParts()->update(['order_id' => $order->id]);
-            $quotation->detailMachinery()->update(['order_id' => $order->id]);
         }
-
-//        Order::factory()->count(50)->machineryPurchase()->create();
-//        Order::factory()->count(50)->machinerySale()->create();
-//        Order::factory()->count(50)->sparePartPurchase()->create();
-//        Order::factory()->count(50)->sparePartSale()->create();
     }
 }

@@ -12,21 +12,30 @@ return new class extends Migration {
     {
         Schema::create('orders', function (Blueprint $table) {
             $table->id();
-            $table->string('type'); // machineryPurchase, machinerySale, sparePartPurchase, sparePartSale
-            $table->date('date');
             $table->string('number');
+            $table->date('date');
+            $table->string('detail')->nullable(); // TEXT LIBRE
+
+            $table->string('type'); // machineryPurchase, machinerySale, sparePartPurchase, sparePartSale
             $table->string('documentType')->nullable(); // BOLETA, FACTURA, TICKET
-            $table->integer('quantity');
-            $table->string('detail'); // TEXT LIBRE
+            $table->string('paymentType')->nullable(); // PAGO A SUNAT
+            $table->string('currencyType')->nullable(); // SOLES, DOLARES
+
+            $table->decimal('totalMachinery')->nullable();
+            $table->decimal('totalSpareParts')->nullable();
+
+            $table->decimal('subtotal')->nullable()->default(0);
+            $table->decimal('igv')->nullable()->default(0);
+            $table->decimal('discount')->nullable()->default(0);
+            $table->decimal('total')->nullable()->default(0);
             $table->decimal('totalIncome')->default(0);
             $table->decimal('totalExpense')->default(0);
-            $table->string('currency');
-            $table->string('typePayment')->nullable(); // PAGO A SUNAT
+
             $table->string('comment')->nullable();
             $table->foreignId('supplier_id')->nullable()->unsigned()->constrained('people');
-
-//            COTIZATION
             $table->foreignId('quotation_id')->nullable()->constrained('quotations');
+            $table->foreignId('client_id')->nullable()->unsigned()->constrained('people');
+
             $table->timestamps();
             $table->softDeletes();
         });
