@@ -16,6 +16,7 @@ class Person extends Model
         'typeDocument',
         'dni',
         'ruc',
+        'filterName',
         'names',
         'fatherSurname',
         'motherSurname',
@@ -51,6 +52,22 @@ class Person extends Model
         'phone',
         'representativeDni',
         'representativeNames',
+        'country_id',
+    ];
+
+    const supplierFilters = [
+        'ruc' => 'like',
+        'filterName' => 'like',
+        'email' => 'like',
+        'phone' => 'like',
+        'country_id' => '=',
+    ];
+
+    const supplierSorts = [
+        'ruc',
+        'filterName',
+        'email',
+        'phone',
         'country_id',
     ];
 

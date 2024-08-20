@@ -6,6 +6,15 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
+/**
+ * @OA\Schema(
+ *     schema="Unit",
+ *     title="Unit",
+ *     @OA\Property(property="id", type="integer", example="1"),
+ *     @OA\Property(property="name", type="string", example="Unidad"),
+ *     @OA\Property(property="abbreviation", type="string", example="UN")
+ * )
+ */
 class Unit extends Model
 {
     use HasFactory;

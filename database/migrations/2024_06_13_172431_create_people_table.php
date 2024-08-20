@@ -13,6 +13,7 @@ return new class extends Migration {
             $table->string('typeDocument');
             $table->string('dni')->nullable();
             $table->string('ruc')->nullable();
+            $table->string('filterName')->nullable();
             $table->string('businessName')->nullable();
             $table->string('names')->nullable();
             $table->string('fatherSurname')->nullable();

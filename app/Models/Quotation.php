@@ -57,10 +57,10 @@ class Quotation extends Model
     ];
 
     const filters = [
-        'date' => '<=',
         'number' => 'like',
+        'date' => '<=',
         'description' => 'like',
-        'client.businessName' => 'like',
+        'client.filterName' => 'like',
     ];
 
     const sorts = [

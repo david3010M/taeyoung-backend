@@ -13,8 +13,6 @@ class SupplierSeeder extends Seeder
      */
     public function run(): void
     {
-        Person::factory()->count(20)->create([
-            'type' => 'supplier',
-        ]);
+        Person::factory()->count(20)->supplier()->create();
     }
 }

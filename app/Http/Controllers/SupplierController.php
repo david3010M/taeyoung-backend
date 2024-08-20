@@ -2,10 +2,11 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\IndexSupplierRequest;
+use App\Http\Requests\StoreSupplierRequest;
+use App\Http\Requests\UpdateSupplierRequest;
 use App\Http\Resources\SupplierResource;
 use App\Models\Person;
-use Illuminate\Http\Request;
-use Illuminate\Validation\Rule;
 
 class SupplierController extends Controller
 {
@@ -39,39 +40,15 @@ class SupplierController extends Controller
      *     )
      * )
      */
-    public function index(Request $request)
+    public function index(IndexSupplierRequest $request)
     {
-        $validator = validator($request->query(), [
-            'pagination' => 'integer',
-            'ruc' => 'nullable|integer',
-            'businessName' => 'nullable|string',
-            'email' => 'nullable|string',
-            'phone' => 'nullable|integer',
-            'countryId' => 'nullable|string',
-            'all' => 'nullable|string|in:true,false',
-        ]);
-
-        if ($validator->fails()) {
-            return response()->json(['error' => $validator->errors()->first()], 422);
-        }
-
-        $pagination = $request->query('pagination', 5);
-        $all = $request->query('all', false) == 'true';
-
-        $suppliers = Person::with('country')->where('type', 'supplier')
-            ->where('ruc', 'like', '%' . $request->query('ruc') . '%')
-            ->where('businessName', 'like', '%' . $request->query('businessName') . '%')
-            ->where('email', 'like', '%' . $request->query('email') . '%')
-            ->where('phone', 'like', '%' . $request->query('phone') . '%')
-            ->where('country_id', 'like', '%' . $request->query('countryId') . '%');
-
-        if (!$all) {
-            $suppliers = $suppliers->paginate($pagination);
-        } else {
-            $suppliers = $suppliers->get();
-        }
-
-        return SupplierResource::collection($suppliers);
+        return $this->getFilteredResults(
+            Person::where('type', 'supplier'),
+            $request,
+            Person::supplierFilters,
+            Person::supplierSorts,
+            SupplierResource::class
+        );
     }
 
     /**
@@ -105,45 +82,15 @@ class SupplierController extends Controller
      *     )
      * )
      */
-    public function store(Request $request)
+    public function store(StoreSupplierRequest $request)
     {
-        $validator = validator()->make($request->all(), [
-            'ruc' => [
-                'required',
-                'string',
-                'max:11',
-                Rule::unique('people')->where('type', 'supplier')
-                    ->whereNull('deleted_at')
-            ],
-            'businessName' => 'required|string',
-            'email' => 'nullable|email',
-            'phone' => 'nullable|integer',
-            'representativeDni' => 'nullable|string',
-            'representativeNames' => 'nullable|string',
-            'country_id' => 'required|integer',
-        ]);
-
-        if ($validator->fails()) {
-            return response()->json(['error' => $validator->errors()->first()], 422);
-        }
-
-        $data = [
-            'type' => 'supplier',
-            'ruc' => $request->input('ruc'),
-            'businessName' => $request->input('businessName'),
-//            'address' => $request->input('address'),
-            'email' => $request->input('email'),
-            'phone' => $request->input('phone'),
-            'representativeDni' => $request->input('representativeDni'),
-            'representativeNames' => $request->input('representativeNames'),
-            'country_id' => $request->input('country_id'),
-        ];
-
-        $supplier = Person::create($data);
+        if ($request->typeDocument === 'DNI') $request->merge(['ruc' => null, 'businessName' => null, 'representativeDni' => null, 'representativeNames' => null]);
+        else $request->merge(['dni' => null, 'names' => null, 'fatherSurname' => null, 'motherSurname' => null]);
+        $request->merge(['type' => 'supplier']);
+        $supplier = Person::create($request->all());
+        $supplier->update(['filterName' => $request->typeDocument === 'DNI' ? $request->names . ' ' . $request->fatherSurname . ' ' . $request->motherSurname : $request->businessName]);
         $supplier = Person::with('country')->find($supplier->id);
-
         return response()->json($supplier);
-
     }
 
     /**
@@ -180,12 +127,10 @@ class SupplierController extends Controller
      *     )
      * )
      */
-    public function show(string $id)
+    public function show(int $id)
     {
         $supplier = Person::with('country')->where('type', 'supplier')->find($id);
-        if (!$supplier) {
-            return response()->json(['error' => 'Supplier not found'], 404);
-        }
+        if (!$supplier) return response()->json(['error' => 'Supplier not found'], 404);
         return response()->json($supplier);
     }
 
@@ -234,47 +179,15 @@ class SupplierController extends Controller
      *     )
      * )
      */
-    public function update(Request $request, string $id)
+    public function update(UpdateSupplierRequest $request, int $id)
     {
-        $supplier = Person::find($id);
-
-        if (!$supplier) {
-            return response()->json(['message' => 'Supplier not found'], 404);
-        }
-
-        $validator = validator()->make($request->all(), [
-            'ruc' => [
-                'required',
-                'string',
-                'max:11',
-                Rule::unique('people')->where('type', 'supplier')
-                    ->ignore($supplier->id, 'id')->whereNull('deleted_at')
-            ],
-            'businessName' => 'required|string',
-            'email' => 'nullable|email',
-            'phone' => 'nullable|int',
-            'representativeDni' => 'nullable|string',
-            'representativeNames' => 'nullable|string',
-            'country_id' => 'required|integer',
-        ]);
-
-        if ($validator->fails()) {
-            return response()->json(['error' => $validator->errors()->first()], 422);
-        }
-
-        $data = [
-            'ruc' => $request->input('ruc'),
-            'businessName' => $request->input('businessName'),
-            'email' => $request->input('email'),
-            'phone' => $request->input('phone'),
-            'representativeDni' => $request->input('representativeDni'),
-            'representativeNames' => $request->input('representativeNames'),
-            'country_id' => $request->input('country_id')
-        ];
-
-        $supplier->update($data);
-        $supplier = Person::with('country')->find($id);
-
+        $supplier = Person::where('type', 'supplier')->find($id);
+        if (!$supplier) return response()->json(['message' => 'Supplier not found'], 404);
+        if ($request->typeDocument === 'DNI') $request->merge(['ruc' => null, 'businessName' => null, 'representativeDni' => null, 'representativeNames' => null]);
+        else $request->merge(['dni' => null, 'names' => null, 'fatherSurname' => null, 'motherSurname' => null]);
+        $supplier->update($request->all());
+        $supplier->update(['filterName' => $request->typeDocument === 'DNI' ? $request->names . ' ' . $request->fatherSurname . ' ' . $request->motherSurname : $request->businessName]);
+        $supplier = Person::with('country')->where('type', 'supplier')->find($id);
         return response()->json($supplier);
     }
 
@@ -314,16 +227,11 @@ class SupplierController extends Controller
      *     )
      * )
      */
-    public function destroy(string $id)
+    public function destroy(int $id)
     {
-        $supplier = Person::find($id);
-
-        if (!$supplier) {
-            return response()->json(['message' => 'Supplier not found'], 404);
-        }
-
+        $supplier = Person::where('type', 'supplier')->find($id);
+        if (!$supplier) return response()->json(['message' => 'Supplier not found'], 404);
         $supplier->delete();
-
-        return response()->json(['message' => 'Supplier deleted successfully']);
+        return response()->json(['message' => 'Supplier deleted']);
     }
 }

@@ -58,21 +58,23 @@ use Illuminate\Http\Resources\Json\JsonResource;
  */
 class SupplierResource extends JsonResource
 {
-    /**
-     * Transform the resource into an array.
-     *
-     * @return array<string, mixed>
-     */
     public function toArray(Request $request): array
     {
         return [
             'id' => $this->id,
-            'ruc' => $this->ruc,
-            'businessName' => $this->businessName,
+            'typeDocument' => $this->typeDocument,
+            'dni' => $this->typeDocument === 'DNI' ? $this->dni : null,
+            'ruc' => $this->typeDocument === 'RUC' ? $this->ruc : null,
+            'names' => $this->typeDocument === 'DNI' ? $this->names : null,
+            'fatherSurname' => $this->typeDocument === 'DNI' ? $this->fatherSurname : null,
+            'motherSurname' => $this->typeDocument === 'DNI' ? $this->motherSurname : null,
+            'businessName' => $this->typeDocument === 'RUC' ? $this->businessName : null,
+            'address' => $this->address,
             'email' => $this->email,
             'phone' => $this->phone,
+            'representativeDni' => $this->typeDocument === 'RUC' ? $this->representativeDni : null,
+            'representativeNames' => $this->typeDocument === 'RUC' ? $this->representativeNames : null,
             'country' => (new CountryResource($this->country))->name,
         ];
-
     }
 }

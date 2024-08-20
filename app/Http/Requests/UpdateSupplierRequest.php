@@ -4,7 +4,7 @@ namespace App\Http\Requests;
 
 use Illuminate\Validation\Rule;
 
-class UpdateClientRequest extends UpdateRequest
+class UpdateSupplierRequest extends UpdateRequest
 {
     public function rules(): array
     {
@@ -16,9 +16,9 @@ class UpdateClientRequest extends UpdateRequest
                 'min:8',
                 'max:8',
                 Rule::unique('people', 'dni')
-                    ->where('type', 'client')
+                    ->where('type', 'supplier')
                     ->whereNull('deleted_at')
-                    ->ignore($this->route('client'))
+                    ->ignore($this->route('supplier'))
             ],
             'ruc' => [
                 'nullable',
@@ -26,9 +26,9 @@ class UpdateClientRequest extends UpdateRequest
                 'min:11',
                 'max:11',
                 Rule::unique('people')
-                    ->where('type', 'client')
+                    ->where('type', 'supplier')
                     ->whereNull('deleted_at')
-                    ->ignore($this->route('client'))
+                    ->ignore($this->route('supplier'))
             ],
             'names' => 'nullable|string',
             'fatherSurname' => 'nullable|string',
