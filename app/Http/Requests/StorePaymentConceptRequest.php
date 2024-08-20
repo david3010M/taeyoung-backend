@@ -2,9 +2,17 @@
 
 namespace App\Http\Requests;
 
-use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Validation\Rule;
 
+/**
+ * @OA\Schema(
+ *     schema="StorePaymentConceptRequest",
+ *     title="StorePaymentConceptRequest",
+ *     required={"name", "type"},
+ *     @OA\Property(property="name", type="string", example="name"),
+ *     @OA\Property(property="type", type="string", example="type")
+ * )
+ */
 class StorePaymentConceptRequest extends StoreRequest
 {
     public function rules(): array

@@ -5,6 +5,14 @@ namespace App\Http\Requests;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Validation\Rule;
 
+/**
+ * @OA\Schema(
+ *     schema="UpdatePaymentConceptRequest",
+ *     title="UpdatePaymentConceptRequest",
+ *     @OA\Property(property="name", type="string", example="name"),
+ *     @OA\Property(property="type", type="string", example="type")
+ * )
+ */
 class UpdatePaymentConceptRequest extends FormRequest
 {
     public function rules(): array
