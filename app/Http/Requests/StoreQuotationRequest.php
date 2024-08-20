@@ -4,6 +4,35 @@ namespace App\Http\Requests;
 
 use Illuminate\Validation\Rule;
 
+/**
+ * @OA\Schema (
+ *     title="StoreQuotationRequest",
+ *     required={"date", "detail", "discount", "currencyType", "client_id", "detailMachinery", "detailSpareParts"},
+ *     @OA\Property(property="date", type="string", format="date", example="2024-08-19"),
+ *     @OA\Property(property="detail", type="string", example="This is a detail"),
+ *     @OA\Property(property="discount", type="number", example="0"),
+ *     @OA\Property(property="currencyType", type="string", example="USD"),
+ *     @OA\Property(property="client_id", type="integer", example="21"),
+ *     @OA\Property(property="detailMachinery", type="array", @OA\Items(ref="#/components/schemas/DetailMachineryRequest")),
+ *     @OA\Property(property="detailSpareParts", type="array", @OA\Items(ref="#/components/schemas/DetailSparePartRequest"))
+ * )
+ *
+ * @OA\Schema (
+ *     schema="DetailMachineryRequest",
+ *     required={"description", "quantity", "salePrice"},
+ *     @OA\Property(property="description", type="string", example="Description"),
+ *     @OA\Property(property="quantity", type="integer", example="1"),
+ *     @OA\Property(property="salePrice", type="number", example="100")
+ * )
+ *
+ * @OA\Schema (
+ *     schema="DetailSparePartRequest",
+ *     required={"quantity", "spare_part_id"},
+ *     @OA\Property(property="quantity", type="integer", example="1"),
+ *     @OA\Property(property="spare_part_id", type="integer", example="1")
+ * )
+ *
+ */
 class StoreQuotationRequest extends StoreRequest
 {
     public function rules(): array

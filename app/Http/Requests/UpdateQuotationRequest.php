@@ -4,6 +4,19 @@ namespace App\Http\Requests;
 
 use Illuminate\Validation\Rule;
 
+/**
+ * @OA\Schema (
+ *     title="UpdateQuotationRequest",
+ *     @OA\Property(property="date", type="string", format="date", example="2024-08-19"),
+ *     @OA\Property(property="detail", type="string", example="This is a detail"),
+ *     @OA\Property(property="discount", type="number", example="0"),
+ *     @OA\Property(property="currencyType", type="string", example="USD"),
+ *     @OA\Property(property="client_id", type="integer", example="21"),
+ *     @OA\Property(property="detailMachinery", type="array", @OA\Items(ref="#/components/schemas/DetailMachineryRequest")),
+ *     @OA\Property(property="detailSpareParts", type="array", @OA\Items(ref="#/components/schemas/DetailSparePartRequest"))
+ * )
+ *
+ */
 class UpdateQuotationRequest extends UpdateRequest
 {
     public function rules(): array

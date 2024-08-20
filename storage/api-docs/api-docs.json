@@ -618,6 +618,389 @@
                 ]
             }
         },
+        "/taeyoung-backend/public/api/quotation": {
+            "get": {
+                "tags": [
+                    "Quotation"
+                ],
+                "summary": "Get all quotations",
+                "description": "Get all quotations",
+                "operationId": "b6ad0ebbf7b868424b0ad8064cd88114",
+                "parameters": [
+                    {
+                        "parameter": "page",
+                        "name": "page",
+                        "in": "query",
+                        "description": "Page number",
+                        "required": false,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    },
+                    {
+                        "parameter": "per_page",
+                        "name": "per_page",
+                        "in": "query",
+                        "description": "Items per page",
+                        "required": false,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    },
+                    {
+                        "parameter": "sort",
+                        "name": "sort",
+                        "in": "query",
+                        "description": "Sort by column",
+                        "required": false,
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "parameter": "direction",
+                        "name": "direction",
+                        "in": "query",
+                        "description": "Sort direction",
+                        "required": false,
+                        "schema": {
+                            "type": "string",
+                            "enum": [
+                                "asc",
+                                "desc"
+                            ]
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Successful operation",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/MachineryPurchaseCollection"
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthenticated",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/Unauthenticated"
+                                }
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "Validation error",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ValidationError"
+                                }
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            },
+            "post": {
+                "tags": [
+                    "Quotation"
+                ],
+                "summary": "Store a new quotation",
+                "description": "Store a new quotation",
+                "operationId": "a10f7bd838842d59e0ce4ef770879cfd",
+                "requestBody": {
+                    "description": "Quotation data",
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/StoreQuotationRequest"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Successful operation",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/QuotationResource"
+                                }
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "Validation error",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ValidationError"
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthenticated",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/Unauthenticated"
+                                }
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
+        "/taeyoung-backend/public/api/quotation/{id}": {
+            "get": {
+                "tags": [
+                    "Quotation"
+                ],
+                "summary": "Show a quotation",
+                "description": "Show a quotation",
+                "operationId": "b0b55af43f7c86f02310f576a189dbc9",
+                "parameters": [
+                    {
+                        "parameter": "id",
+                        "name": "id",
+                        "in": "path",
+                        "description": "Quotation ID",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Successful operation",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/QuotationResource"
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Quotation not found",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Quotation not found"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthenticated",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/Unauthenticated"
+                                }
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            },
+            "put": {
+                "tags": [
+                    "Quotation"
+                ],
+                "summary": "Update a quotation",
+                "description": "Update a quotation",
+                "operationId": "c2c613321fabe55f3b62e22065107c59",
+                "parameters": [
+                    {
+                        "parameter": "id",
+                        "name": "id",
+                        "in": "path",
+                        "description": "Quotation ID",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "requestBody": {
+                    "description": "Quotation data",
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/UpdateQuotationRequest"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Successful operation",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/QuotationResource"
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Quotation not found",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Quotation not found"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "Validation error",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ValidationError"
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthenticated",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/Unauthenticated"
+                                }
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            },
+            "delete": {
+                "tags": [
+                    "Quotation"
+                ],
+                "summary": "Delete a quotation",
+                "description": "Delete a quotation",
+                "operationId": "ca0ae3d82574039bb8b63d269b0474bf",
+                "parameters": [
+                    {
+                        "parameter": "id",
+                        "name": "id",
+                        "in": "path",
+                        "description": "Quotation ID",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Successful operation",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Quotation deleted"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Quotation not found",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Quotation not found"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "409": {
+                        "description": "Quotation cannot be deleted",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Quotation cannot be deleted"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthenticated",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/Unauthenticated"
+                                }
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
         "/taeyoung-backend/public/api/searchByDni/{dni}": {
             "get": {
                 "tags": [
@@ -1704,6 +2087,93 @@
                 },
                 "type": "object"
             },
+            "StoreQuotationRequest": {
+                "title": "StoreQuotationRequest",
+                "required": [
+                    "date",
+                    "detail",
+                    "discount",
+                    "currencyType",
+                    "client_id",
+                    "detailMachinery",
+                    "detailSpareParts"
+                ],
+                "properties": {
+                    "date": {
+                        "type": "string",
+                        "format": "date",
+                        "example": "2024-08-19"
+                    },
+                    "detail": {
+                        "type": "string",
+                        "example": "This is a detail"
+                    },
+                    "discount": {
+                        "type": "number",
+                        "example": "0"
+                    },
+                    "currencyType": {
+                        "type": "string",
+                        "example": "USD"
+                    },
+                    "client_id": {
+                        "type": "integer",
+                        "example": "21"
+                    },
+                    "detailMachinery": {
+                        "type": "array",
+                        "items": {
+                            "$ref": "#/components/schemas/DetailMachineryRequest"
+                        }
+                    },
+                    "detailSpareParts": {
+                        "type": "array",
+                        "items": {
+                            "$ref": "#/components/schemas/DetailSparePartRequest"
+                        }
+                    }
+                },
+                "type": "object"
+            },
+            "DetailMachineryRequest": {
+                "required": [
+                    "description",
+                    "quantity",
+                    "salePrice"
+                ],
+                "properties": {
+                    "description": {
+                        "type": "string",
+                        "example": "Description"
+                    },
+                    "quantity": {
+                        "type": "integer",
+                        "example": "1"
+                    },
+                    "salePrice": {
+                        "type": "number",
+                        "example": "100"
+                    }
+                },
+                "type": "object"
+            },
+            "DetailSparePartRequest": {
+                "required": [
+                    "quantity",
+                    "spare_part_id"
+                ],
+                "properties": {
+                    "quantity": {
+                        "type": "integer",
+                        "example": "1"
+                    },
+                    "spare_part_id": {
+                        "type": "integer",
+                        "example": "1"
+                    }
+                },
+                "type": "object"
+            },
             "StoreUserRequest": {
                 "title": "Create User Request",
                 "required": [
@@ -1794,6 +2264,45 @@
                                 }
                             },
                             "type": "object"
+                        }
+                    }
+                },
+                "type": "object"
+            },
+            "UpdateQuotationRequest": {
+                "title": "UpdateQuotationRequest",
+                "properties": {
+                    "date": {
+                        "type": "string",
+                        "format": "date",
+                        "example": "2024-08-19"
+                    },
+                    "detail": {
+                        "type": "string",
+                        "example": "This is a detail"
+                    },
+                    "discount": {
+                        "type": "number",
+                        "example": "0"
+                    },
+                    "currencyType": {
+                        "type": "string",
+                        "example": "USD"
+                    },
+                    "client_id": {
+                        "type": "integer",
+                        "example": "21"
+                    },
+                    "detailMachinery": {
+                        "type": "array",
+                        "items": {
+                            "$ref": "#/components/schemas/DetailMachineryRequest"
+                        }
+                    },
+                    "detailSpareParts": {
+                        "type": "array",
+                        "items": {
+                            "$ref": "#/components/schemas/DetailSparePartRequest"
                         }
                     }
                 },
@@ -2084,6 +2593,114 @@
                         "type": "array",
                         "items": {
                             "$ref": "#/components/schemas/MachineryPurchaseResource"
+                        }
+                    },
+                    "links": {
+                        "$ref": "#/components/schemas/PaginationLinks"
+                    },
+                    "meta": {
+                        "$ref": "#/components/schemas/PaginationMeta"
+                    }
+                },
+                "type": "object"
+            },
+            "QuotationResource": {
+                "required": [
+                    "id",
+                    "number",
+                    "date",
+                    "detail",
+                    "paymentType",
+                    "currencyType",
+                    "totalMachinery",
+                    "totalSpareParts",
+                    "subtotal",
+                    "igv",
+                    "discount",
+                    "total",
+                    "client_id"
+                ],
+                "properties": {
+                    "id": {
+                        "type": "integer",
+                        "example": "1"
+                    },
+                    "number": {
+                        "type": "string",
+                        "example": "COTI-0001"
+                    },
+                    "date": {
+                        "type": "string",
+                        "format": "date",
+                        "example": "2024-08-19"
+                    },
+                    "detail": {
+                        "type": "string",
+                        "example": "This is a detail"
+                    },
+                    "paymentType": {
+                        "type": "string",
+                        "example": "Contado"
+                    },
+                    "currencyType": {
+                        "type": "string",
+                        "example": "USD"
+                    },
+                    "totalMachinery": {
+                        "type": "number",
+                        "example": "100"
+                    },
+                    "totalSpareParts": {
+                        "type": "number",
+                        "example": "100"
+                    },
+                    "subtotal": {
+                        "type": "number",
+                        "example": "100"
+                    },
+                    "igv": {
+                        "type": "number",
+                        "example": "18"
+                    },
+                    "discount": {
+                        "type": "number",
+                        "example": "0"
+                    },
+                    "total": {
+                        "type": "number",
+                        "example": "118"
+                    },
+                    "client_id": {
+                        "type": "integer",
+                        "example": "1"
+                    },
+                    "client": {
+                        "type": "string",
+                        "example": "Client Name"
+                    },
+                    "detailMachinery": {
+                        "type": "array",
+                        "items": {
+                            "$ref": "#/components/schemas/DetailMachineryResource"
+                        }
+                    },
+                    "detailSpareParts": {
+                        "type": "array",
+                        "items": {
+                            "$ref": "#/components/schemas/DetailSparePartResource"
+                        }
+                    }
+                },
+                "type": "object"
+            },
+            "QuotationCollection": {
+                "title": "QuotationCollection",
+                "description": "Quotation resource collection",
+                "properties": {
+                    "data": {
+                        "type": "array",
+                        "items": {
+                            "$ref": "#/components/schemas/QuotationResource"
                         }
                     },
                     "links": {

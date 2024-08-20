@@ -90,5 +90,10 @@ class Quotation extends Model
         return $this->hasMany(DetailMachinery::class);
     }
 
+    public function orders()
+    {
+        return $this->hasMany(Order::class);
+    }
+
 
 }

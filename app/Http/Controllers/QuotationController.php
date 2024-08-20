@@ -15,6 +15,23 @@ use App\Traits\Filterable;
 
 class QuotationController extends Controller
 {
+    /**
+     * @OA\Get (
+     *     path="/taeyoung-backend/public/api/quotation",
+     *     tags={"Quotation"},
+     *     summary="Get all quotations",
+     *     description="Get all quotations",
+     *     security={{"bearerAuth": {}}},
+     *     @OA\Parameter(parameter="page", name="page", in="query", required=false, description="Page number", @OA\Schema(type="integer")),
+     *     @OA\Parameter(parameter="per_page", name="per_page", in="query", required=false, description="Items per page", @OA\Schema(type="integer")),
+     *     @OA\Parameter(parameter="sort", name="sort", in="query", required=false, description="Sort by column", @OA\Schema(type="string")),
+     *     @OA\Parameter(parameter="direction", name="direction", in="query", required=false, description="Sort direction", @OA\Schema(type="string", enum={"asc", "desc"})),
+     *     @OA\Response(response=200, description="Successful operation", @OA\JsonContent(ref="#/components/schemas/MachineryPurchaseCollection")),
+     *     @OA\Response(response=401, description="Unauthenticated", @OA\JsonContent(ref="#/components/schemas/Unauthenticated")),
+     *     @OA\Response(response=422, description="Validation error", @OA\JsonContent(ref="#/components/schemas/ValidationError"))
+     * )
+     *
+     */
     public function index(IndexQuotationRequest $request)
     {
         return $this->getFilteredResults(
@@ -26,6 +43,20 @@ class QuotationController extends Controller
         );
     }
 
+    /**
+     * @OA\Post (
+     *     path="/taeyoung-backend/public/api/quotation",
+     *     tags={"Quotation"},
+     *     summary="Store a new quotation",
+     *     description="Store a new quotation",
+     *     security={{"bearerAuth": {}}},
+     *     @OA\RequestBody(required=true, description="Quotation data", @OA\JsonContent(ref="#/components/schemas/StoreQuotationRequest")),
+     *     @OA\Response(response=200, description="Successful operation", @OA\JsonContent(ref="#/components/schemas/QuotationResource")),
+     *     @OA\Response(response=422, description="Validation error", @OA\JsonContent(ref="#/components/schemas/ValidationError")),
+     *     @OA\Response(response=401, description="Unauthenticated", @OA\JsonContent(ref="#/components/schemas/Unauthenticated"))
+     * )
+     *
+     */
     public function store(StoreQuotationRequest $request)
     {
         $dataQuotation = [
@@ -74,6 +105,20 @@ class QuotationController extends Controller
         return response()->json(new QuotationResource($quotation));
     }
 
+    /**
+     * @OA\Get (
+     *     path="/taeyoung-backend/public/api/quotation/{id}",
+     *     tags={"Quotation"},
+     *     summary="Show a quotation",
+     *     description="Show a quotation",
+     *     security={{"bearerAuth": {}}},
+     *     @OA\Parameter(parameter="id", name="id", in="path", required=true, description="Quotation ID", @OA\Schema(type="integer")),
+     *     @OA\Response(response=200, description="Successful operation", @OA\JsonContent(ref="#/components/schemas/QuotationResource")),
+     *     @OA\Response(response=404, description="Quotation not found", @OA\JsonContent(type="object", @OA\Property(property="message", type="string", example="Quotation not found"))),
+     *     @OA\Response(response=401, description="Unauthenticated", @OA\JsonContent(ref="#/components/schemas/Unauthenticated"))
+     * )
+     *
+     */
     public function show(int $id)
     {
         $quotation = Quotation::find($id);
@@ -81,6 +126,21 @@ class QuotationController extends Controller
         return response()->json(new QuotationResource($quotation));
     }
 
+    /**
+     * @OA\Put (
+     *     path="/taeyoung-backend/public/api/quotation/{id}",
+     *     tags={"Quotation"},
+     *     summary="Update a quotation",
+     *     description="Update a quotation",
+     *     security={{"bearerAuth": {}}},
+     *     @OA\Parameter(parameter="id", name="id", in="path", required=true, description="Quotation ID", @OA\Schema(type="integer")),
+     *     @OA\RequestBody(required=true, description="Quotation data", @OA\JsonContent(ref="#/components/schemas/UpdateQuotationRequest")),
+     *     @OA\Response(response=200, description="Successful operation", @OA\JsonContent(ref="#/components/schemas/QuotationResource")),
+     *     @OA\Response(response=404, description="Quotation not found", @OA\JsonContent(type="object", @OA\Property(property="message", type="string", example="Quotation not found"))),
+     *     @OA\Response(response=422, description="Validation error", @OA\JsonContent(ref="#/components/schemas/ValidationError")),
+     *     @OA\Response(response=401, description="Unauthenticated", @OA\JsonContent(ref="#/components/schemas/Unauthenticated"))
+     * )
+     */
     public function update(UpdateQuotationRequest $request, int $id)
     {
         $quotation = Quotation::find($id);
@@ -133,10 +193,29 @@ class QuotationController extends Controller
         return response()->json(new QuotationResource($quotation));
     }
 
+    /**
+     * @OA\Delete (
+     *     path="/taeyoung-backend/public/api/quotation/{id}",
+     *     tags={"Quotation"},
+     *     summary="Delete a quotation",
+     *     description="Delete a quotation",
+     *     security={{"bearerAuth": {}}},
+     *     @OA\Parameter(parameter="id", name="id", in="path", required=true, description="Quotation ID", @OA\Schema(type="integer")),
+     *     @OA\Response(response=200, description="Successful operation", @OA\JsonContent(type="object", @OA\Property(property="message", type="string", example="Quotation deleted"))),
+     *     @OA\Response(response=404, description="Quotation not found", @OA\JsonContent(type="object", @OA\Property(property="message", type="string", example="Quotation not found"))),
+     *     @OA\Response(response=409, description="Quotation cannot be deleted", @OA\JsonContent(type="object", @OA\Property(property="message", type="string", example="Quotation cannot be deleted"))),
+     *     @OA\Response(response=401, description="Unauthenticated", @OA\JsonContent(ref="#/components/schemas/Unauthenticated"))
+     * )
+     */
     public function destroy(int $id)
     {
         $quotation = Quotation::find($id);
         if (!$quotation) return response()->json(['message' => 'Quotation not found'], 404);
+        if ($quotation->orders()->count() > 0) {
+            return response()->json(['message' => 'Quotation has orders, cannot be deleted'], 409);
+        }
+        $quotation->detailMachinery()->delete();
+        $quotation->detailSpareParts()->delete();
         $quotation->delete();
         return response()->json(['message' => 'Quotation deleted']);
     }
