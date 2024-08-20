@@ -32,8 +32,8 @@ class Unit extends Model
     ];
 
     const filters = [
-        'name',
-        'abbreviation'
+        'name' => 'like',
+        'abbreviation' => 'like'
     ];
 
     const sorts = [

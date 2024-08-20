@@ -1949,6 +1949,294 @@
                         "bearerAuth": []
                     }
                 ]
+            },
+            "post": {
+                "tags": [
+                    "Unit"
+                ],
+                "summary": "Create a unit",
+                "description": "Create a unit",
+                "operationId": "f81039077e7954d672d09195608a0dd0",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/StoreUnitRequest"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Successful operation",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/Unit"
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthenticated",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/Unauthenticated"
+                                }
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "Validation error",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ValidationError"
+                                }
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
+        "/taeyoung-backend/public/api/unit/{id}": {
+            "get": {
+                "tags": [
+                    "Unit"
+                ],
+                "summary": "Get a unit",
+                "description": "Get a unit",
+                "operationId": "7b4deca2201d2079ab9067305711dfc5",
+                "parameters": [
+                    {
+                        "parameter": "id",
+                        "name": "id",
+                        "in": "path",
+                        "description": "Unit ID",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Successful operation",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/Unit"
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthenticated",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/Unauthenticated"
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Unit not found",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Unit not found"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            },
+            "put": {
+                "tags": [
+                    "Unit"
+                ],
+                "summary": "Update a unit",
+                "description": "Update a unit",
+                "operationId": "eeca75c9925be5db53e7e9d8f763719e",
+                "parameters": [
+                    {
+                        "parameter": "id",
+                        "name": "id",
+                        "in": "path",
+                        "description": "Unit ID",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/UpdateUnitRequest"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Successful operation",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/Unit"
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthenticated",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/Unauthenticated"
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Unit not found",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Unit not found"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "Validation error",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ValidationError"
+                                }
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            },
+            "delete": {
+                "tags": [
+                    "Unit"
+                ],
+                "summary": "Delete a unit",
+                "description": "Delete a unit",
+                "operationId": "bc0590b8344a77baf0cd56cd1490fc67",
+                "parameters": [
+                    {
+                        "parameter": "id",
+                        "name": "id",
+                        "in": "path",
+                        "description": "Unit ID",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Successful operation",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Unit deleted"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthenticated",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/Unauthenticated"
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Unit not found",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Unit not found"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "409": {
+                        "description": "Unit has spare parts",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Unit has spare parts"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
             }
         },
         "/taeyoung-backend/public/api/user": {
@@ -2330,6 +2618,24 @@
                 },
                 "type": "object"
             },
+            "StoreUnitRequest": {
+                "title": "StoreUnitRequest",
+                "required": [
+                    "name",
+                    "abbreviation"
+                ],
+                "properties": {
+                    "name": {
+                        "type": "string",
+                        "example": "Unidad"
+                    },
+                    "abbreviation": {
+                        "type": "string",
+                        "example": "UN"
+                    }
+                },
+                "type": "object"
+            },
             "StoreUserRequest": {
                 "title": "Create User Request",
                 "required": [
@@ -2460,6 +2766,20 @@
                         "items": {
                             "$ref": "#/components/schemas/DetailSparePartRequest"
                         }
+                    }
+                },
+                "type": "object"
+            },
+            "UpdateUnitRequest": {
+                "title": "UpdateUnitRequest",
+                "properties": {
+                    "name": {
+                        "type": "string",
+                        "example": "Unidad"
+                    },
+                    "abbreviation": {
+                        "type": "string",
+                        "example": "UN"
                     }
                 },
                 "type": "object"
