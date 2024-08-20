@@ -17,13 +17,14 @@ class UnitController extends Controller
      *     summary="Get all units",
      *     description="Get all units",
      *     security={{"bearerAuth": {}}},
+     *     @OA\Parameter(parameter="all", name="all", in="query", required=false, description="Get all units", @OA\Schema(type="boolean")),
      *     @OA\Parameter(parameter="page", name="page", in="query", required=false, description="Page number", @OA\Schema(type="integer")),
      *     @OA\Parameter(parameter="per_page", name="per_page", in="query", required=false, description="Items per page", @OA\Schema(type="integer")),
      *     @OA\Parameter(parameter="sort", name="sort", in="query", required=false, description="Sort by column", @OA\Schema(type="string")),
      *     @OA\Parameter(parameter="direction", name="direction", in="query", required=false, description="Sort direction", @OA\Schema(type="string", enum={"asc", "desc"})),
      *     @OA\Parameter(parameter="name", name="name", in="query", required=false, description="Filter by name", @OA\Schema(type="string")),
      *     @OA\Parameter(parameter="abbreviation", name="abbreviation", in="query", required=false, description="Filter by abbreviation", @OA\Schema(type="string")),
-     *     @OA\Response(response=200, description="Successful operation", @OA\JsonContent(type="array", @OA\Items(ref="#/components/schemas/Unit"))),
+     *     @OA\Response(response=200, description="Successful operation", @OA\JsonContent(type="array", @OA\Items(ref="#/components/schemas/UnitCollection"))),
      *     @OA\Response(response=401, description="Unauthenticated", @OA\JsonContent(ref="#/components/schemas/Unauthenticated")),
      *     @OA\Response(response=422, description="Validation error", @OA\JsonContent(ref="#/components/schemas/ValidationError"))
      * )

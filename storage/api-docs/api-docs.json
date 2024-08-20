@@ -628,6 +628,16 @@
                 "operationId": "2e76ba9a79456da436bfa15eec0a557c",
                 "parameters": [
                     {
+                        "parameter": "all",
+                        "name": "all",
+                        "in": "query",
+                        "description": "Get all units",
+                        "required": false,
+                        "schema": {
+                            "type": "boolean"
+                        }
+                    },
+                    {
                         "parameter": "page",
                         "name": "page",
                         "in": "query",
@@ -1012,6 +1022,16 @@
                 "description": "Get all quotations",
                 "operationId": "b6ad0ebbf7b868424b0ad8064cd88114",
                 "parameters": [
+                    {
+                        "parameter": "all",
+                        "name": "all",
+                        "in": "query",
+                        "description": "Get all units",
+                        "required": false,
+                        "schema": {
+                            "type": "boolean"
+                        }
+                    },
                     {
                         "parameter": "page",
                         "name": "page",
@@ -1810,86 +1830,114 @@
                 "tags": [
                     "Supplier"
                 ],
-                "summary": "Show all suppliers",
+                "summary": "List all suppliers",
+                "description": "Show all suppliers",
                 "operationId": "846d032d37ae8fae626d404be694761e",
                 "parameters": [
                     {
-                        "name": "pagination",
-                        "in": "query",
-                        "description": "Number of items to display per page",
-                        "required": false,
-                        "schema": {
-                            "type": "integer"
-                        }
-                    },
-                    {
-                        "name": "ruc",
-                        "in": "query",
-                        "description": "Supplier RUC",
-                        "required": false,
-                        "schema": {
-                            "type": "string"
-                        }
-                    },
-                    {
-                        "name": "businessName",
-                        "in": "query",
-                        "description": "Supplier business name",
-                        "required": false,
-                        "schema": {
-                            "type": "string"
-                        }
-                    },
-                    {
-                        "name": "email",
-                        "in": "query",
-                        "description": "Supplier email",
-                        "required": false,
-                        "schema": {
-                            "type": "string"
-                        }
-                    },
-                    {
-                        "name": "phone",
-                        "in": "query",
-                        "description": "Supplier phone",
-                        "required": false,
-                        "schema": {
-                            "type": "integer"
-                        }
-                    },
-                    {
-                        "name": "countryId",
-                        "in": "query",
-                        "description": "Supplier country ID",
-                        "required": false,
-                        "schema": {
-                            "type": "string"
-                        }
-                    },
-                    {
+                        "parameter": "all",
                         "name": "all",
                         "in": "query",
-                        "description": "Show all suppliers",
+                        "description": "Get all suppliers",
+                        "required": false,
+                        "schema": {
+                            "type": "boolean"
+                        }
+                    },
+                    {
+                        "parameter": "page",
+                        "name": "page",
+                        "in": "query",
+                        "description": "Page number",
+                        "required": false,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    },
+                    {
+                        "parameter": "per_page",
+                        "name": "per_page",
+                        "in": "query",
+                        "description": "Items per page",
+                        "required": false,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    },
+                    {
+                        "parameter": "sort",
+                        "name": "sort",
+                        "in": "query",
+                        "description": "Sort by column",
+                        "required": false,
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "parameter": "direction",
+                        "name": "direction",
+                        "in": "query",
+                        "description": "Sort direction",
                         "required": false,
                         "schema": {
                             "type": "string",
                             "enum": [
-                                "true",
-                                "false"
+                                "asc",
+                                "desc"
                             ]
+                        }
+                    },
+                    {
+                        "parameter": "ruc",
+                        "name": "ruc",
+                        "in": "query",
+                        "description": "Filter by ruc",
+                        "required": false,
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "parameter": "businessName",
+                        "name": "businessName",
+                        "in": "query",
+                        "description": "Filter by business name",
+                        "required": false,
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "parameter": "email",
+                        "name": "email",
+                        "in": "query",
+                        "description": "Filter by email",
+                        "required": false,
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "parameter": "country_id",
+                        "name": "country_id",
+                        "in": "query",
+                        "description": "Filter by country",
+                        "required": false,
+                        "schema": {
+                            "type": "integer"
                         }
                     }
                 ],
                 "responses": {
                     "200": {
-                        "description": "Show all suppliers",
+                        "description": "Successful operation",
                         "content": {
                             "application/json": {
                                 "schema": {
                                     "type": "array",
                                     "items": {
-                                        "$ref": "#/components/schemas/SupplierPagination"
+                                        "$ref": "#/components/schemas/SupplierCollection"
                                     }
                                 }
                             }
@@ -1900,13 +1948,17 @@
                         "content": {
                             "application/json": {
                                 "schema": {
-                                    "properties": {
-                                        "msg": {
-                                            "type": "string",
-                                            "example": "Unauthenticated"
-                                        }
-                                    },
-                                    "type": "object"
+                                    "$ref": "#/components/schemas/Unauthenticated"
+                                }
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "Validation error",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ValidationError"
                                 }
                             }
                         }
@@ -1929,7 +1981,7 @@
                     "content": {
                         "application/json": {
                             "schema": {
-                                "$ref": "#/components/schemas/SupplierRequest"
+                                "$ref": "#/components/schemas/StoreSupplierRequest"
                             }
                         }
                     }
@@ -1950,13 +2002,7 @@
                         "content": {
                             "application/json": {
                                 "schema": {
-                                    "properties": {
-                                        "error": {
-                                            "type": "string",
-                                            "example": "The given data was invalid."
-                                        }
-                                    },
-                                    "type": "object"
+                                    "$ref": "#/components/schemas/ValidationError"
                                 }
                             }
                         }
@@ -1966,13 +2012,7 @@
                         "content": {
                             "application/json": {
                                 "schema": {
-                                    "properties": {
-                                        "error": {
-                                            "type": "string",
-                                            "example": "Unauthenticated"
-                                        }
-                                    },
-                                    "type": "object"
+                                    "$ref": "#/components/schemas/Unauthenticated"
                                 }
                             }
                         }
@@ -2005,7 +2045,7 @@
                 ],
                 "responses": {
                     "200": {
-                        "description": "Show a supplier",
+                        "description": "Successful operation",
                         "content": {
                             "application/json": {
                                 "schema": {
@@ -2075,7 +2115,7 @@
                     "content": {
                         "application/json": {
                             "schema": {
-                                "$ref": "#/components/schemas/SupplierRequest"
+                                "$ref": "#/components/schemas/UpdateSupplierRequest"
                             }
                         }
                     }
@@ -2100,22 +2140,6 @@
                                         "message": {
                                             "type": "string",
                                             "example": "Supplier not found"
-                                        }
-                                    },
-                                    "type": "object"
-                                }
-                            }
-                        }
-                    },
-                    "422": {
-                        "description": "Validation error",
-                        "content": {
-                            "application/json": {
-                                "schema": {
-                                    "properties": {
-                                        "error": {
-                                            "type": "string",
-                                            "example": "The given data was invalid."
                                         }
                                     },
                                     "type": "object"
@@ -2230,6 +2254,16 @@
                 "operationId": "bdc37374ed2261fcd984583f93ccb69f",
                 "parameters": [
                     {
+                        "parameter": "all",
+                        "name": "all",
+                        "in": "query",
+                        "description": "Get all units",
+                        "required": false,
+                        "schema": {
+                            "type": "boolean"
+                        }
+                    },
+                    {
                         "parameter": "page",
                         "name": "page",
                         "in": "query",
@@ -2302,7 +2336,7 @@
                                 "schema": {
                                     "type": "array",
                                     "items": {
-                                        "$ref": "#/components/schemas/Unit"
+                                        "$ref": "#/components/schemas/UnitCollection"
                                     }
                                 }
                             }
@@ -3021,6 +3055,64 @@
                 },
                 "type": "object"
             },
+            "StoreSupplierRequest": {
+                "title": "StoreSupplierRequest",
+                "properties": {
+                    "typeDocument": {
+                        "type": "string",
+                        "example": "DNI"
+                    },
+                    "dni": {
+                        "type": "string",
+                        "example": "12345678"
+                    },
+                    "ruc": {
+                        "type": "string",
+                        "example": "12345678901"
+                    },
+                    "names": {
+                        "type": "string",
+                        "example": "Juan"
+                    },
+                    "fatherSurname": {
+                        "type": "string",
+                        "example": "Perez"
+                    },
+                    "motherSurname": {
+                        "type": "string",
+                        "example": "Gomez"
+                    },
+                    "businessName": {
+                        "type": "string",
+                        "example": "Empresa SAC"
+                    },
+                    "address": {
+                        "type": "string",
+                        "example": "Av. Los Pinos 123"
+                    },
+                    "email": {
+                        "type": "string",
+                        "example": "mail@mail.com"
+                    },
+                    "phone": {
+                        "type": "string",
+                        "example": "987654321"
+                    },
+                    "representativeDni": {
+                        "type": "string",
+                        "example": "12345678"
+                    },
+                    "representativeNames": {
+                        "type": "string",
+                        "example": "Juan"
+                    },
+                    "country_id": {
+                        "type": "integer",
+                        "example": "1"
+                    }
+                },
+                "type": "object"
+            },
             "StoreUnitRequest": {
                 "title": "StoreUnitRequest",
                 "required": [
@@ -3183,6 +3275,64 @@
                         "items": {
                             "$ref": "#/components/schemas/DetailSparePartRequest"
                         }
+                    }
+                },
+                "type": "object"
+            },
+            "UpdateSupplierRequest": {
+                "title": "UpdateSupplierRequest",
+                "properties": {
+                    "typeDocument": {
+                        "type": "string",
+                        "example": "DNI"
+                    },
+                    "dni": {
+                        "type": "string",
+                        "example": "12345678"
+                    },
+                    "ruc": {
+                        "type": "string",
+                        "example": "12345678901"
+                    },
+                    "names": {
+                        "type": "string",
+                        "example": "Juan"
+                    },
+                    "fatherSurname": {
+                        "type": "string",
+                        "example": "Perez"
+                    },
+                    "motherSurname": {
+                        "type": "string",
+                        "example": "Gomez"
+                    },
+                    "businessName": {
+                        "type": "string",
+                        "example": "Empresa SAC"
+                    },
+                    "address": {
+                        "type": "string",
+                        "example": "Av. Los Pinos 123"
+                    },
+                    "email": {
+                        "type": "string",
+                        "example": "mail@mail.com"
+                    },
+                    "phone": {
+                        "type": "string",
+                        "example": "987654321"
+                    },
+                    "representativeDni": {
+                        "type": "string",
+                        "example": "12345678"
+                    },
+                    "representativeNames": {
+                        "type": "string",
+                        "example": "Juan"
+                    },
+                    "country_id": {
+                        "type": "integer",
+                        "example": "1"
                     }
                 },
                 "type": "object"
@@ -3697,29 +3847,47 @@
                 },
                 "type": "object"
             },
-            "Supplier": {
-                "title": "Supplier",
-                "description": "Supplier model",
+            "SupplierResource": {
                 "properties": {
                     "id": {
                         "type": "integer",
                         "example": "1"
                     },
-                    "type": {
+                    "typeDocument": {
                         "type": "string",
-                        "example": "supplier"
+                        "example": "DNI"
+                    },
+                    "dni": {
+                        "type": "string",
+                        "example": "12345678"
                     },
                     "ruc": {
                         "type": "string",
-                        "example": "20547869541"
+                        "example": "12345678901"
+                    },
+                    "names": {
+                        "type": "string",
+                        "example": "Juan"
+                    },
+                    "fatherSurname": {
+                        "type": "string",
+                        "example": "Perez"
+                    },
+                    "motherSurname": {
+                        "type": "string",
+                        "example": "Gomez"
                     },
                     "businessName": {
                         "type": "string",
-                        "example": "Distribuidora de Productos S.A."
+                        "example": "Empresa SAC"
+                    },
+                    "address": {
+                        "type": "string",
+                        "example": "Av. Los Pinos 123"
                     },
                     "email": {
                         "type": "string",
-                        "example": "supplier@gmail.com"
+                        "example": "mail@mail.com"
                     },
                     "phone": {
                         "type": "string",
@@ -3731,47 +3899,7 @@
                     },
                     "representativeNames": {
                         "type": "string",
-                        "example": "Juan Perez"
-                    },
-                    "country_id": {
-                        "type": "integer",
-                        "example": "1"
-                    },
-                    "country": {
-                        "$ref": "#/components/schemas/Country"
-                    }
-                },
-                "type": "object"
-            },
-            "SupplierResource": {
-                "required": [
-                    "id",
-                    "ruc",
-                    "businessName",
-                    "email",
-                    "phone",
-                    "country"
-                ],
-                "properties": {
-                    "id": {
-                        "type": "integer",
-                        "example": "1"
-                    },
-                    "ruc": {
-                        "type": "string",
-                        "example": "12345678901"
-                    },
-                    "businessName": {
-                        "type": "string",
-                        "example": "Business Name"
-                    },
-                    "email": {
-                        "type": "string",
-                        "example": "mail@gmail.com"
-                    },
-                    "phone": {
-                        "type": "integer",
-                        "example": "123456789"
+                        "example": "Juan"
                     },
                     "country": {
                         "type": "string",
@@ -3780,7 +3908,7 @@
                 },
                 "type": "object"
             },
-            "SupplierPagination": {
+            "SupplierCollection": {
                 "properties": {
                     "data": {
                         "type": "array",
@@ -3797,42 +3925,38 @@
                 },
                 "type": "object"
             },
-            "SupplierRequest": {
-                "title": "SupplierRequest",
-                "description": "Supplier request",
-                "required": [
-                    "ruc",
-                    "businessName",
-                    "country_id"
-                ],
+            "UnitResource": {
+                "title": "UnitResource",
                 "properties": {
-                    "ruc": {
-                        "type": "string",
-                        "example": "20547869541"
-                    },
-                    "businessName": {
-                        "type": "string",
-                        "example": "Distribuidora de Productos S.A."
-                    },
-                    "email": {
-                        "type": "string",
-                        "example": "supplier@gmail.com"
-                    },
-                    "phone": {
-                        "type": "string",
-                        "example": "987654321"
-                    },
-                    "representativeDni": {
-                        "type": "string",
-                        "example": "12345678"
-                    },
-                    "representativeNames": {
-                        "type": "string",
-                        "example": "Juan Perez"
-                    },
-                    "country_id": {
+                    "id": {
                         "type": "integer",
                         "example": "1"
+                    },
+                    "name": {
+                        "type": "string",
+                        "example": "Unit 1"
+                    },
+                    "abbreviation": {
+                        "type": "string",
+                        "example": "UN"
+                    }
+                },
+                "type": "object"
+            },
+            "UnitCollection": {
+                "title": "UnitCollection",
+                "properties": {
+                    "data": {
+                        "type": "array",
+                        "items": {
+                            "$ref": "#/components/schemas/UnitResource"
+                        }
+                    },
+                    "links": {
+                        "$ref": "#/components/schemas/PaginationLinks"
+                    },
+                    "meta": {
+                        "$ref": "#/components/schemas/PaginationMeta"
                     }
                 },
                 "type": "object"
@@ -3940,6 +4064,68 @@
                     "type": {
                         "type": "string",
                         "example": "type"
+                    }
+                },
+                "type": "object"
+            },
+            "Supplier": {
+                "title": "Supplier",
+                "properties": {
+                    "id": {
+                        "type": "integer",
+                        "example": "1"
+                    },
+                    "typeDocument": {
+                        "type": "string",
+                        "example": "DNI"
+                    },
+                    "dni": {
+                        "type": "string",
+                        "example": "12345678"
+                    },
+                    "ruc": {
+                        "type": "string",
+                        "example": "12345678901"
+                    },
+                    "names": {
+                        "type": "string",
+                        "example": "Juan"
+                    },
+                    "fatherSurname": {
+                        "type": "string",
+                        "example": "Perez"
+                    },
+                    "motherSurname": {
+                        "type": "string",
+                        "example": "Gomez"
+                    },
+                    "businessName": {
+                        "type": "string",
+                        "example": "Empresa SAC"
+                    },
+                    "address": {
+                        "type": "string",
+                        "example": "Av. Los Pinos 123"
+                    },
+                    "email": {
+                        "type": "string",
+                        "example": "mail@mail.com"
+                    },
+                    "phone": {
+                        "type": "string",
+                        "example": "987654321"
+                    },
+                    "representativeDni": {
+                        "type": "string",
+                        "example": "12345678"
+                    },
+                    "representativeNames": {
+                        "type": "string",
+                        "example": "Juan"
+                    },
+                    "country_id": {
+                        "type": "integer",
+                        "example": "1"
                     }
                 },
                 "type": "object"

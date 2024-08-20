@@ -14,30 +14,21 @@ class SupplierController extends Controller
      * @OA\Get (
      *     path="/taeyoung-backend/public/api/supplier",
      *     tags={"Supplier"},
+     *     summary="List all suppliers",
+     *     description="Show all suppliers",
      *     security={{"bearerAuth": {}}},
-     *     summary="Show all suppliers",
-     *     @OA\Parameter(name="pagination", in="query", description="Number of items to display per page", required=false, @OA\Schema(type="integer")),
-     *     @OA\Parameter(name="ruc", in="query", description="Supplier RUC", required=false, @OA\Schema(type="string")),
-     *     @OA\Parameter(name="businessName", in="query", description="Supplier business name", required=false, @OA\Schema(type="string")),
-     *     @OA\Parameter(name="email", in="query", description="Supplier email", required=false, @OA\Schema(type="string")),
-     *     @OA\Parameter(name="phone", in="query", description="Supplier phone", required=false, @OA\Schema(type="integer")),
-     *     @OA\Parameter(name="countryId", in="query", description="Supplier country ID", required=false, @OA\Schema(type="string")),
-     *     @OA\Parameter(name="all", in="query", description="Show all suppliers", required=false, @OA\Schema(type="string", enum={"true", "false"})),
-     *     @OA\Response(
-     *         response=200,
-     *         description="Show all suppliers",
-     *         @OA\JsonContent(
-     *             type="array",
-     *             @OA\Items(ref="#/components/schemas/SupplierPagination")
-     *         )
-     *     ),
-     *     @OA\Response(
-     *         response=401,
-     *         description="Unauthenticated",
-     *         @OA\JsonContent(
-     *             @OA\Property(property="msg", type="string", example="Unauthenticated")
-     *         )
-     *     )
+     *     @OA\Parameter(parameter="all", name="all", in="query", required=false, description="Get all suppliers", @OA\Schema(type="boolean")),
+     *     @OA\Parameter(parameter="page", name="page", in="query", required=false, description="Page number", @OA\Schema(type="integer")),
+     *     @OA\Parameter(parameter="per_page", name="per_page", in="query", required=false, description="Items per page", @OA\Schema(type="integer")),
+     *     @OA\Parameter(parameter="sort", name="sort", in="query", required=false, description="Sort by column", @OA\Schema(type="string")),
+     *     @OA\Parameter(parameter="direction", name="direction", in="query", required=false, description="Sort direction", @OA\Schema(type="string", enum={"asc", "desc"})),
+     *     @OA\Parameter(parameter="ruc", name="ruc", in="query", required=false, description="Filter by ruc", @OA\Schema(type="string")),
+     *     @OA\Parameter(parameter="businessName", name="businessName", in="query", required=false, description="Filter by business name", @OA\Schema(type="string")),
+     *     @OA\Parameter(parameter="email", name="email", in="query", required=false, description="Filter by email", @OA\Schema(type="string")),
+     *     @OA\Parameter(parameter="country_id", name="country_id", in="query", required=false, description="Filter by country", @OA\Schema(type="integer")),
+     *     @OA\Response(response=200, description="Successful operation", @OA\JsonContent(type="array", @OA\Items(ref="#/components/schemas/SupplierCollection"))),
+     *     @OA\Response(response=401, description="Unauthenticated", @OA\JsonContent(ref="#/components/schemas/Unauthenticated")),
+     *     @OA\Response(response=422, description="Validation error", @OA\JsonContent(ref="#/components/schemas/ValidationError"))
      * )
      */
     public function index(IndexSupplierRequest $request)
@@ -57,29 +48,10 @@ class SupplierController extends Controller
      *     tags={"Supplier"},
      *     security={{"bearerAuth": {}}},
      *     summary="Create a new supplier",
-     *     @OA\RequestBody(
-     *         required=true,
-     *         @OA\JsonContent(ref="#/components/schemas/SupplierRequest")
-     *     ),
-     *     @OA\Response(
-     *         response=200,
-     *         description="Supplier created successfully",
-     *         @OA\JsonContent(ref="#/components/schemas/Supplier")
-     *     ),
-     *     @OA\Response(
-     *         response=422,
-     *         description="Validation error",
-     *         @OA\JsonContent(
-     *             @OA\Property(property="error", type="string", example="The given data was invalid.")
-     *         )
-     *     ),
-     *     @OA\Response(
-     *         response=401,
-     *         description="Unauthenticated",
-     *         @OA\JsonContent(
-     *             @OA\Property(property="error", type="string", example="Unauthenticated")
-     *         )
-     *     )
+     *     @OA\RequestBody( required=true, @OA\JsonContent(ref="#/components/schemas/StoreSupplierRequest")),
+     *     @OA\Response(response=200, description="Supplier created successfully", @OA\JsonContent(ref="#/components/schemas/Supplier")),
+     *     @OA\Response(response=422, description="Validation error", @OA\JsonContent(ref="#/components/schemas/ValidationError")),
+     *     @OA\Response(response=401, description="Unauthenticated", @OA\JsonContent(ref="#/components/schemas/Unauthenticated"))
      * )
      */
     public function store(StoreSupplierRequest $request)
@@ -99,32 +71,10 @@ class SupplierController extends Controller
      *     tags={"Supplier"},
      *     security={{"bearerAuth": {}}},
      *     summary="Show a supplier",
-     *     @OA\Parameter(
-     *         name="id",
-     *         in="path",
-     *         required=true,
-     *         description="Supplier ID",
-     *         @OA\Schema(type="integer")
-     *     ),
-     *     @OA\Response(
-     *         response=200,
-     *         description="Show a supplier",
-     *         @OA\JsonContent(ref="#/components/schemas/Supplier")
-     *     ),
-     *     @OA\Response(
-     *         response=404,
-     *         description="Supplier not found",
-     *         @OA\JsonContent(
-     *             @OA\Property(property="message", type="string", example="Supplier not found")
-     *         )
-     *     ),
-     *     @OA\Response(
-     *         response=401,
-     *         description="Unauthenticated",
-     *         @OA\JsonContent(
-     *             @OA\Property(property="error", type="string", example="Unauthenticated")
-     *         )
-     *     )
+     *     @OA\Parameter( name="id", in="path", required=true, description="Supplier ID", @OA\Schema(type="integer")),
+     *     @OA\Response( response=200, description="Successful operation", @OA\JsonContent(ref="#/components/schemas/Supplier")),
+     *     @OA\Response( response=404, description="Supplier not found", @OA\JsonContent( @OA\Property(property="message", type="string", example="Supplier not found"))),
+     *     @OA\Response( response=401, description="Unauthenticated", @OA\JsonContent( @OA\Property(property="error", type="string", example="Unauthenticated")))
      * )
      */
     public function show(int $id)
@@ -140,43 +90,11 @@ class SupplierController extends Controller
      *     tags={"Supplier"},
      *     security={{"bearerAuth": {}}},
      *     summary="Update a supplier",
-     *     @OA\Parameter(
-     *         name="id",
-     *         in="path",
-     *         required=true,
-     *         description="Supplier ID",
-     *         @OA\Schema(type="integer")
-     *     ),
-     *     @OA\RequestBody(
-     *         required=true,
-     *         @OA\JsonContent(ref="#/components/schemas/SupplierRequest")
-     *     ),
-     *     @OA\Response(
-     *         response=200,
-     *         description="Supplier updated successfully",
-     *         @OA\JsonContent(ref="#/components/schemas/Supplier")
-     *     ),
-     *     @OA\Response(
-     *         response=404,
-     *         description="Supplier not found",
-     *         @OA\JsonContent(
-     *             @OA\Property(property="message", type="string", example="Supplier not found")
-     *         )
-     *     ),
-     *     @OA\Response(
-     *         response=422,
-     *         description="Validation error",
-     *         @OA\JsonContent(
-     *             @OA\Property(property="error", type="string", example="The given data was invalid.")
-     *         )
-     *     ),
-     *     @OA\Response(
-     *         response=401,
-     *         description="Unauthenticated",
-     *         @OA\JsonContent(
-     *             @OA\Property(property="error", type="string", example="Unauthenticated")
-     *         )
-     *     )
+     *     @OA\Parameter( name="id", in="path", required=true, description="Supplier ID", @OA\Schema(type="integer")),
+     *     @OA\RequestBody( required=true, @OA\JsonContent(ref="#/components/schemas/UpdateSupplierRequest")),
+     *     @OA\Response( response=200, description="Supplier updated successfully", @OA\JsonContent(ref="#/components/schemas/Supplier")),
+     *     @OA\Response( response=404, description="Supplier not found", @OA\JsonContent( @OA\Property(property="message", type="string", example="Supplier not found"))),
+     *     @OA\Response( response=401, description="Unauthenticated", @OA\JsonContent( @OA\Property(property="error", type="string", example="Unauthenticated")))
      * )
      */
     public function update(UpdateSupplierRequest $request, int $id)

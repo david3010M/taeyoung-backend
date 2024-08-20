@@ -22,6 +22,7 @@ class QuotationController extends Controller
      *     summary="Get all quotations",
      *     description="Get all quotations",
      *     security={{"bearerAuth": {}}},
+     *     @OA\Parameter(parameter="all", name="all", in="query", required=false, description="Get all units", @OA\Schema(type="boolean")),
      *     @OA\Parameter(parameter="page", name="page", in="query", required=false, description="Page number", @OA\Schema(type="integer")),
      *     @OA\Parameter(parameter="per_page", name="per_page", in="query", required=false, description="Items per page", @OA\Schema(type="integer")),
      *     @OA\Parameter(parameter="sort", name="sort", in="query", required=false, description="Sort by column", @OA\Schema(type="string")),
