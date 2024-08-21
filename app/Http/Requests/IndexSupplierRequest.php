@@ -12,7 +12,7 @@ class IndexSupplierRequest extends IndexRequest
             'businessName' => 'nullable|string',
             'email' => 'nullable|string',
             'phone' => 'nullable|integer',
-            'countryId' => 'nullable|string',
+            'country_id' => 'nullable|string',
         ];
     }
 }
