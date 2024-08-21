@@ -9,9 +9,9 @@ class IndexPaymentConceptRequest extends IndexRequest
     public function rules(): array
     {
         return [
-            'number' => 'string',
-            'name' => 'string',
-            'type' => 'string',
+            'number' => 'nullable|string',
+            'name' => 'nullable|string',
+            'type' => 'nullable|string',
         ];
     }
 }
