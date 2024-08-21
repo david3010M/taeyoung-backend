@@ -65,17 +65,18 @@ class SearchController extends Controller
             return response()->json(['error' => $validator->errors()->first()], 422);
         }
 
-        $respuesta = array();
         $client = new Client();
         try {
             $res = $client->get('http://facturae-garzasoft.com/facturacion/buscaCliente/BuscaCliente2.php?' . 'dni=' . $dni . '&fe=N&token=qusEj_w7aHEpX');
 
-            if ($res->getStatusCode() == 200) { // 200 OK
+            if ($res->getStatusCode() == 200) {
                 $response_data = $res->getBody()->getContents();
                 $respuesta = json_decode($response_data);
-                return response()->json([
-                    $respuesta,
-                ]);
+
+                if (is_array($respuesta)) {
+                    $respuesta = (object)$respuesta;
+                }
+                return response()->json($respuesta);
             } else {
                 return response()->json([
                     "status" => 0,
@@ -89,6 +90,7 @@ class SearchController extends Controller
             ], 500);
         }
     }
+
 
     /**
      * @OA\Get(
@@ -155,6 +157,10 @@ class SearchController extends Controller
         if ($res->getStatusCode() == 200) { // 200 OK
             $response_data = $res->getBody()->getContents();
             $respuesta = json_decode($response_data);
+            if (is_array($respuesta)) {
+                $respuesta = (object)$respuesta;
+            }
+            return response()->json($respuesta);
         } else {
             return response()->json([
                 "status" => 0,
