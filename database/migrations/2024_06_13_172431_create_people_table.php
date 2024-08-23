@@ -20,7 +20,7 @@ return new class extends Migration {
             $table->string('motherSurname')->nullable();
             $table->string('address')->nullable();
             $table->string('email')->nullable();
-            $table->integer('phone')->nullable();
+            $table->string('phone')->nullable();
             $table->string('representativeDni')->nullable();
             $table->string('representativeNames')->nullable();
             $table->foreignId('country_id')->nullable()->unsigned()->constrained('countries');
