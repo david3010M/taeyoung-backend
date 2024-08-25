@@ -14,7 +14,7 @@ return new class extends Migration {
         Schema::create('quotations', function (Blueprint $table) {
             $table->id();
             $table->string('number');
-            $table->dateTime('date');
+            $table->date('date');
             $table->string('detail')->nullable();
 
             $table->string('currencyType')->nullable();

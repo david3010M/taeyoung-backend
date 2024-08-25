@@ -53,12 +53,12 @@ class Quotation extends Model
     ];
 
     protected $casts = [
-        'date' => 'datetime',
+        'date' => 'date',
     ];
 
     const filters = [
         'number' => 'like',
-        'date' => '<=',
+        'date' => '=',
         'description' => 'like',
         'client.filterName' => 'like',
     ];
