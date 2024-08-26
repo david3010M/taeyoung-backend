@@ -31,7 +31,7 @@ class QuotationController extends Controller
      *     @OA\Parameter(parameter="date", name="date", in="query", required=false, description="Filter by date", @OA\Schema(type="string")),
      *     @OA\Parameter(parameter="detail", name="detail", in="query", required=false, description="Filter by detail", @OA\Schema(type="string")),
      *     @OA\Parameter(parameter="client_filterName", name="client_filterName", in="query", required=false, description="Filter by client name", @OA\Schema(type="string")),
-     *     @OA\Response(response=200, description="Successful operation", @OA\JsonContent(ref="#/components/schemas/MachineryPurchaseCollection")),
+     *     @OA\Response(response=200, description="Successful operation", @OA\JsonContent(ref="#/components/schemas/PurchaseCollection")),
      *     @OA\Response(response=401, description="Unauthenticated", @OA\JsonContent(ref="#/components/schemas/Unauthenticated")),
      *     @OA\Response(response=422, description="Validation error", @OA\JsonContent(ref="#/components/schemas/ValidationError"))
      * )
@@ -156,7 +156,7 @@ class QuotationController extends Controller
             'date' => $request->input('date') ?? $quotation->date,
             'currencyType' => $request->input('currencyType') ?? $quotation->currencyType,
             'discount' => $request->input('discount') ?? $quotation->discount,
-//            'client_id' => $request->input('client_id') ?? $quotation->client_id,
+            'client_id' => $request->input('client_id') ?? $quotation->client_id,
         ];
         $quotation->update($data);
         $totalMachinery = 0;

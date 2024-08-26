@@ -8,11 +8,11 @@ use Illuminate\Http\Resources\Json\JsonResource;
 
 /**
  * @OA\Schema (
- *     schema="MachineryPurchaseResource",
- *     title="MachineryPurchaseResource",
+ *     schema="PurchaseResource",
+ *     title="PurchaseResource",
  *     description="Machinery Purchase resource",
  *     @OA\Property (property="id", type="integer", example="1"),
- *     @OA\Property (property="number", type="string", example="COMAQ-0001"),
+ *     @OA\Property (property="number", type="string", example="COMPR-0001"),
  *     @OA\Property (property="date", type="string", format="date", example="2024-08-19"),
  *     @OA\Property (property="detail", type="string", example="This is a detail"),
  *     @OA\Property (property="paymentType", type="string", example="Contado"),
@@ -35,22 +35,22 @@ use Illuminate\Http\Resources\Json\JsonResource;
  * )
  *
  * @OA\Schema (
- *     schema="MachineryPurchaseCollection",
- *     title="MachineryPurchaseCollection",
- *     description="Machinery Purchase resource collection",
- *     @OA\Property (property="data", type="array", @OA\Items(ref="#/components/schemas/MachineryPurchaseResource")),
+ *     schema="PurchaseCollection",
+ *     title="PurchaseCollection",
+ *     description="Purchase resource collection",
+ *     @OA\Property (property="data", type="array", @OA\Items(ref="#/components/schemas/PurchaseResource")),
  *     @OA\Property (property="links", type="object", ref="#/components/schemas/PaginationLinks"),
  *     @OA\Property (property="meta", type="object", ref="#/components/schemas/PaginationMeta")
  * )
  *
  */
-class MachineryPurchaseResource extends JsonResource
+class PurchaseResource extends JsonResource
 {
     public function toArray(Request $request): array
     {
         return [
             'id' => $this->id,
-            'number' => "COMAQ-" . $this->number,
+            'number' => "COMPR-" . $this->number,
             'date' => Carbon::parse($this->date)->format('Y-m-d'),
             'detail' => $this->detail,
 

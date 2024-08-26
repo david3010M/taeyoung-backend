@@ -2,6 +2,7 @@
 
 namespace Database\Factories;
 
+use App\Models\Person;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 class QuotationFactory extends Factory
@@ -13,12 +14,14 @@ class QuotationFactory extends Factory
         $correlativo++;
         $correlativoFormatted = str_pad($correlativo, 8, '0', STR_PAD_LEFT);
 
+        $clients = Person::where('type', 'client')->get();
+
         return [
             'number' => $correlativoFormatted,
             'detail' => $this->faker->text(100),
             'date' => $this->faker->dateTimeThisYear(),
             'currencyType' => 'PEN',
-            'client_id' => $this->faker->numberBetween(1, 10),
+            'client_id' => $clients->random()->id,
         ];
     }
 }

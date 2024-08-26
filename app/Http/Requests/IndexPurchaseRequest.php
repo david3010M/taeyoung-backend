@@ -2,7 +2,7 @@
 
 namespace App\Http\Requests;
 
-class IndexMachineryPurchaseRequest extends IndexRequest
+class IndexPurchaseRequest extends IndexRequest
 {
     public function rules(): array
     {

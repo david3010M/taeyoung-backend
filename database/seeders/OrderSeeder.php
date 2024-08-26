@@ -16,7 +16,7 @@ class OrderSeeder extends Seeder
 //        PURCHASE
         $quotations = Quotation::all();
         foreach ($quotations as $quotation) {
-            $order = Order::factory()->machineryPurchase()->create();
+            $order = Order::factory()->purchase()->create();
             $detailSpareParts = $quotation->detailSpareParts;
             $detailMachinery = $quotation->detailMachinery;
             foreach ($detailSpareParts as $detail) {
@@ -25,9 +25,9 @@ class OrderSeeder extends Seeder
                         'quantity' => $detail->quantity,
                         'movementType' => 'purchase',
                         'purchasePrice' => $detail->purchasePrice,
-                        'salePrice' => $detail->salePrice,
+                        'salePrice' => null,
                         'purchaseValue' => $detail->purchaseValue,
-                        'saleValue' => $detail->saleValue,
+                        'saleValue' => null,
                         'spare_part_id' => $detail->spare_part_id,
                         'quotation_id' => $detail->quotation_id,
                         'order_id' => $order->id,
@@ -42,9 +42,9 @@ class OrderSeeder extends Seeder
                         'quantity' => $detail->quantity,
                         'movementType' => 'purchase',
                         'purchasePrice' => $detail->purchasePrice,
-                        'salePrice' => $detail->salePrice,
+                        'salePrice' => null,
                         'purchaseValue' => $detail->purchaseValue,
-                        'saleValue' => $detail->saleValue,
+                        'saleValue' => null,
                         'quotation_id' => $detail->quotation_id,
                         'order_id' => $order->id,
                     ]

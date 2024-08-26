@@ -7,7 +7,7 @@ use App\Http\Controllers\CountryController;
 use App\Http\Controllers\CurrencyController;
 use App\Http\Controllers\DetailSparePartController;
 use App\Http\Controllers\GroupMenuController;
-use App\Http\Controllers\MachineryPurchaseController;
+use App\Http\Controllers\PurchaseController;
 use App\Http\Controllers\OptionMenuController;
 use App\Http\Controllers\PaymentConceptController;
 use App\Http\Controllers\PdfController;
@@ -192,15 +192,15 @@ Route::group(
         );
 
 //        MACHINERY PURCHASE
-        Route::resource('machineryPurchase', MachineryPurchaseController::class)->only(
+        Route::resource('purchase', PurchaseController::class)->only(
             ['index', 'show', 'store', 'update', 'destroy']
         )->names(
             [
-                'index' => 'machineryPurchase.index',
-                'store' => 'machineryPurchase.store',
-                'show' => 'machineryPurchase.show',
-                'update' => 'machineryPurchase.update',
-                'destroy' => 'machineryPurchase.destroy',
+                'index' => 'purchase.index',
+                'store' => 'purchase.store',
+                'show' => 'purchase.show',
+                'update' => 'purchase.update',
+                'destroy' => 'purchase.destroy',
             ]
         );
 

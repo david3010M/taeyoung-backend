@@ -6,8 +6,7 @@ use Illuminate\Validation\Rule;
 
 /**
  * @OA\Schema (
- *     schema="StoreMachineryPurchaseRequest",
- *     required={"date", "detailMachinery", "supplier_id"},
+ *     schema="UpdatePurchaseRequest",
  *     @OA\Property(property="quotation_id", type="integer", example="21"),
  *     @OA\Property(property="date", type="string", format="date", example="2024-08-19"),
  *     @OA\Property(property="detail", type="string", example="This is a detail"),
@@ -19,12 +18,12 @@ use Illuminate\Validation\Rule;
  *         @OA\Property(property="purchasePrice", type="number", example="100"),
  *     )),
  *     @OA\Property(property="detailSpareParts", type="array", @OA\Items(
- *         @OA\Property(property="quantity", type="integer", example="2"),
+ *         @OA\Property(property="quantity", type="integer", example="3"),
  *         @OA\Property(property="spare_part_id", type="integer", example="1"),
  *     )),
  * )
  */
-class StoreMachineryPurchaseRequest extends StoreRequest
+class UpdatePurchaseRequest extends UpdateRequest
 {
     public function rules(): array
     {
@@ -33,7 +32,7 @@ class StoreMachineryPurchaseRequest extends StoreRequest
                 'nullable',
                 Rule::exists('quotations', 'id'),
 //                Rule::unique('orders', 'quotation_id')
-//                    ->where('type', 'machineryPurchase')
+//                    ->where('type', 'purchase')
 //                    ->whereNull('deleted_at')
             ],
 

@@ -16,7 +16,7 @@ return new class extends Migration {
             $table->date('date');
             $table->string('detail')->nullable(); // TEXT LIBRE
 
-            $table->string('type'); // machineryPurchase, machinerySale, sparePartPurchase, sparePartSale
+            $table->string('type'); // purchase, sale
             $table->string('documentType')->nullable(); // BOLETA, FACTURA, TICKET
             $table->string('paymentType')->nullable(); // PAGO A SUNAT
             $table->string('currencyType')->nullable(); // SOLES, DOLARES

@@ -41,12 +41,12 @@ class OrderFactory extends Factory
         ];
     }
 
-    public function machineryPurchase()
+    public function purchase()
     {
         return $this->state(function (array $attributes) {
             $suppliers = Person::where('type', 'supplier')->get();
             return [
-                'type' => 'machineryPurchase',
+                'type' => 'purchase',
                 'supplier_id' => $suppliers->random()->id,
             ];
         });

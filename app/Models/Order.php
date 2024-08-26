@@ -49,23 +49,17 @@ class Order extends Model
         'deleted_at',
     ];
 
-    const filtersMachineryPurchase = [
+    const filtersPurchase = [
         'number' => 'like',
         'date' => 'like',
         'supplier_id' => '=',
     ];
 
-    const sortMachineryPurchase = [
+    const sortPurchase = [
         'id',
         'number',
         'date',
         'supplier_id',
-    ];
-
-    const filtersSparePartPurchase = [
-        'number' => 'like',
-        'date' => 'date',
-        'supplier_id' => 'equal',
     ];
 
 

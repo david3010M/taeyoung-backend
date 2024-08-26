@@ -22,7 +22,7 @@ class UpdateQuotationRequest extends UpdateRequest
     public function rules(): array
     {
         return [
-            'date' => 'required|date',
+            'date' => 'nullable|date',
             'detail' => 'nullable|string',
             'discount' => 'nullable|numeric',
             'currencyType' => 'nullable|string',
