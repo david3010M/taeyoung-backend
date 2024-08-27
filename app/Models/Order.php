@@ -38,7 +38,7 @@ class Order extends Model
     ];
 
     protected $casts = [
-        'date' => 'datetime:Y-m-d',
+        'date' => 'date:Y-m-d',
         'totalIncome' => 'decimal:2',
         'totalExpense' => 'decimal:2',
     ];

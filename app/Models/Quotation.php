@@ -53,7 +53,14 @@ class Quotation extends Model
     ];
 
     protected $casts = [
-        'date' => 'date',
+        'date' => 'date:Y-m-d',
+        'totalMachinery' => 'float',
+        'totalSpareParts' => 'float',
+        'subtotal' => 'float',
+        'igv' => 'float',
+        'discount' => 'float',
+        'total' => 'float',
+
     ];
 
     const filters = [
