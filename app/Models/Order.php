@@ -53,6 +53,8 @@ class Order extends Model
         'number' => 'like',
         'date' => 'like',
         'supplier_id' => '=',
+        'supplier.filterName' => 'like',
+        'supplier.country_id' => '=',
     ];
 
     const sortPurchase = [
