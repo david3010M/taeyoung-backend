@@ -73,7 +73,7 @@ class PurchaseResource extends JsonResource
             'quotation_id' => $this->quotation_id,
 
             'supplier' => new SupplierResource($this->supplier),
-            'quotation' => $this->quotation,
+            'quotation' => new SingleQuotationResource($this->quotation),
             'detailMachinery' => DetailMachineryResource::collection($this->detailMachinery),
             'detailSpareParts' => DetailSparePartResource::collection($this->detailSpareParts),
         ];
