@@ -56,13 +56,13 @@ class Person extends Model
     ];
 
     const clientFilters = [
-        'ruc',
-        'businessName',
-        'email',
-        'phone',
-        'representativeDni',
-        'representativeNames',
-        'country_id',
+        'ruc' => 'like',
+        'filterName' => 'like',
+        'email' => 'like',
+        'phone' => 'like',
+        'representativeDni' => 'like',
+        'representativeNames' => 'like',
+        'country_id' => '=',
     ];
 
     const clientSorts = [

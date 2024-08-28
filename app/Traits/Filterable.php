@@ -10,7 +10,7 @@ trait Filterable
     protected function applyFilters($query, $request, $filters)
     {
         foreach ($filters as $filter => $operator) {
-            $paramName = str_replace('.', '-', $filter);
+            $paramName = str_replace('.', '$', $filter);
             $value = $request->query($paramName);
 
             if ($value !== null) {

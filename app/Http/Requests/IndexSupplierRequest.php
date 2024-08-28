@@ -9,7 +9,7 @@ class IndexSupplierRequest extends IndexRequest
     {
         return [
             'ruc' => 'nullable|integer',
-            'businessName' => 'nullable|string',
+            'filterName' => 'nullable|string',
             'email' => 'nullable|string',
             'phone' => 'nullable|integer',
             'country_id' => 'nullable|string',
