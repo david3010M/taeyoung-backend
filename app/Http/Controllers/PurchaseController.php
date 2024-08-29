@@ -224,12 +224,12 @@ class PurchaseController extends Controller
             $detailSparePart = DetailSparePart::create([
                 'quantity' => $detail['quantity'],
                 'movementType' => 'quotation',
-                'salePrice' => $sparePart->salePrice,
-                'saleValue' => $sparePart->salePrice * $detail['quantity'],
+                'purchasePrice' => $sparePart->purchasePrice,
+                'purchaseValue' => $sparePart->purchasePrice * $detail['quantity'],
                 'spare_part_id' => $detail['spare_part_id'],
                 'order_id' => $order->id,
             ]);
-            $totalSpareParts += $detailSparePart->saleValue;
+            $totalSpareParts += $detailSparePart->purchaseValue;
         }
         return $totalSpareParts;
     }
