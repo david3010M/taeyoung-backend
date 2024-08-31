@@ -1048,6 +1048,60 @@
                         }
                     },
                     {
+                        "parameter": "number",
+                        "name": "number",
+                        "in": "query",
+                        "description": "Purchase number",
+                        "required": false,
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "parameter": "date",
+                        "name": "date[]",
+                        "in": "query",
+                        "description": "Purchase date",
+                        "required": false,
+                        "schema": {
+                            "type": "array",
+                            "items": {
+                                "type": "string",
+                                "format": "date"
+                            }
+                        }
+                    },
+                    {
+                        "parameter": "supplier_id",
+                        "name": "supplier_id",
+                        "in": "query",
+                        "description": "Supplier ID",
+                        "required": false,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    },
+                    {
+                        "parameter": "supplier$filterName",
+                        "name": "supplier$filterName",
+                        "in": "query",
+                        "description": "Supplier name",
+                        "required": false,
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "parameter": "supplier$country_id",
+                        "name": "supplier$country_id",
+                        "in": "query",
+                        "description": "Supplier country ID",
+                        "required": false,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    },
+                    {
                         "parameter": "sort",
                         "name": "sort",
                         "in": "query",
@@ -1450,12 +1504,15 @@
                     },
                     {
                         "parameter": "date",
-                        "name": "date",
+                        "name": "date[]",
                         "in": "query",
                         "description": "Filter by date",
                         "required": false,
                         "schema": {
-                            "type": "string"
+                            "type": "array",
+                            "items": {
+                                "type": "string"
+                            }
                         }
                     },
                     {
@@ -1469,8 +1526,8 @@
                         }
                     },
                     {
-                        "parameter": "client_filterName",
-                        "name": "client_filterName",
+                        "parameter": "client$filterName",
+                        "name": "client$filterName",
                         "in": "query",
                         "description": "Filter by client name",
                         "required": false,
