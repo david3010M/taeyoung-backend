@@ -1649,22 +1649,61 @@
                 ]
             }
         },
-        "/taeyoung-backend/public/api/spareparts": {
+        "/taeyoung-backend/public/api/sparePart": {
             "get": {
                 "tags": [
                     "Spare Parts"
                 ],
                 "summary": "List all spare parts",
-                "operationId": "e559b1302cf3b1bf543bd0da24fde40d",
+                "operationId": "96d63257f79c509c75311100d5069d01",
                 "parameters": [
                     {
-                        "name": "pagination",
+                        "name": "page",
                         "in": "query",
-                        "description": "Number of items to display per page",
+                        "description": "Page number",
                         "required": false,
                         "schema": {
-                            "type": "integer",
-                            "minimum": 5
+                            "type": "integer"
+                        }
+                    },
+                    {
+                        "name": "per_page",
+                        "in": "query",
+                        "description": "Items per page",
+                        "required": false,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    },
+                    {
+                        "name": "sort",
+                        "in": "query",
+                        "description": "Sort by column",
+                        "required": false,
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "direction",
+                        "in": "query",
+                        "description": "Sort direction",
+                        "required": false,
+                        "schema": {
+                            "type": "string",
+                            "enum": [
+                                "asc",
+                                "desc"
+                            ]
+                        }
+                    },
+                    {
+                        "name": "all",
+                        "in": "query",
+                        "description": "Get all items",
+                        "required": false,
+                        "schema": {
+                            "type": "boolean"
                         }
                     }
                 ],
@@ -1711,7 +1750,7 @@
                     "Spare Parts"
                 ],
                 "summary": "Create a spare part",
-                "operationId": "aa39145506167ad5733b52d8be3f706a",
+                "operationId": "3197f695269df188fb8508aa29e68ebc",
                 "requestBody": {
                     "required": true,
                     "content": {
@@ -1744,7 +1783,7 @@
                         }
                     },
                     "401": {
-                        "description": "Unauthenticated",
+                        "description": "UnSauthenticated",
                         "content": {
                             "application/json": {
                                 "schema": {
@@ -1761,13 +1800,13 @@
                 ]
             }
         },
-        "/taeyoung-backend/public/api/spareparts/{id}": {
+        "/taeyoung-backend/public/api/sparePart/{id}": {
             "get": {
                 "tags": [
                     "Spare Parts"
                 ],
                 "summary": "Show a spare part",
-                "operationId": "2d7ef941c184cbdf1a547b9368eabe0b",
+                "operationId": "ccfdf0e52b6e39d1066b6148a16ac97a",
                 "parameters": [
                     {
                         "name": "id",
@@ -1775,8 +1814,7 @@
                         "description": "Spare part ID",
                         "required": true,
                         "schema": {
-                            "type": "integer",
-                            "minimum": 1
+                            "type": "integer"
                         }
                     }
                 ],
@@ -1787,6 +1825,154 @@
                             "application/json": {
                                 "schema": {
                                     "$ref": "#/components/schemas/SparePartResource"
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Spare part not found",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Spare part not found"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthenticated",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/Unauthenticated"
+                                }
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            },
+            "put": {
+                "tags": [
+                    "Spare Parts"
+                ],
+                "summary": "Update a spare part",
+                "operationId": "15228764d4f1d66c726f9faa927908bf",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "Spare part ID",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/SparePartRequest"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Spare part updated",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/SparePartResource"
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Spare part not found",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Spare part not found"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "Validation error",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ValidationError"
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthenticated",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/Unauthenticated"
+                                }
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            },
+            "delete": {
+                "tags": [
+                    "Spare Parts"
+                ],
+                "summary": "Delete a spare part",
+                "operationId": "35289728489795322b61114858b7be84",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "Spare part ID",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Spare part deleted",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Spare part deleted"
+                                        }
+                                    },
+                                    "type": "object"
                                 }
                             }
                         }
@@ -3393,6 +3579,10 @@
                         "type": "string",
                         "example": "Business Name"
                     },
+                    "filterName": {
+                        "type": "string",
+                        "example": "Filter Name"
+                    },
                     "address": {
                         "type": "string",
                         "example": "Address"
@@ -3818,13 +4008,24 @@
                         "type": "number",
                         "example": "150.00"
                     },
+                    "purchaseValue": {
+                        "type": "number",
+                        "example": "1000.00"
+                    },
+                    "saleValue": {
+                        "type": "number",
+                        "example": "1500.00"
+                    },
                     "stock": {
                         "type": "integer",
                         "example": "10"
                     },
-                    "image": {
-                        "type": "string",
-                        "example": "http://example.com/image.jpg"
+                    "unit_id": {
+                        "type": "integer",
+                        "example": "1"
+                    },
+                    "unit": {
+                        "$ref": "#/components/schemas/UnitResource"
                     }
                 },
                 "type": "object"
@@ -3880,6 +4081,10 @@
                     "businessName": {
                         "type": "string",
                         "example": "Empresa SAC"
+                    },
+                    "filterName": {
+                        "type": "string",
+                        "example": "Juan Perez Gomez"
                     },
                     "address": {
                         "type": "string",
