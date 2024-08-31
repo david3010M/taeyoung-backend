@@ -57,8 +57,9 @@ class SparePartController extends Controller
      */
     public function store(StoreSparePartRequest $request)
     {
-        $request->merge(['code' => $this->nextCorrelative(SparePart::class, 'code')]);
-        $sparePart = SparePart::create($request->all());
+        $data = $request->validated();
+        $data['code'] = $this->nextCorrelative(SparePart::class, 'code');
+        $sparePart = SparePart::create($data);
         $sparePart = SparePart::find($sparePart->id);
         return response()->json(new SparePartResource($sparePart));
     }
@@ -101,7 +102,7 @@ class SparePartController extends Controller
     {
         $sparePart = SparePart::find($id);
         if (!$sparePart) return response()->json(['message' => 'Spare part not found'], 404);
-        $sparePart->update($request->all());
+        $sparePart->update($request->validated());
         $sparePart = SparePart::find($sparePart->id);
         return response()->json(new SparePartResource($sparePart));
     }
