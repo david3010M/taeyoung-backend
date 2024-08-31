@@ -202,7 +202,7 @@
         "/taeyoung-backend/public/api/logs": {
             "get": {
                 "tags": [
-                    "Authentication"
+                    "Logs"
                 ],
                 "summary": "Get logs",
                 "operationId": "516d208907d8ab4a98c5fc82ba8594ed",

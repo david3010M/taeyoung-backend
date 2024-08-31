@@ -177,7 +177,7 @@ class AuthController extends Controller
     /**
      * @OA\Get (
      *     path="/taeyoung-backend/public/api/logs",
-     *     tags={"Authentication"},
+     *     tags={"Logs"},
      *     summary="Get logs",
      *     security={{"bearerAuth": {}}},
      *     @OA\Response(response=200, description="Successful operation", @OA\JsonContent(type="object", @OA\Property(property="errors", type="array", @OA\Items(
