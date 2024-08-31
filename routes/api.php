@@ -43,6 +43,7 @@ Route::group(
 
         Route::get('/authenticate', [AuthController::class, 'authenticate'])->name('authenticate');
         Route::get('/logout', [AuthController::class, 'logout'])->name('logout');
+        Route::get('/logs', [AuthController::class, 'logs'])->name('logs');
 
 //         SEARCH
         Route::get('searchByDni/{dni}', [SearchController::class, 'searchByDni']);

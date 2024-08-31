@@ -17,20 +17,22 @@ class SupplierController extends Controller
      *     summary="List all suppliers",
      *     description="Show all suppliers",
      *     security={{"bearerAuth": {}}},
-     *     @OA\Parameter(parameter="all", name="all", in="query", required=false, description="Get all suppliers", @OA\Schema(type="boolean")),
+     *     @OA\Parameter(parameter="ruc", name="ruc", in="query", required=false, description="Filter by ruc", @OA\Schema(type="string")),
+     *     @OA\Parameter(parameter="filterName", name="filterName", in="query", required=false, description="Filter by business name", @OA\Schema(type="string")),
+     *     @OA\Parameter(parameter="email", name="email", in="query", required=false, description="Filter by email", @OA\Schema(type="string")),
+     *     @OA\Parameter(parameter="phone", name="phone", in="query", required=false, description="Filter by phone", @OA\Schema(type="string")),
+     *     @OA\Parameter(parameter="country_id", name="country_id", in="query", required=false, description="Filter by country", @OA\Schema(type="integer")),
      *     @OA\Parameter(parameter="page", name="page", in="query", required=false, description="Page number", @OA\Schema(type="integer")),
      *     @OA\Parameter(parameter="per_page", name="per_page", in="query", required=false, description="Items per page", @OA\Schema(type="integer")),
-     *     @OA\Parameter(parameter="sort", name="sort", in="query", required=false, description="Sort by column", @OA\Schema(type="string")),
+     *     @OA\Parameter(parameter="sort", name="sort", in="query", required=false, description="Sort by column", @OA\Schema(type="string", enum={"ruc","filterName","email","phone","country_id"})),
      *     @OA\Parameter(parameter="direction", name="direction", in="query", required=false, description="Sort direction", @OA\Schema(type="string", enum={"asc", "desc"})),
-     *     @OA\Parameter(parameter="ruc", name="ruc", in="query", required=false, description="Filter by ruc", @OA\Schema(type="string")),
-     *     @OA\Parameter(parameter="businessName", name="businessName", in="query", required=false, description="Filter by business name", @OA\Schema(type="string")),
-     *     @OA\Parameter(parameter="email", name="email", in="query", required=false, description="Filter by email", @OA\Schema(type="string")),
-     *     @OA\Parameter(parameter="country_id", name="country_id", in="query", required=false, description="Filter by country", @OA\Schema(type="integer")),
+     *     @OA\Parameter(parameter="all", name="all", in="query", required=false, description="Get all suppliers", @OA\Schema(type="boolean")),
      *     @OA\Response(response=200, description="Successful operation", @OA\JsonContent(type="array", @OA\Items(ref="#/components/schemas/SupplierCollection"))),
      *     @OA\Response(response=401, description="Unauthenticated", @OA\JsonContent(ref="#/components/schemas/Unauthenticated")),
      *     @OA\Response(response=422, description="Validation error", @OA\JsonContent(ref="#/components/schemas/ValidationError"))
      * )
      */
+
     public function index(IndexSupplierRequest $request)
     {
         return $this->getFilteredResults(
@@ -62,7 +64,7 @@ class SupplierController extends Controller
         $supplier = Person::create($request->all());
         $supplier->update(['filterName' => $request->typeDocument === 'DNI' ? $request->names . ' ' . $request->fatherSurname . ' ' . $request->motherSurname : $request->businessName]);
         $supplier = Person::with('country')->find($supplier->id);
-        return response()->json($supplier);
+        return response()->json(new SupplierResource($supplier));
     }
 
     /**
@@ -81,7 +83,7 @@ class SupplierController extends Controller
     {
         $supplier = Person::with('country')->where('type', 'supplier')->find($id);
         if (!$supplier) return response()->json(['error' => 'Supplier not found'], 404);
-        return response()->json($supplier);
+        return response()->json(new SupplierResource($supplier));
     }
 
     /**
@@ -106,7 +108,7 @@ class SupplierController extends Controller
         $supplier->update($request->all());
         $supplier->update(['filterName' => $request->typeDocument === 'DNI' ? $request->names . ' ' . $request->fatherSurname . ' ' . $request->motherSurname : $request->businessName]);
         $supplier = Person::with('country')->where('type', 'supplier')->find($id);
-        return response()->json($supplier);
+        return response()->json(new SupplierResource($supplier));
     }
 
     /**
@@ -115,34 +117,10 @@ class SupplierController extends Controller
      *     tags={"Supplier"},
      *     security={{"bearerAuth": {}}},
      *     summary="Delete a supplier",
-     *     @OA\Parameter(
-     *         name="id",
-     *         in="path",
-     *         required=true,
-     *         description="Supplier ID",
-     *         @OA\Schema(type="string")
-     *     ),
-     *     @OA\Response(
-     *         response=200,
-     *         description="Supplier deleted successfully",
-     *         @OA\JsonContent(
-     *             @OA\Property(property="message", type="string", example="Supplier deleted successfully")
-     *         )
-     *     ),
-     *     @OA\Response(
-     *         response=404,
-     *         description="Supplier not found",
-     *         @OA\JsonContent(
-     *             @OA\Property(property="message", type="string", example="Supplier not found")
-     *         )
-     *     ),
-     *     @OA\Response(
-     *         response=401,
-     *         description="Unauthenticated",
-     *         @OA\JsonContent(
-     *             @OA\Property(property="error", type="string", example="Unauthenticated")
-     *         )
-     *     )
+     *     @OA\Parameter( name="id", in="path", required=true, description="Supplier ID", @OA\Schema(type="integer")),
+     *     @OA\Response( response=200, description="Supplier deleted", @OA\JsonContent( @OA\Property(property="message", type="string", example="Supplier deleted"))),
+     *     @OA\Response( response=404, description="Supplier not found", @OA\JsonContent( @OA\Property(property="message", type="string", example="Supplier not found"))),
+     *     @OA\Response( response=401, description="Unauthenticated", @OA\JsonContent( @OA\Property(property="error", type="string", example="Unauthenticated")))
      * )
      */
     public function destroy(int $id)

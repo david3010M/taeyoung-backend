@@ -27,7 +27,7 @@ use Illuminate\Http\Resources\Json\JsonResource;
  * )
  *
  * @OA\Schema(
- *     schema="ClientPagination",
+ *     schema="ClientCollection",
  *     @OA\Property(property="data", type="array", @OA\Items(ref="#/components/schemas/Client")),
  *     @OA\Property(property="links", type="object", ref="#/components/schemas/PaginationLinks"),
  *     @OA\Property(property="meta", type="object", ref="#/components/schemas/PaginationMeta"),

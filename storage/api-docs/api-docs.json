@@ -199,24 +199,215 @@
                 ]
             }
         },
+        "/taeyoung-backend/public/api/logs": {
+            "get": {
+                "tags": [
+                    "Authentication"
+                ],
+                "summary": "Get logs",
+                "operationId": "516d208907d8ab4a98c5fc82ba8594ed",
+                "responses": {
+                    "200": {
+                        "description": "Successful operation",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "errors": {
+                                            "type": "array",
+                                            "items": {
+                                                "properties": {
+                                                    "date": {
+                                                        "type": "string",
+                                                        "example": "2021-10-01 00:00:00"
+                                                    },
+                                                    "environment": {
+                                                        "type": "string",
+                                                        "example": "local"
+                                                    },
+                                                    "error_type": {
+                                                        "type": "string",
+                                                        "example": "ERROR"
+                                                    },
+                                                    "message": {
+                                                        "type": "string",
+                                                        "example": "Error message"
+                                                    }
+                                                },
+                                                "type": "object"
+                                            }
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "No logs found",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "example": "No logs found."
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
         "/taeyoung-backend/public/api/client": {
             "get": {
                 "tags": [
                     "Client"
                 ],
                 "summary": "Show all clients",
-                "description": "SHOW ALL CLIENTS",
+                "description": "Show all clients",
                 "operationId": "3d63222732fa8b7df8ba346c91d5b94b",
+                "parameters": [
+                    {
+                        "parameter": "ruc",
+                        "name": "ruc",
+                        "in": "query",
+                        "description": "Filter by ruc",
+                        "required": false,
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "parameter": "filterName",
+                        "name": "filterName",
+                        "in": "query",
+                        "description": "Filter by business name",
+                        "required": false,
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "parameter": "email",
+                        "name": "email",
+                        "in": "query",
+                        "description": "Filter by email",
+                        "required": false,
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "parameter": "phone",
+                        "name": "phone",
+                        "in": "query",
+                        "description": "Filter by phone",
+                        "required": false,
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "parameter": "country_id",
+                        "name": "country_id",
+                        "in": "query",
+                        "description": "Filter by country",
+                        "required": false,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    },
+                    {
+                        "parameter": "page",
+                        "name": "page",
+                        "in": "query",
+                        "description": "Page number",
+                        "required": false,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    },
+                    {
+                        "parameter": "per_page",
+                        "name": "per_page",
+                        "in": "query",
+                        "description": "Items per page",
+                        "required": false,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    },
+                    {
+                        "parameter": "sort",
+                        "name": "sort",
+                        "in": "query",
+                        "description": "Sort by column",
+                        "required": false,
+                        "schema": {
+                            "type": "string",
+                            "enum": [
+                                "ruc",
+                                "filterName",
+                                "email",
+                                "phone",
+                                "country_id"
+                            ]
+                        }
+                    },
+                    {
+                        "parameter": "direction",
+                        "name": "direction",
+                        "in": "query",
+                        "description": "Sort direction",
+                        "required": false,
+                        "schema": {
+                            "type": "string",
+                            "enum": [
+                                "asc",
+                                "desc"
+                            ]
+                        }
+                    },
+                    {
+                        "parameter": "all",
+                        "name": "all",
+                        "in": "query",
+                        "description": "Get all clients",
+                        "required": false,
+                        "schema": {
+                            "type": "boolean"
+                        }
+                    }
+                ],
                 "responses": {
                     "200": {
-                        "description": "Show all clients",
+                        "description": "Successful operation",
                         "content": {
                             "application/json": {
                                 "schema": {
                                     "type": "array",
                                     "items": {
-                                        "$ref": "#/components/schemas/ClientPagination"
+                                        "$ref": "#/components/schemas/ClientCollection"
                                     }
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthenticated",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/Unauthenticated"
                                 }
                             }
                         }
@@ -226,10 +417,187 @@
                         "content": {
                             "application/json": {
                                 "schema": {
+                                    "$ref": "#/components/schemas/ValidationError"
+                                }
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            },
+            "post": {
+                "tags": [
+                    "Client"
+                ],
+                "summary": "Create a new client",
+                "description": "CREATE A NEW CLIENT",
+                "operationId": "7d64b20d98e8b8b48e4f1406a4b606e2",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/StoreClientRequest"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Client created successfully",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/Client"
+                                }
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "Validation error",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ValidationError"
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthenticated",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/Unauthenticated"
+                                }
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
+        "/taeyoung-backend/public/api/client/{id}": {
+            "get": {
+                "tags": [
+                    "Client"
+                ],
+                "summary": "Show a client",
+                "description": "Show a client",
+                "operationId": "e6ea42462c00bf907e10f322ebb67805",
+                "parameters": [
+                    {
+                        "parameter": "id",
+                        "name": "id",
+                        "in": "path",
+                        "description": "Client ID",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Successful operation",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/Client"
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthenticated",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/Unauthenticated"
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Client not found",
+                        "content": {
+                            "application/json": {
+                                "schema": {
                                     "properties": {
-                                        "error": {
+                                        "message": {
                                             "type": "string",
-                                            "example": "The pagination must be an integer."
+                                            "example": "Client not found"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            },
+            "put": {
+                "tags": [
+                    "Client"
+                ],
+                "summary": "Update a client",
+                "description": "UPDATE A CLIENT",
+                "operationId": "03272273389c577f5b52d546f838922b",
+                "parameters": [
+                    {
+                        "parameter": "id",
+                        "name": "id",
+                        "in": "path",
+                        "description": "Client ID",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/UpdateClientRequest"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Client updated successfully",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/Client"
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Client not found",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Client not found"
                                         }
                                     },
                                     "type": "object"
@@ -242,13 +610,7 @@
                         "content": {
                             "application/json": {
                                 "schema": {
-                                    "properties": {
-                                        "msg": {
-                                            "type": "string",
-                                            "example": "Unauthenticated"
-                                        }
-                                    },
-                                    "type": "object"
+                                    "$ref": "#/components/schemas/Unauthenticated"
                                 }
                             }
                         }
@@ -2021,13 +2383,53 @@
                 "operationId": "846d032d37ae8fae626d404be694761e",
                 "parameters": [
                     {
-                        "parameter": "all",
-                        "name": "all",
+                        "parameter": "ruc",
+                        "name": "ruc",
                         "in": "query",
-                        "description": "Get all suppliers",
+                        "description": "Filter by ruc",
                         "required": false,
                         "schema": {
-                            "type": "boolean"
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "parameter": "filterName",
+                        "name": "filterName",
+                        "in": "query",
+                        "description": "Filter by business name",
+                        "required": false,
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "parameter": "email",
+                        "name": "email",
+                        "in": "query",
+                        "description": "Filter by email",
+                        "required": false,
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "parameter": "phone",
+                        "name": "phone",
+                        "in": "query",
+                        "description": "Filter by phone",
+                        "required": false,
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "parameter": "country_id",
+                        "name": "country_id",
+                        "in": "query",
+                        "description": "Filter by country",
+                        "required": false,
+                        "schema": {
+                            "type": "integer"
                         }
                     },
                     {
@@ -2057,7 +2459,14 @@
                         "description": "Sort by column",
                         "required": false,
                         "schema": {
-                            "type": "string"
+                            "type": "string",
+                            "enum": [
+                                "ruc",
+                                "filterName",
+                                "email",
+                                "phone",
+                                "country_id"
+                            ]
                         }
                     },
                     {
@@ -2075,43 +2484,13 @@
                         }
                     },
                     {
-                        "parameter": "ruc",
-                        "name": "ruc",
+                        "parameter": "all",
+                        "name": "all",
                         "in": "query",
-                        "description": "Filter by ruc",
+                        "description": "Get all suppliers",
                         "required": false,
                         "schema": {
-                            "type": "string"
-                        }
-                    },
-                    {
-                        "parameter": "businessName",
-                        "name": "businessName",
-                        "in": "query",
-                        "description": "Filter by business name",
-                        "required": false,
-                        "schema": {
-                            "type": "string"
-                        }
-                    },
-                    {
-                        "parameter": "email",
-                        "name": "email",
-                        "in": "query",
-                        "description": "Filter by email",
-                        "required": false,
-                        "schema": {
-                            "type": "string"
-                        }
-                    },
-                    {
-                        "parameter": "country_id",
-                        "name": "country_id",
-                        "in": "query",
-                        "description": "Filter by country",
-                        "required": false,
-                        "schema": {
-                            "type": "integer"
+                            "type": "boolean"
                         }
                     }
                 ],
@@ -2369,20 +2748,20 @@
                         "description": "Supplier ID",
                         "required": true,
                         "schema": {
-                            "type": "string"
+                            "type": "integer"
                         }
                     }
                 ],
                 "responses": {
                     "200": {
-                        "description": "Supplier deleted successfully",
+                        "description": "Supplier deleted",
                         "content": {
                             "application/json": {
                                 "schema": {
                                     "properties": {
                                         "message": {
                                             "type": "string",
-                                            "example": "Supplier deleted successfully"
+                                            "example": "Supplier deleted"
                                         }
                                     },
                                     "type": "object"
@@ -3069,6 +3448,68 @@
                 },
                 "type": "object"
             },
+            "StoreClientRequest": {
+                "title": "Store Client Request",
+                "required": [
+                    "typeDocument",
+                    "country_id"
+                ],
+                "properties": {
+                    "typeDocument": {
+                        "type": "string",
+                        "example": "DNI"
+                    },
+                    "dni": {
+                        "type": "string",
+                        "example": "12345678"
+                    },
+                    "ruc": {
+                        "type": "string",
+                        "example": "12345678901"
+                    },
+                    "names": {
+                        "type": "string",
+                        "example": "Juan"
+                    },
+                    "fatherSurname": {
+                        "type": "string",
+                        "example": "Perez"
+                    },
+                    "motherSurname": {
+                        "type": "string",
+                        "example": "Gomez"
+                    },
+                    "businessName": {
+                        "type": "string",
+                        "example": "Empresa SAC"
+                    },
+                    "address": {
+                        "type": "string",
+                        "example": "Av. Los Pinos 123"
+                    },
+                    "email": {
+                        "type": "string",
+                        "example": "mail@mail.com"
+                    },
+                    "phone": {
+                        "type": "string",
+                        "example": "987654321"
+                    },
+                    "representativeDni": {
+                        "type": "string",
+                        "example": "12345678"
+                    },
+                    "representativeNames": {
+                        "type": "string",
+                        "example": "Juan"
+                    },
+                    "country_id": {
+                        "type": "integer",
+                        "example": "1"
+                    }
+                },
+                "type": "object"
+            },
             "StorePaymentConceptRequest": {
                 "title": "StorePaymentConceptRequest",
                 "required": [
@@ -3350,6 +3791,64 @@
                 },
                 "type": "object"
             },
+            "UpdateClientRequest": {
+                "title": "Update Client Request",
+                "properties": {
+                    "typeDocument": {
+                        "type": "string",
+                        "example": "DNI"
+                    },
+                    "dni": {
+                        "type": "string",
+                        "example": "12345678"
+                    },
+                    "ruc": {
+                        "type": "string",
+                        "example": "12345678901"
+                    },
+                    "names": {
+                        "type": "string",
+                        "example": "Juan"
+                    },
+                    "fatherSurname": {
+                        "type": "string",
+                        "example": "Perez"
+                    },
+                    "motherSurname": {
+                        "type": "string",
+                        "example": "Gomez"
+                    },
+                    "businessName": {
+                        "type": "string",
+                        "example": "Empresa SAC"
+                    },
+                    "address": {
+                        "type": "string",
+                        "example": "Av. Los Pinos 123"
+                    },
+                    "email": {
+                        "type": "string",
+                        "example": "mail@mail.com"
+                    },
+                    "phone": {
+                        "type": "string",
+                        "example": "987654321"
+                    },
+                    "representativeDni": {
+                        "type": "string",
+                        "example": "12345678"
+                    },
+                    "representativeNames": {
+                        "type": "string",
+                        "example": "Juan"
+                    },
+                    "country_id": {
+                        "type": "integer",
+                        "example": "1"
+                    }
+                },
+                "type": "object"
+            },
             "UpdatePaymentConceptRequest": {
                 "title": "UpdatePaymentConceptRequest",
                 "properties": {
@@ -3610,7 +4109,7 @@
                 },
                 "type": "object"
             },
-            "ClientPagination": {
+            "ClientCollection": {
                 "properties": {
                     "data": {
                         "type": "array",
@@ -4109,6 +4608,10 @@
                     "country": {
                         "type": "string",
                         "example": "Peru"
+                    },
+                    "country_id": {
+                        "type": "integer",
+                        "example": "1"
                     }
                 },
                 "type": "object"

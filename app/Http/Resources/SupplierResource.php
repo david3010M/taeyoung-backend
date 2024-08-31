@@ -24,6 +24,7 @@ use Illuminate\Http\Resources\Json\JsonResource;
  *     @OA\Property(property="representativeDni", type="string", example="12345678"),
  *     @OA\Property(property="representativeNames", type="string", example="Juan"),
  *     @OA\Property(property="country", type="string", example="Peru"),
+ *     @OA\Property(property="country_id", type="integer", example="1"),
  *  )
  *
  * @OA\Schema(
@@ -52,7 +53,8 @@ class SupplierResource extends JsonResource
             'phone' => $this->phone,
             'representativeDni' => $this->typeDocument === 'RUC' ? $this->representativeDni : null,
             'representativeNames' => $this->typeDocument === 'RUC' ? $this->representativeNames : null,
-            'country' => (new CountryResource($this->country))->name,
+            'country' => $this->country->name,
+            'country_id' => $this->country_id,
         ];
     }
 }
