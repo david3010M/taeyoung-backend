@@ -85,7 +85,7 @@ class ClientController extends Controller
     public function show(string $id)
     {
         $client = Person::with('country')->where('type', 'client')->find($id);
-        if (!$client) return response()->json(['message' => 'Client not found'], 404);
+        if (!$client) return response()->json(['message' => 'Cliente no encontrado'], 404);
         return response()->json($client);
     }
 
@@ -106,7 +106,7 @@ class ClientController extends Controller
     public function update(UpdateClientRequest $request, string $id)
     {
         $client = Person::where('type', 'client')->find($id);
-        if (!$client) return response()->json(['message' => 'Client not found'], 404);
+        if (!$client) return response()->json(['message' => 'Cliente no encontrado'], 404);
         if ($request->typeDocument === 'DNI') $request->merge(['ruc' => null, 'businessName' => null, 'representativeDni' => null, 'representativeNames' => null]);
         else $request->merge(['dni' => null, 'names' => null, 'fatherSurname' => null, 'motherSurname' => null]);
         $client->update($request->all());
@@ -118,7 +118,8 @@ class ClientController extends Controller
     public function destroy(string $id)
     {
         $client = Person::where('type', 'client')->find($id);
-        if (!$client) return response()->json(['message' => 'Client not found'], 404);
+        if (!$client) return response()->json(['message' => 'Cliente no encontrado'], 404);
+        if ($client->orders()->count() > 0) return response()->json(['message' => 'El cliente tiene órdenes asociadas'], 422);
         $client->delete();
         return response()->json(['message' => 'Client deleted']);
     }

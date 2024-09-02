@@ -98,5 +98,15 @@ class Person extends Model
         return $this->belongsTo(Country::class);
     }
 
+    public function quotations()
+    {
+        return $this->hasMany(Quotation::class);
+    }
+
+    public function orders()
+    {
+        return $this->hasMany(Order::class);
+    }
+
 
 }

@@ -82,7 +82,7 @@ class SupplierController extends Controller
     public function show(int $id)
     {
         $supplier = Person::with('country')->where('type', 'supplier')->find($id);
-        if (!$supplier) return response()->json(['error' => 'Supplier not found'], 404);
+        if (!$supplier) return response()->json(['error' => 'Proveedor no encontrado'], 404);
         return response()->json(new SupplierResource($supplier));
     }
 
@@ -102,7 +102,7 @@ class SupplierController extends Controller
     public function update(UpdateSupplierRequest $request, int $id)
     {
         $supplier = Person::where('type', 'supplier')->find($id);
-        if (!$supplier) return response()->json(['message' => 'Supplier not found'], 404);
+        if (!$supplier) return response()->json(['message' => 'Proveedor no encontrado'], 404);
         if ($request->typeDocument === 'DNI') $request->merge(['ruc' => null, 'businessName' => null, 'representativeDni' => null, 'representativeNames' => null]);
         else $request->merge(['dni' => null, 'names' => null, 'fatherSurname' => null, 'motherSurname' => null]);
         $supplier->update($request->all());
@@ -126,8 +126,10 @@ class SupplierController extends Controller
     public function destroy(int $id)
     {
         $supplier = Person::where('type', 'supplier')->find($id);
-        if (!$supplier) return response()->json(['message' => 'Supplier not found'], 404);
+        if (!$supplier) return response()->json(['message' => 'Proveedor no encontrado'], 404);
+        if ($supplier->quotations()->exists()) return response()->json(['message' => 'El proveedor tiene cotizaciones'], 422);
+        if ($supplier->orders()->exists()) return response()->json(['message' => 'El proveedor tiene ordenes'], 422);
         $supplier->delete();
-        return response()->json(['message' => 'Supplier deleted']);
+        return response()->json(['message' => 'Proveedor eliminado']);
     }
 }
