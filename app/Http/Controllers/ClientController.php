@@ -119,7 +119,8 @@ class ClientController extends Controller
     {
         $client = Person::where('type', 'client')->find($id);
         if (!$client) return response()->json(['message' => 'Cliente no encontrado'], 404);
-        if ($client->orders()->count() > 0) return response()->json(['message' => 'El cliente tiene órdenes asociadas'], 422);
+        if ($client->quotations()->count() > 0) return response()->json(['message' => 'El cliente tiene cotizaciones asociadas'], 422);
+        if ($client->sales()->count() > 0) return response()->json(['message' => 'El cliente tiene ventas asociadas'], 422);
         $client->delete();
         return response()->json(['message' => 'Client deleted']);
     }

@@ -70,6 +70,11 @@ class Order extends Model
         return $this->belongsTo(Person::class, 'supplier_id');
     }
 
+    public function client()
+    {
+        return $this->belongsTo(Person::class, 'client_id');
+    }
+
     public function quotation()
     {
         return $this->belongsTo(Quotation::class);

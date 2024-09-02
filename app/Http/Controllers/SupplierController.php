@@ -127,8 +127,7 @@ class SupplierController extends Controller
     {
         $supplier = Person::where('type', 'supplier')->find($id);
         if (!$supplier) return response()->json(['message' => 'Proveedor no encontrado'], 404);
-        if ($supplier->quotations()->exists()) return response()->json(['message' => 'El proveedor tiene cotizaciones'], 422);
-        if ($supplier->orders()->exists()) return response()->json(['message' => 'El proveedor tiene ordenes'], 422);
+        if ($supplier->purchases()->count() > 0) return response()->json(['message' => 'El proveedor tiene compras asociadas'], 422);
         $supplier->delete();
         return response()->json(['message' => 'Proveedor eliminado']);
     }

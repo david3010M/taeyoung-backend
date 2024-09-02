@@ -100,12 +100,17 @@ class Person extends Model
 
     public function quotations()
     {
-        return $this->hasMany(Quotation::class);
+        return $this->hasMany(Quotation::class, 'client_id');
     }
 
-    public function orders()
+    public function purchases()
     {
-        return $this->hasMany(Order::class);
+        return $this->hasMany(Order::class, 'supplier_id');
+    }
+
+    public function sales()
+    {
+        return $this->hasMany(Order::class, 'client_id');
     }
 
 
