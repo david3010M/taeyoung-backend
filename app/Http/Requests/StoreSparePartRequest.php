@@ -2,8 +2,6 @@
 
 namespace App\Http\Requests;
 
-use Illuminate\Validation\Rule;
-
 class StoreSparePartRequest extends StoreRequest
 {
     public function rules(): array

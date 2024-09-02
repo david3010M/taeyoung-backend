@@ -12,8 +12,10 @@ class IndexQuotationRequest extends IndexRequest
             'number' => 'nullable|string',
             'currencyFrom' => 'nullable|string|in:USD,PEN',
             'currencyTo' => 'nullable|string|in:USD,PEN',
-            'client_businessName' => 'nullable|string',
-            'date' => 'nullable|date',
+            'client$filterName' => 'nullable|string',
+            'date' => 'nullable|array|size:2',
+            'date.0' => 'nullable|date_format:Y-m-d',
+            'date.1' => 'nullable|date_format:Y-m-d',
             'sort' => 'nullable|string|in:date,currencyFrom,currencyTo,id,number',
             'direction' => 'nullable|string|in:asc,desc',
         ];

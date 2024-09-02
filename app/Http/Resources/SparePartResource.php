@@ -14,8 +14,11 @@ use Illuminate\Http\Resources\Json\JsonResource;
  *     @OA\Property(property="name", type="string", example="Spare Part" ),
  *     @OA\Property(property="purchasePrice", type="number", example="100.00" ),
  *     @OA\Property(property="salePrice", type="number", example="150.00" ),
+ *     @OA\Property(property="purchaseValue", type="number", example="1000.00" ),
+ *     @OA\Property(property="saleValue", type="number", example="1500.00" ),
  *     @OA\Property(property="stock", type="integer", example="10" ),
- *     @OA\Property(property="image", type="string", example="http://example.com/image.jpg" )
+ *     @OA\Property(property="unit_id", type="integer", example="1" ),
+ *     @OA\Property(property="unit", ref="#/components/schemas/UnitResource")
  * )
  *
  * @OA\Schema (

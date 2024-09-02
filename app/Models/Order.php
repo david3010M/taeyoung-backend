@@ -51,7 +51,7 @@ class Order extends Model
 
     const filtersPurchase = [
         'number' => 'like',
-        'date' => 'like',
+        'date' => 'between',
         'supplier_id' => '=',
         'supplier.filterName' => 'like',
         'supplier.country_id' => '=',

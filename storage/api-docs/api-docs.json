@@ -199,24 +199,215 @@
                 ]
             }
         },
+        "/taeyoung-backend/public/api/logs": {
+            "get": {
+                "tags": [
+                    "Logs"
+                ],
+                "summary": "Get logs",
+                "operationId": "516d208907d8ab4a98c5fc82ba8594ed",
+                "responses": {
+                    "200": {
+                        "description": "Successful operation",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "errors": {
+                                            "type": "array",
+                                            "items": {
+                                                "properties": {
+                                                    "date": {
+                                                        "type": "string",
+                                                        "example": "2021-10-01 00:00:00"
+                                                    },
+                                                    "environment": {
+                                                        "type": "string",
+                                                        "example": "local"
+                                                    },
+                                                    "error_type": {
+                                                        "type": "string",
+                                                        "example": "ERROR"
+                                                    },
+                                                    "message": {
+                                                        "type": "string",
+                                                        "example": "Error message"
+                                                    }
+                                                },
+                                                "type": "object"
+                                            }
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "No logs found",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "example": "No logs found."
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
         "/taeyoung-backend/public/api/client": {
             "get": {
                 "tags": [
                     "Client"
                 ],
                 "summary": "Show all clients",
-                "description": "SHOW ALL CLIENTS",
+                "description": "Show all clients",
                 "operationId": "3d63222732fa8b7df8ba346c91d5b94b",
+                "parameters": [
+                    {
+                        "parameter": "ruc",
+                        "name": "ruc",
+                        "in": "query",
+                        "description": "Filter by ruc",
+                        "required": false,
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "parameter": "filterName",
+                        "name": "filterName",
+                        "in": "query",
+                        "description": "Filter by business name",
+                        "required": false,
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "parameter": "email",
+                        "name": "email",
+                        "in": "query",
+                        "description": "Filter by email",
+                        "required": false,
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "parameter": "phone",
+                        "name": "phone",
+                        "in": "query",
+                        "description": "Filter by phone",
+                        "required": false,
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "parameter": "country_id",
+                        "name": "country_id",
+                        "in": "query",
+                        "description": "Filter by country",
+                        "required": false,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    },
+                    {
+                        "parameter": "page",
+                        "name": "page",
+                        "in": "query",
+                        "description": "Page number",
+                        "required": false,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    },
+                    {
+                        "parameter": "per_page",
+                        "name": "per_page",
+                        "in": "query",
+                        "description": "Items per page",
+                        "required": false,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    },
+                    {
+                        "parameter": "sort",
+                        "name": "sort",
+                        "in": "query",
+                        "description": "Sort by column",
+                        "required": false,
+                        "schema": {
+                            "type": "string",
+                            "enum": [
+                                "ruc",
+                                "filterName",
+                                "email",
+                                "phone",
+                                "country_id"
+                            ]
+                        }
+                    },
+                    {
+                        "parameter": "direction",
+                        "name": "direction",
+                        "in": "query",
+                        "description": "Sort direction",
+                        "required": false,
+                        "schema": {
+                            "type": "string",
+                            "enum": [
+                                "asc",
+                                "desc"
+                            ]
+                        }
+                    },
+                    {
+                        "parameter": "all",
+                        "name": "all",
+                        "in": "query",
+                        "description": "Get all clients",
+                        "required": false,
+                        "schema": {
+                            "type": "boolean"
+                        }
+                    }
+                ],
                 "responses": {
                     "200": {
-                        "description": "Show all clients",
+                        "description": "Successful operation",
                         "content": {
                             "application/json": {
                                 "schema": {
                                     "type": "array",
                                     "items": {
-                                        "$ref": "#/components/schemas/ClientPagination"
+                                        "$ref": "#/components/schemas/ClientCollection"
                                     }
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthenticated",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/Unauthenticated"
                                 }
                             }
                         }
@@ -226,10 +417,187 @@
                         "content": {
                             "application/json": {
                                 "schema": {
+                                    "$ref": "#/components/schemas/ValidationError"
+                                }
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            },
+            "post": {
+                "tags": [
+                    "Client"
+                ],
+                "summary": "Create a new client",
+                "description": "CREATE A NEW CLIENT",
+                "operationId": "7d64b20d98e8b8b48e4f1406a4b606e2",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/StoreClientRequest"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Client created successfully",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/Client"
+                                }
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "Validation error",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ValidationError"
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthenticated",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/Unauthenticated"
+                                }
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
+        "/taeyoung-backend/public/api/client/{id}": {
+            "get": {
+                "tags": [
+                    "Client"
+                ],
+                "summary": "Show a client",
+                "description": "Show a client",
+                "operationId": "e6ea42462c00bf907e10f322ebb67805",
+                "parameters": [
+                    {
+                        "parameter": "id",
+                        "name": "id",
+                        "in": "path",
+                        "description": "Client ID",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Successful operation",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/Client"
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthenticated",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/Unauthenticated"
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Client not found",
+                        "content": {
+                            "application/json": {
+                                "schema": {
                                     "properties": {
-                                        "error": {
+                                        "message": {
                                             "type": "string",
-                                            "example": "The pagination must be an integer."
+                                            "example": "Client not found"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            },
+            "put": {
+                "tags": [
+                    "Client"
+                ],
+                "summary": "Update a client",
+                "description": "UPDATE A CLIENT",
+                "operationId": "03272273389c577f5b52d546f838922b",
+                "parameters": [
+                    {
+                        "parameter": "id",
+                        "name": "id",
+                        "in": "path",
+                        "description": "Client ID",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/UpdateClientRequest"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Client updated successfully",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/Client"
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Client not found",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Client not found"
                                         }
                                     },
                                     "type": "object"
@@ -242,13 +610,7 @@
                         "content": {
                             "application/json": {
                                 "schema": {
-                                    "properties": {
-                                        "msg": {
-                                            "type": "string",
-                                            "example": "Unauthenticated"
-                                        }
-                                    },
-                                    "type": "object"
+                                    "$ref": "#/components/schemas/Unauthenticated"
                                 }
                             }
                         }
@@ -686,6 +1048,60 @@
                         }
                     },
                     {
+                        "parameter": "number",
+                        "name": "number",
+                        "in": "query",
+                        "description": "Purchase number",
+                        "required": false,
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "parameter": "date",
+                        "name": "date[]",
+                        "in": "query",
+                        "description": "Purchase date",
+                        "required": false,
+                        "schema": {
+                            "type": "array",
+                            "items": {
+                                "type": "string",
+                                "format": "date"
+                            }
+                        }
+                    },
+                    {
+                        "parameter": "supplier_id",
+                        "name": "supplier_id",
+                        "in": "query",
+                        "description": "Supplier ID",
+                        "required": false,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    },
+                    {
+                        "parameter": "supplier$filterName",
+                        "name": "supplier$filterName",
+                        "in": "query",
+                        "description": "Supplier name",
+                        "required": false,
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "parameter": "supplier$country_id",
+                        "name": "supplier$country_id",
+                        "in": "query",
+                        "description": "Supplier country ID",
+                        "required": false,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    },
+                    {
                         "parameter": "sort",
                         "name": "sort",
                         "in": "query",
@@ -1088,12 +1504,15 @@
                     },
                     {
                         "parameter": "date",
-                        "name": "date",
+                        "name": "date[]",
                         "in": "query",
                         "description": "Filter by date",
                         "required": false,
                         "schema": {
-                            "type": "string"
+                            "type": "array",
+                            "items": {
+                                "type": "string"
+                            }
                         }
                     },
                     {
@@ -1107,8 +1526,8 @@
                         }
                     },
                     {
-                        "parameter": "client_filterName",
-                        "name": "client_filterName",
+                        "parameter": "client$filterName",
+                        "name": "client$filterName",
                         "in": "query",
                         "description": "Filter by client name",
                         "required": false,
@@ -1649,22 +2068,61 @@
                 ]
             }
         },
-        "/taeyoung-backend/public/api/spareparts": {
+        "/taeyoung-backend/public/api/sparePart": {
             "get": {
                 "tags": [
                     "Spare Parts"
                 ],
                 "summary": "List all spare parts",
-                "operationId": "e559b1302cf3b1bf543bd0da24fde40d",
+                "operationId": "96d63257f79c509c75311100d5069d01",
                 "parameters": [
                     {
-                        "name": "pagination",
+                        "name": "page",
                         "in": "query",
-                        "description": "Number of items to display per page",
+                        "description": "Page number",
                         "required": false,
                         "schema": {
-                            "type": "integer",
-                            "minimum": 5
+                            "type": "integer"
+                        }
+                    },
+                    {
+                        "name": "per_page",
+                        "in": "query",
+                        "description": "Items per page",
+                        "required": false,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    },
+                    {
+                        "name": "sort",
+                        "in": "query",
+                        "description": "Sort by column",
+                        "required": false,
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "direction",
+                        "in": "query",
+                        "description": "Sort direction",
+                        "required": false,
+                        "schema": {
+                            "type": "string",
+                            "enum": [
+                                "asc",
+                                "desc"
+                            ]
+                        }
+                    },
+                    {
+                        "name": "all",
+                        "in": "query",
+                        "description": "Get all items",
+                        "required": false,
+                        "schema": {
+                            "type": "boolean"
                         }
                     }
                 ],
@@ -1711,7 +2169,7 @@
                     "Spare Parts"
                 ],
                 "summary": "Create a spare part",
-                "operationId": "aa39145506167ad5733b52d8be3f706a",
+                "operationId": "3197f695269df188fb8508aa29e68ebc",
                 "requestBody": {
                     "required": true,
                     "content": {
@@ -1744,7 +2202,7 @@
                         }
                     },
                     "401": {
-                        "description": "Unauthenticated",
+                        "description": "UnSauthenticated",
                         "content": {
                             "application/json": {
                                 "schema": {
@@ -1761,13 +2219,13 @@
                 ]
             }
         },
-        "/taeyoung-backend/public/api/spareparts/{id}": {
+        "/taeyoung-backend/public/api/sparePart/{id}": {
             "get": {
                 "tags": [
                     "Spare Parts"
                 ],
                 "summary": "Show a spare part",
-                "operationId": "2d7ef941c184cbdf1a547b9368eabe0b",
+                "operationId": "ccfdf0e52b6e39d1066b6148a16ac97a",
                 "parameters": [
                     {
                         "name": "id",
@@ -1775,8 +2233,7 @@
                         "description": "Spare part ID",
                         "required": true,
                         "schema": {
-                            "type": "integer",
-                            "minimum": 1
+                            "type": "integer"
                         }
                     }
                 ],
@@ -1787,6 +2244,154 @@
                             "application/json": {
                                 "schema": {
                                     "$ref": "#/components/schemas/SparePartResource"
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Spare part not found",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Spare part not found"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthenticated",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/Unauthenticated"
+                                }
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            },
+            "put": {
+                "tags": [
+                    "Spare Parts"
+                ],
+                "summary": "Update a spare part",
+                "operationId": "15228764d4f1d66c726f9faa927908bf",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "Spare part ID",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/SparePartRequest"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Spare part updated",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/SparePartResource"
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Spare part not found",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Spare part not found"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "Validation error",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ValidationError"
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthenticated",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/Unauthenticated"
+                                }
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            },
+            "delete": {
+                "tags": [
+                    "Spare Parts"
+                ],
+                "summary": "Delete a spare part",
+                "operationId": "35289728489795322b61114858b7be84",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "Spare part ID",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Spare part deleted",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Spare part deleted"
+                                        }
+                                    },
+                                    "type": "object"
                                 }
                             }
                         }
@@ -1835,13 +2440,53 @@
                 "operationId": "846d032d37ae8fae626d404be694761e",
                 "parameters": [
                     {
-                        "parameter": "all",
-                        "name": "all",
+                        "parameter": "ruc",
+                        "name": "ruc",
                         "in": "query",
-                        "description": "Get all suppliers",
+                        "description": "Filter by ruc",
                         "required": false,
                         "schema": {
-                            "type": "boolean"
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "parameter": "filterName",
+                        "name": "filterName",
+                        "in": "query",
+                        "description": "Filter by business name",
+                        "required": false,
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "parameter": "email",
+                        "name": "email",
+                        "in": "query",
+                        "description": "Filter by email",
+                        "required": false,
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "parameter": "phone",
+                        "name": "phone",
+                        "in": "query",
+                        "description": "Filter by phone",
+                        "required": false,
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "parameter": "country_id",
+                        "name": "country_id",
+                        "in": "query",
+                        "description": "Filter by country",
+                        "required": false,
+                        "schema": {
+                            "type": "integer"
                         }
                     },
                     {
@@ -1871,7 +2516,14 @@
                         "description": "Sort by column",
                         "required": false,
                         "schema": {
-                            "type": "string"
+                            "type": "string",
+                            "enum": [
+                                "ruc",
+                                "filterName",
+                                "email",
+                                "phone",
+                                "country_id"
+                            ]
                         }
                     },
                     {
@@ -1889,43 +2541,13 @@
                         }
                     },
                     {
-                        "parameter": "ruc",
-                        "name": "ruc",
+                        "parameter": "all",
+                        "name": "all",
                         "in": "query",
-                        "description": "Filter by ruc",
+                        "description": "Get all suppliers",
                         "required": false,
                         "schema": {
-                            "type": "string"
-                        }
-                    },
-                    {
-                        "parameter": "businessName",
-                        "name": "businessName",
-                        "in": "query",
-                        "description": "Filter by business name",
-                        "required": false,
-                        "schema": {
-                            "type": "string"
-                        }
-                    },
-                    {
-                        "parameter": "email",
-                        "name": "email",
-                        "in": "query",
-                        "description": "Filter by email",
-                        "required": false,
-                        "schema": {
-                            "type": "string"
-                        }
-                    },
-                    {
-                        "parameter": "country_id",
-                        "name": "country_id",
-                        "in": "query",
-                        "description": "Filter by country",
-                        "required": false,
-                        "schema": {
-                            "type": "integer"
+                            "type": "boolean"
                         }
                     }
                 ],
@@ -2183,20 +2805,20 @@
                         "description": "Supplier ID",
                         "required": true,
                         "schema": {
-                            "type": "string"
+                            "type": "integer"
                         }
                     }
                 ],
                 "responses": {
                     "200": {
-                        "description": "Supplier deleted successfully",
+                        "description": "Supplier deleted",
                         "content": {
                             "application/json": {
                                 "schema": {
                                     "properties": {
                                         "message": {
                                             "type": "string",
-                                            "example": "Supplier deleted successfully"
+                                            "example": "Supplier deleted"
                                         }
                                     },
                                     "type": "object"
@@ -2883,6 +3505,68 @@
                 },
                 "type": "object"
             },
+            "StoreClientRequest": {
+                "title": "Store Client Request",
+                "required": [
+                    "typeDocument",
+                    "country_id"
+                ],
+                "properties": {
+                    "typeDocument": {
+                        "type": "string",
+                        "example": "DNI"
+                    },
+                    "dni": {
+                        "type": "string",
+                        "example": "12345678"
+                    },
+                    "ruc": {
+                        "type": "string",
+                        "example": "12345678901"
+                    },
+                    "names": {
+                        "type": "string",
+                        "example": "Juan"
+                    },
+                    "fatherSurname": {
+                        "type": "string",
+                        "example": "Perez"
+                    },
+                    "motherSurname": {
+                        "type": "string",
+                        "example": "Gomez"
+                    },
+                    "businessName": {
+                        "type": "string",
+                        "example": "Empresa SAC"
+                    },
+                    "address": {
+                        "type": "string",
+                        "example": "Av. Los Pinos 123"
+                    },
+                    "email": {
+                        "type": "string",
+                        "example": "mail@mail.com"
+                    },
+                    "phone": {
+                        "type": "string",
+                        "example": "987654321"
+                    },
+                    "representativeDni": {
+                        "type": "string",
+                        "example": "12345678"
+                    },
+                    "representativeNames": {
+                        "type": "string",
+                        "example": "Juan"
+                    },
+                    "country_id": {
+                        "type": "integer",
+                        "example": "1"
+                    }
+                },
+                "type": "object"
+            },
             "StorePaymentConceptRequest": {
                 "title": "StorePaymentConceptRequest",
                 "required": [
@@ -3164,6 +3848,64 @@
                 },
                 "type": "object"
             },
+            "UpdateClientRequest": {
+                "title": "Update Client Request",
+                "properties": {
+                    "typeDocument": {
+                        "type": "string",
+                        "example": "DNI"
+                    },
+                    "dni": {
+                        "type": "string",
+                        "example": "12345678"
+                    },
+                    "ruc": {
+                        "type": "string",
+                        "example": "12345678901"
+                    },
+                    "names": {
+                        "type": "string",
+                        "example": "Juan"
+                    },
+                    "fatherSurname": {
+                        "type": "string",
+                        "example": "Perez"
+                    },
+                    "motherSurname": {
+                        "type": "string",
+                        "example": "Gomez"
+                    },
+                    "businessName": {
+                        "type": "string",
+                        "example": "Empresa SAC"
+                    },
+                    "address": {
+                        "type": "string",
+                        "example": "Av. Los Pinos 123"
+                    },
+                    "email": {
+                        "type": "string",
+                        "example": "mail@mail.com"
+                    },
+                    "phone": {
+                        "type": "string",
+                        "example": "987654321"
+                    },
+                    "representativeDni": {
+                        "type": "string",
+                        "example": "12345678"
+                    },
+                    "representativeNames": {
+                        "type": "string",
+                        "example": "Juan"
+                    },
+                    "country_id": {
+                        "type": "integer",
+                        "example": "1"
+                    }
+                },
+                "type": "object"
+            },
             "UpdatePaymentConceptRequest": {
                 "title": "UpdatePaymentConceptRequest",
                 "properties": {
@@ -3393,6 +4135,10 @@
                         "type": "string",
                         "example": "Business Name"
                     },
+                    "filterName": {
+                        "type": "string",
+                        "example": "Filter Name"
+                    },
                     "address": {
                         "type": "string",
                         "example": "Address"
@@ -3420,7 +4166,7 @@
                 },
                 "type": "object"
             },
-            "ClientPagination": {
+            "ClientCollection": {
                 "properties": {
                     "data": {
                         "type": "array",
@@ -3818,13 +4564,24 @@
                         "type": "number",
                         "example": "150.00"
                     },
+                    "purchaseValue": {
+                        "type": "number",
+                        "example": "1000.00"
+                    },
+                    "saleValue": {
+                        "type": "number",
+                        "example": "1500.00"
+                    },
                     "stock": {
                         "type": "integer",
                         "example": "10"
                     },
-                    "image": {
-                        "type": "string",
-                        "example": "http://example.com/image.jpg"
+                    "unit_id": {
+                        "type": "integer",
+                        "example": "1"
+                    },
+                    "unit": {
+                        "$ref": "#/components/schemas/UnitResource"
                     }
                 },
                 "type": "object"
@@ -3881,6 +4638,10 @@
                         "type": "string",
                         "example": "Empresa SAC"
                     },
+                    "filterName": {
+                        "type": "string",
+                        "example": "Juan Perez Gomez"
+                    },
                     "address": {
                         "type": "string",
                         "example": "Av. Los Pinos 123"
@@ -3904,6 +4665,10 @@
                     "country": {
                         "type": "string",
                         "example": "Peru"
+                    },
+                    "country_id": {
+                        "type": "integer",
+                        "example": "1"
                     }
                 },
                 "type": "object"

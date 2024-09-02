@@ -65,7 +65,7 @@ class Quotation extends Model
 
     const filters = [
         'number' => 'like',
-        'date' => '=',
+        'date' => 'between',
         'description' => 'like',
         'client.filterName' => 'like',
     ];

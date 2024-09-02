@@ -17,28 +17,20 @@ class ClientController extends Controller
      *     tags={"Client"},
      *     security={{"bearerAuth": {}}},
      *     summary="Show all clients",
-     *     @OA\Response(
-     *         response=200,
-     *         description="Show all clients",
-     *         @OA\JsonContent(
-     *             type="array",
-     *             @OA\Items(ref="#/components/schemas/ClientPagination")
-     *         )
-     *     ),
-     *     @OA\Response(
-     *         response=422,
-     *         description="Validation error",
-     *         @OA\JsonContent(
-     *             @OA\Property(property="error", type="string", example="The pagination must be an integer.")
-     *         )
-     *     ),
-     *     @OA\Response(
-     *         response=401,
-     *         description="Unauthenticated",
-     *         @OA\JsonContent(
-     *             @OA\Property(property="msg", type="string", example="Unauthenticated")
-     *         )
-     *     )
+     *     description="Show all clients",
+     *     @OA\Parameter(parameter="ruc", name="ruc", in="query", required=false, description="Filter by ruc", @OA\Schema(type="string")),
+     *     @OA\Parameter(parameter="filterName", name="filterName", in="query", required=false, description="Filter by business name", @OA\Schema(type="string")),
+     *     @OA\Parameter(parameter="email", name="email", in="query", required=false, description="Filter by email", @OA\Schema(type="string")),
+     *     @OA\Parameter(parameter="phone", name="phone", in="query", required=false, description="Filter by phone", @OA\Schema(type="string")),
+     *     @OA\Parameter(parameter="country_id", name="country_id", in="query", required=false, description="Filter by country", @OA\Schema(type="integer")),
+     *     @OA\Parameter(parameter="page", name="page", in="query", required=false, description="Page number", @OA\Schema(type="integer")),
+     *     @OA\Parameter(parameter="per_page", name="per_page", in="query", required=false, description="Items per page", @OA\Schema(type="integer")),
+     *     @OA\Parameter(parameter="sort", name="sort", in="query", required=false, description="Sort by column", @OA\Schema(type="string", enum={"ruc","filterName","email","phone","country_id"})),
+     *     @OA\Parameter(parameter="direction", name="direction", in="query", required=false, description="Sort direction", @OA\Schema(type="string", enum={"asc", "desc"})),
+     *     @OA\Parameter(parameter="all", name="all", in="query", required=false, description="Get all clients", @OA\Schema(type="boolean")),
+     *     @OA\Response(response=200, description="Successful operation", @OA\JsonContent(type="array", @OA\Items(ref="#/components/schemas/ClientCollection"))),
+     *     @OA\Response(response=401, description="Unauthenticated", @OA\JsonContent(ref="#/components/schemas/Unauthenticated")),
+     *     @OA\Response(response=422, description="Validation error", @OA\JsonContent(ref="#/components/schemas/ValidationError"))
      * )
      */
     public function index(IndexClientRequest $request)
@@ -52,6 +44,19 @@ class ClientController extends Controller
         );
     }
 
+    /**
+     * CREATE A NEW CLIENT
+     * @OA\Post (
+     *     path="/taeyoung-backend/public/api/client",
+     *     tags={"Client"},
+     *     security={{"bearerAuth": {}}},
+     *     summary="Create a new client",
+     *     @OA\RequestBody( required=true, @OA\JsonContent(ref="#/components/schemas/StoreClientRequest")),
+     *     @OA\Response(response=200, description="Client created successfully", @OA\JsonContent(ref="#/components/schemas/Client")),
+     *     @OA\Response(response=422, description="Validation error", @OA\JsonContent(ref="#/components/schemas/ValidationError")),
+     *     @OA\Response(response=401, description="Unauthenticated", @OA\JsonContent(ref="#/components/schemas/Unauthenticated"))
+     * )
+     */
     public function store(StoreClientRequest $request)
     {
         if ($request->typeDocument === 'DNI') $request->merge(['ruc' => null, 'businessName' => null, 'representativeDni' => null, 'representativeNames' => null]);
@@ -63,6 +68,20 @@ class ClientController extends Controller
         return response()->json($client);
     }
 
+    /**
+     * SHOW A CLIENT
+     * @OA\Get (
+     *     path="/taeyoung-backend/public/api/client/{id}",
+     *     tags={"Client"},
+     *     security={{"bearerAuth": {}}},
+     *     summary="Show a client",
+     *     description="Show a client",
+     *     @OA\Parameter(parameter="id", name="id", in="path", required=true, description="Client ID", @OA\Schema(type="string")),
+     *     @OA\Response(response=200, description="Successful operation", @OA\JsonContent(ref="#/components/schemas/Client")),
+     *     @OA\Response(response=401, description="Unauthenticated", @OA\JsonContent(ref="#/components/schemas/Unauthenticated")),
+     *     @OA\Response(response=404, description="Client not found", @OA\JsonContent(type="object", @OA\Property(property="message", type="string", example="Client not found")))
+     * )
+     */
     public function show(string $id)
     {
         $client = Person::with('country')->where('type', 'client')->find($id);
@@ -70,6 +89,20 @@ class ClientController extends Controller
         return response()->json($client);
     }
 
+    /**
+     * UPDATE A CLIENT
+     * @OA\Put (
+     *     path="/taeyoung-backend/public/api/client/{id}",
+     *     tags={"Client"},
+     *     security={{"bearerAuth": {}}},
+     *     summary="Update a client",
+     *     @OA\Parameter(parameter="id", name="id", in="path", required=true, description="Client ID", @OA\Schema(type="string")),
+     *     @OA\RequestBody( required=true, @OA\JsonContent(ref="#/components/schemas/UpdateClientRequest")),
+     *     @OA\Response(response=200, description="Client updated successfully", @OA\JsonContent(ref="#/components/schemas/Client")),
+     *     @OA\Response(response=404, description="Client not found", @OA\JsonContent(type="object", @OA\Property(property="message", type="string", example="Client not found"))),
+     *     @OA\Response(response=401, description="Unauthenticated", @OA\JsonContent(ref="#/components/schemas/Unauthenticated"))
+     * )
+     */
     public function update(UpdateClientRequest $request, string $id)
     {
         $client = Person::where('type', 'client')->find($id);
