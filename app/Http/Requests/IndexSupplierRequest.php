@@ -8,6 +8,7 @@ class IndexSupplierRequest extends IndexRequest
     public function rules(): array
     {
         return [
+            'dni' => 'nullable|integer',
             'ruc' => 'nullable|integer',
             'filterName' => 'nullable|string',
             'email' => 'nullable|string',

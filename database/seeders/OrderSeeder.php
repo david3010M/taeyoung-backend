@@ -5,7 +5,6 @@ namespace Database\Seeders;
 use App\Models\DetailMachinery;
 use App\Models\DetailSparePart;
 use App\Models\Order;
-use App\Models\Person;
 use App\Models\Quotation;
 use Illuminate\Database\Seeder;
 

@@ -58,7 +58,7 @@ class ClientController extends Controller
         else $request->merge(['dni' => null, 'names' => null, 'fatherSurname' => null, 'motherSurname' => null]);
         $request->merge(['type' => 'client']);
         $client = Person::create($request->all());
-        $client->update(['filterName' => $request->typeDocument === 'DNI' ? $request->names . ' ' . $request->fatherSurname . ' ' . $request->motherSurname : $request->businessName]);
+        $client->update(['filterName' => $client->typeDocument === 'DNI' ? $client->names . ' ' . $client->fatherSurname . ' ' . $client->motherSurname : $client->businessName]);
         $client = Person::with('country')->find($client->id);
         return response()->json($client);
     }
@@ -77,7 +77,7 @@ class ClientController extends Controller
         if ($request->typeDocument === 'DNI') $request->merge(['ruc' => null, 'businessName' => null, 'representativeDni' => null, 'representativeNames' => null]);
         else $request->merge(['dni' => null, 'names' => null, 'fatherSurname' => null, 'motherSurname' => null]);
         $client->update($request->all());
-        $client->update(['filterName' => $request->typeDocument === 'DNI' ? $request->names . ' ' . $request->fatherSurname . ' ' . $request->motherSurname : $request->businessName]);
+        $client->update(['filterName' => $client->typeDocument === 'DNI' ? $client->names . ' ' . $client->fatherSurname . ' ' . $client->motherSurname : $client->businessName]);
         $client = Person::with('country')->where('type', 'client')->find($id);
         return response()->json($client);
     }

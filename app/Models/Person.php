@@ -76,6 +76,7 @@ class Person extends Model
     ];
 
     const supplierFilters = [
+        'dni' => 'like',
         'ruc' => 'like',
         'filterName' => 'like',
         'email' => 'like',
@@ -84,6 +85,7 @@ class Person extends Model
     ];
 
     const supplierSorts = [
+        'dni',
         'ruc',
         'filterName',
         'email',
