@@ -50,9 +50,9 @@ class UpdatePurchaseRequest extends UpdateRequest
             'detailMachinery.*.description' => 'required|string',
             'detailMachinery.*.quantity' => 'required|int',
             'detailMachinery.*.purchasePrice' => 'required|numeric',
-            'detailSpares' => 'required_without:detailMachinery|nullable|array',
-            'detailSpares.*.quantity' => 'required|numeric',
-            'detailSpares.*.spare_part_id' => 'required|exists:spare_parts,id',
+            'detailSpareParts' => 'required_without:detailMachinery|nullable|array',
+            'detailSpareParts.*.quantity' => 'required|numeric',
+            'detailSpareParts.*.spare_part_id' => 'required|exists:spare_parts,id',
         ];
     }
 }

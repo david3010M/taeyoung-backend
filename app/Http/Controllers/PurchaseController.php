@@ -161,8 +161,10 @@ class PurchaseController extends Controller
         $detailMachinery = $request->input('detailMachinery');
         $detailSpares = $request->input('detailSpareParts');
 
+        $purchase->detailMachinery()->delete();
+        $purchase->detailSpareParts()->delete();
+        
         if ($detailMachinery) {
-            DetailMachinery::where('order_id', $purchase->id)->delete();
             foreach ($detailMachinery as $detail) {
                 $detailMachinery = DetailMachinery::create([
                     'description' => $detail['description'],
@@ -177,7 +179,6 @@ class PurchaseController extends Controller
         }
 
         if ($detailSpares) {
-            $purchase->detailSpareParts()->delete();
             $totalSpareParts = $this->addDetailSpareParts($detailSpares, $purchase);
         }
 
