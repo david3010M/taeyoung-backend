@@ -13,7 +13,6 @@ class UpdateSparePartRequest extends FormRequest
             'name' => 'nullable|string',
             'purchasePrice' => 'nullable|numeric',
             'salePrice' => 'nullable|numeric',
-            'stock' => 'nullable|integer',
             'unit_id' => 'nullable|integer|exists:units,id',
         ];
     }

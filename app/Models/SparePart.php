@@ -15,7 +15,6 @@ use Illuminate\Database\Eloquent\SoftDeletes;
  *     @OA\Property(property="name", type="string", example="Spare Part" ),
  *     @OA\Property(property="purchasePrice", type="number", example="100.00" ),
  *     @OA\Property(property="salePrice", type="number", example="150.00" ),
- *     @OA\Property(property="stock", type="integer", example="10" )
  * )
  *
  */

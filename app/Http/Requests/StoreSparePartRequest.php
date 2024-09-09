@@ -10,7 +10,6 @@ class StoreSparePartRequest extends StoreRequest
             'name' => 'required|string',
             'purchasePrice' => 'required|numeric',
             'salePrice' => 'required|numeric',
-            'stock' => 'nullable|integer',
             'unit_id' => 'nullable|integer|exists:units,id',
         ];
     }

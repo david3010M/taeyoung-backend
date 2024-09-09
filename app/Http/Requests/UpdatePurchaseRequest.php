@@ -31,9 +31,9 @@ class UpdatePurchaseRequest extends UpdateRequest
             'quotation_id' => [
                 'nullable',
                 Rule::exists('quotations', 'id'),
-//                Rule::unique('orders', 'quotation_id')
-//                    ->where('type', 'purchase')
-//                    ->whereNull('deleted_at')
+                Rule::unique('orders', 'quotation_id')
+                    ->where('type', 'purchase')
+                    ->whereNull('deleted_at')
             ],
 
             'date' => 'required|date',

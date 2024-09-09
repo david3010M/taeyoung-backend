@@ -16,7 +16,7 @@ return new class extends Migration {
             $table->string('name');
             $table->decimal('purchasePrice');
             $table->decimal('salePrice');
-            $table->integer('stock')->nullable();
+            $table->integer('stock')->default(0);
 //            $table->string('description')->nullable();
             $table->foreignId('unit_id')->nullable()->default(1)->constrained('units');
             $table->timestamps();
