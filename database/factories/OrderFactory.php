@@ -17,13 +17,16 @@ class OrderFactory extends Factory
         $correlativo++;
         $correlativoFormatted = str_pad($correlativo, 8, '0', STR_PAD_LEFT);
 
+        $randomMethodPayNumber = $this->faker->numberBetween(1, 2);
+
         return [
             'number' => $correlativoFormatted,
             'date' => $this->faker->date(),
             'detail' => $this->faker->sentence(15),
 
             'documentType' => $this->faker->randomElement(['BOLETA', 'FACTURA']),
-            'paymentType' => $this->faker->randomElement(['cash', 'credit']),
+            'paymentType' => $randomMethodPayNumber == 1 ? 'CONTADO' : 'CREDITO',
+            'status' => $randomMethodPayNumber == 1 ? 'PAGADO' : 'PENDIENTE',
             'currencyType' => $this->faker->randomElement(['USD', 'PEN']),
 
             'totalMachinery' => $this->faker->randomFloat(2, 1000, 100000),

@@ -60,6 +60,7 @@ class OrderSeeder extends Seeder
                 'total' => $order->detailMachinery->sum('purchaseValue') + $order->detailSpareParts->sum('purchaseValue'),
                 'quotation_id' => $quotation->id,
                 'totalExpense' => $order->detailMachinery->sum('purchaseValue') + $order->detailSpareParts->sum('purchaseValue'),
+                'balance' => $order->status === 'PAGADO' ? 0 : $order->detailMachinery->sum('purchaseValue') + $order->detailSpareParts->sum('purchaseValue'),
             ]);
         }
 
@@ -109,6 +110,7 @@ class OrderSeeder extends Seeder
                 'total' => $order->detailMachinery->sum('saleValue') + $order->detailSpareParts->sum('saleValue'),
                 'quotation_id' => $quotation->id,
                 'totalIncome' => $order->detailMachinery->sum('saleValue') + $order->detailSpareParts->sum('saleValue'),
+                'balance' => $order->status === 'PAGADO' ? 0 : $order->detailMachinery->sum('saleValue') + $order->detailSpareParts->sum('saleValue'),
             ]);
         }
     }

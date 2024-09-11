@@ -1865,6 +1865,232 @@
                 ]
             }
         },
+        "/taeyoung-backend/public/api/sale": {
+            "get": {
+                "tags": [
+                    "Sale"
+                ],
+                "summary": "List Sales",
+                "description": "Returns a list of Sales.",
+                "operationId": "d530e15bc7d7c298aef01ee02edba0ed",
+                "parameters": [
+                    {
+                        "parameter": "page",
+                        "name": "page",
+                        "in": "query",
+                        "description": "Page number",
+                        "required": false,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    },
+                    {
+                        "parameter": "per_page",
+                        "name": "per_page",
+                        "in": "query",
+                        "description": "Items per page",
+                        "required": false,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    },
+                    {
+                        "parameter": "documentType",
+                        "name": "documentType",
+                        "in": "query",
+                        "description": "Document type",
+                        "required": false,
+                        "schema": {
+                            "type": "string",
+                            "enum": [
+                                "BOLETA",
+                                "FACTURA"
+                            ]
+                        }
+                    },
+                    {
+                        "parameter": "number",
+                        "name": "number",
+                        "in": "query",
+                        "description": "Sale number",
+                        "required": false,
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "parameter": "date",
+                        "name": "date[]",
+                        "in": "query",
+                        "description": "Sale date",
+                        "required": false,
+                        "schema": {
+                            "type": "array",
+                            "items": {
+                                "type": "string",
+                                "format": "date"
+                            }
+                        }
+                    },
+                    {
+                        "parameter": "client_id",
+                        "name": "client_id",
+                        "in": "query",
+                        "description": "Client ID",
+                        "required": false,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    },
+                    {
+                        "parameter": "client$filterName",
+                        "name": "client$filterName",
+                        "in": "query",
+                        "description": "Client name",
+                        "required": false,
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "parameter": "client$country_id",
+                        "name": "client$country_id",
+                        "in": "query",
+                        "description": "Client country ID",
+                        "required": false,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    },
+                    {
+                        "parameter": "sort",
+                        "name": "sort",
+                        "in": "query",
+                        "description": "Sort by column",
+                        "required": false,
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "parameter": "direction",
+                        "name": "direction",
+                        "in": "query",
+                        "description": "Sort direction",
+                        "required": false,
+                        "schema": {
+                            "type": "string",
+                            "enum": [
+                                "asc",
+                                "desc"
+                            ]
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Successful operation",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/Client"
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthenticated",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/Unauthenticated"
+                                }
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "Validation error",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ValidationError"
+                                }
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
+        "/taeyoung-backend/public/api/sale/{id}": {
+            "get": {
+                "tags": [
+                    "Sale"
+                ],
+                "summary": "Show Sale",
+                "description": "Returns a Sale.",
+                "operationId": "76c4e990956941dedf4ffc1f1646a04d",
+                "parameters": [
+                    {
+                        "parameter": "id",
+                        "name": "id",
+                        "in": "path",
+                        "description": "Purchase ID",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Successful operation",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/SaleResource"
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthenticated",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/Unauthenticated"
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Sale not found",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Sale not found"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
         "/taeyoung-backend/public/api/searchByDni/{dni}": {
             "get": {
                 "tags": [
@@ -4549,6 +4775,119 @@
                 },
                 "type": "object"
             },
+            "SaleResource": {
+                "title": "SaleResource",
+                "description": "Machinery Sale resource",
+                "properties": {
+                    "id": {
+                        "type": "integer",
+                        "example": "1"
+                    },
+                    "number": {
+                        "type": "string",
+                        "example": "COMPR-0001"
+                    },
+                    "date": {
+                        "type": "string",
+                        "format": "date",
+                        "example": "2024-08-19"
+                    },
+                    "detail": {
+                        "type": "string",
+                        "example": "This is a detail"
+                    },
+                    "paymentType": {
+                        "type": "string",
+                        "example": "Contado"
+                    },
+                    "currencyType": {
+                        "type": "string",
+                        "example": "USD"
+                    },
+                    "totalMachinery": {
+                        "type": "number",
+                        "example": "100"
+                    },
+                    "totalSpareParts": {
+                        "type": "number",
+                        "example": "100"
+                    },
+                    "subtotal": {
+                        "type": "number",
+                        "example": "100"
+                    },
+                    "igv": {
+                        "type": "number",
+                        "example": "18"
+                    },
+                    "discount": {
+                        "type": "number",
+                        "example": "0"
+                    },
+                    "total": {
+                        "type": "number",
+                        "example": "118"
+                    },
+                    "totalIncome": {
+                        "type": "number",
+                        "example": "0"
+                    },
+                    "totalExpense": {
+                        "type": "number",
+                        "example": "0"
+                    },
+                    "comment": {
+                        "type": "string",
+                        "example": "This is a comment"
+                    },
+                    "client_id": {
+                        "type": "integer",
+                        "example": "1"
+                    },
+                    "quotation_id": {
+                        "type": "integer",
+                        "example": "21"
+                    },
+                    "client": {
+                        "$ref": "#/components/schemas/Client"
+                    },
+                    "quotation": {
+                        "$ref": "#/components/schemas/Quotation"
+                    },
+                    "detailMachinery": {
+                        "type": "array",
+                        "items": {
+                            "$ref": "#/components/schemas/DetailMachineryResource"
+                        }
+                    },
+                    "detailSpareParts": {
+                        "type": "array",
+                        "items": {
+                            "$ref": "#/components/schemas/DetailSparePartResource"
+                        }
+                    }
+                },
+                "type": "object"
+            },
+            "SaleCollection": {
+                "title": "SaleCollection",
+                "description": "Sale resource collection",
+                "properties": {
+                    "data": {
+                        "type": "array",
+                        "items": {
+                            "$ref": "#/components/schemas/SaleResource"
+                        }
+                    },
+                    "links": {
+                        "$ref": "#/components/schemas/PaginationLinks"
+                    },
+                    "meta": {
+                        "$ref": "#/components/schemas/PaginationMeta"
+                    }
+                },
+                "type": "object"
+            },
             "SparePartResource": {
                 "title": "SparePartResource",
                 "properties": {
@@ -5074,5 +5413,55 @@
                 "scheme": "bearer"
             }
         }
-    }
+    },
+    "tags": [
+        {
+            "name": "Authentication",
+            "description": "Authentication"
+        },
+        {
+            "name": "Logs",
+            "description": "Logs"
+        },
+        {
+            "name": "Client",
+            "description": "Client"
+        },
+        {
+            "name": "PaymentConcept",
+            "description": "PaymentConcept"
+        },
+        {
+            "name": "Purchase",
+            "description": "Purchase"
+        },
+        {
+            "name": "Quotation",
+            "description": "Quotation"
+        },
+        {
+            "name": "Sale",
+            "description": "Sale"
+        },
+        {
+            "name": "Search",
+            "description": "Search"
+        },
+        {
+            "name": "Spare Parts",
+            "description": "Spare Parts"
+        },
+        {
+            "name": "Supplier",
+            "description": "Supplier"
+        },
+        {
+            "name": "Unit",
+            "description": "Unit"
+        },
+        {
+            "name": "User",
+            "description": "User"
+        }
+    ]
 }

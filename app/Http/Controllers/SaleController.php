@@ -27,7 +27,7 @@ class SaleController extends Controller
      *     @OA\Parameter(parameter="client$country_id", name="client$country_id", in="query", required=false, description="Client country ID", @OA\Schema(type="integer")),
      *     @OA\Parameter(parameter="sort", name="sort", in="query", required=false, description="Sort by column", @OA\Schema(type="string")),
      *     @OA\Parameter(parameter="direction", name="direction", in="query", required=false, description="Sort direction", @OA\Schema(type="string", enum={"asc", "desc"})),
-     *     @OA\Response(response=200, description="Successful operation", @OA\JsonContent(ref="#/components/schemas/ClientCollection")),
+     *     @OA\Response(response=200, description="Successful operation", @OA\JsonContent(ref="#/components/schemas/Client")),
      *     @OA\Response(response=401, description="Unauthenticated", @OA\JsonContent(ref="#/components/schemas/Unauthenticated")),
      *     @OA\Response(response=422, description="Validation error", @OA\JsonContent(ref="#/components/schemas/ValidationError")),
      * )
@@ -93,6 +93,19 @@ class SaleController extends Controller
 
     }
 
+    /**
+     * @OA\Get(
+     *     path="/taeyoung-backend/public/api/sale/{id}",
+     *     tags={"Sale"},
+     *     summary="Show Sale",
+     *     description="Returns a Sale.",
+     *     security={{"bearerAuth":{}}},
+     *     @OA\Parameter(parameter="id", name="id", in="path", required=true, description="Purchase ID", @OA\Schema(type="string")),
+     *     @OA\Response(response=200, description="Successful operation", @OA\JsonContent(ref="#/components/schemas/SaleResource")),
+     *     @OA\Response(response=401, description="Unauthenticated", @OA\JsonContent(ref="#/components/schemas/Unauthenticated")),
+     *     @OA\Response(response=404, description="Sale not found", @OA\JsonContent(type="object", @OA\Property(property="message", type="string", example="Sale not found")))
+     * )
+     */
     public function show(int $id)
     {
         $sale = Order::find($id);

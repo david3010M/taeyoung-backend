@@ -37,6 +37,7 @@ class UpdatePurchaseRequest extends UpdateRequest
                     ->ignore($this->route('purchase'))
             ],
 
+            'paymentType' => 'nullable|string|in:CONTADO,CREDITO', // CONTADO, CREDITO
             'documentType' => 'nullable|string|in:BOLETA,FACTURA', // BOLETA, FACTURA, TICKET
             'number' => [
                 'nullable',

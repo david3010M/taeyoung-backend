@@ -15,6 +15,7 @@ class Order extends Model
         'number',
         'date',
         'detail',
+        'status',
 
         'type',
         'documentType',
@@ -30,6 +31,7 @@ class Order extends Model
         'total',
         'totalIncome',
         'totalExpense',
+        'balance',
 
         'comment',
         'supplier_id',

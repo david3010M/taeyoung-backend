@@ -15,7 +15,7 @@ use Illuminate\Database\Eloquent\SoftDeletes;
  *     @OA\Property(property="date", type="string", format="date", example="2024-08-19"),
  *     @OA\Property(property="detail", type="string", example="This is a detail"),
  *     @OA\Property(property="currencyType", type="string", example="USD"),
- *     @OA\Property(property="paymentType", type="string", example="Contado"),
+ *     @OA\Property(property="paymentType", type="string", enum={"CONTADO", "CREDITO"}, example="CONTADO"),
  *     @OA\Property(property="totalMachinery", type="number", example="100"),
  *     @OA\Property(property="totalSpareParts", type="number", example="100"),
  *     @OA\Property(property="subtotal", type="number", example="100"),

@@ -38,6 +38,7 @@ class StorePurchaseRequest extends StoreRequest
                     ->whereNull('deleted_at')
             ],
 
+            'paymentType' => 'nullable|string|in:CONTADO,CREDITO', // CONTADO, CREDITO
             'documentType' => 'nullable|string|in:BOLETA,FACTURA', // BOLETA, FACTURA, TICKET
             'number' => 'required|string',
             'date' => 'required|date',

@@ -31,6 +31,7 @@ return new class extends Migration {
             $table->decimal('total')->nullable()->default(0);
             $table->decimal('totalIncome')->default(0);
             $table->decimal('totalExpense')->default(0);
+            $table->decimal('balance')->default(0);
 
             $table->string('comment')->nullable();
             $table->foreignId('supplier_id')->nullable()->unsigned()->constrained('people');
