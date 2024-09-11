@@ -3644,6 +3644,10 @@
                                 "spare_part_id": {
                                     "type": "integer",
                                     "example": "1"
+                                },
+                                "purchasePrice": {
+                                    "type": "number",
+                                    "example": "100"
                                 }
                             },
                             "type": "object"
@@ -3735,6 +3739,10 @@
                     "spare_part_id": {
                         "type": "integer",
                         "example": "1"
+                    },
+                    "salePrice": {
+                        "type": "number",
+                        "example": "100"
                     }
                 },
                 "type": "object"

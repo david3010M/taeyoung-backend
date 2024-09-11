@@ -89,12 +89,12 @@ class Quotation extends Model
 
     public function detailSpareParts()
     {
-        return $this->hasMany(DetailSparePart::class);
+        return $this->hasMany(DetailSparePart::class)->where('movementType', 'quotation');
     }
 
     public function detailMachinery()
     {
-        return $this->hasMany(DetailMachinery::class);
+        return $this->hasMany(DetailMachinery::class)->where('movementType', 'quotation');
     }
 
     public function orders()

@@ -22,7 +22,7 @@ class OrderFactory extends Factory
             'date' => $this->faker->date(),
             'detail' => $this->faker->sentence(15),
 
-            'documentType' => $this->faker->randomElement(['invoice', 'receipt']),
+            'documentType' => $this->faker->randomElement(['BOLETA', 'FACTURA']),
             'paymentType' => $this->faker->randomElement(['cash', 'credit']),
             'currencyType' => $this->faker->randomElement(['USD', 'PEN']),
 
@@ -48,6 +48,16 @@ class OrderFactory extends Factory
             return [
                 'type' => 'purchase',
                 'supplier_id' => $suppliers->random()->id,
+            ];
+        });
+    }
+
+    public function sale()
+    {
+        return $this->state(function (array $attributes) {
+            return [
+                'number' => $this->faker->unique()->numberBetween(10000000, 99999999),
+                'type' => 'sale',
             ];
         });
     }

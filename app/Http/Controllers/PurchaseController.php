@@ -37,7 +37,7 @@ class PurchaseController extends Controller
     public function index(IndexPurchaseRequest $request)
     {
         return $this->getFilteredResults(
-            Order::class,
+            Order::where('type', 'purchase'),
             $request,
             Order::filtersPurchase,
             Order::sortPurchase,
@@ -61,7 +61,7 @@ class PurchaseController extends Controller
      */
     public function store(StorePurchaseRequest $request)
     {
-        $dataQuotation = [
+        $dataPurchase = [
             'type' => 'purchase',
             'number' => $request->input('number'),
             'date' => $request->input('date'),
@@ -72,7 +72,7 @@ class PurchaseController extends Controller
             'quotation_id' => $request->input('quotation_id'),
         ];
 
-        $purchase = Order::create($dataQuotation);
+        $purchase = Order::create($dataPurchase);
         $totalMachinery = 0;
         $totalSpareParts = 0;
 

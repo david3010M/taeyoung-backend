@@ -57,11 +57,27 @@ class Order extends Model
         'supplier.country_id' => '=',
     ];
 
+    const filtersSale = [
+        'documentType' => '=',
+        'number' => 'like',
+        'date' => 'between',
+        'client_id' => '=',
+        'client.filterName' => 'like',
+        'client.country_id' => '=',
+    ];
+
     const sortPurchase = [
         'id',
         'number',
         'date',
         'supplier_id',
+    ];
+
+    const sortSale = [
+        'id',
+        'number',
+        'date',
+        'client_id',
     ];
 
 

@@ -22,6 +22,13 @@ class DetailMachineryFactory extends Factory
         ];
     }
 
+    public function quotation()
+    {
+        return $this->state([
+            'movementType' => 'quotation',
+        ]);
+    }
+
     public function purchase()
     {
         return $this->state([

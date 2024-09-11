@@ -13,6 +13,7 @@ use App\Http\Controllers\PaymentConceptController;
 use App\Http\Controllers\PdfController;
 use App\Http\Controllers\PersonController;
 use App\Http\Controllers\QuotationController;
+use App\Http\Controllers\SaleController;
 use App\Http\Controllers\SearchController;
 use App\Http\Controllers\SparePartController;
 use App\Http\Controllers\SupplierController;
@@ -241,6 +242,19 @@ Route::group(
                 'show' => 'paymentConcept.show',
                 'update' => 'paymentConcept.update',
                 'destroy' => 'paymentConcept.destroy',
+            ]
+        );
+
+//        SALE
+        Route::resource('sale', SaleController::class)->only(
+            ['index', 'show', 'store', 'update', 'destroy']
+        )->names(
+            [
+                'index' => 'sale.index',
+                'store' => 'sale.store',
+                'show' => 'sale.show',
+                'update' => 'sale.update',
+                'destroy' => 'sale.destroy',
             ]
         );
 

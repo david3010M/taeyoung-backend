@@ -13,9 +13,8 @@ class DetailMachinerySeeder extends Seeder
 //        PURCHASE
         $quotations = Quotation::all();
         foreach ($quotations as $quotation) {
-            $detailMachinery = DetailMachinery::factory()->sale()->create([
+            $detailMachinery = DetailMachinery::factory()->quotation()->create([
                 'quotation_id' => $quotation->id,
-                'movementType' => 'quotation'
             ]);
 
             $totalMachinery = $detailMachinery->saleValue;

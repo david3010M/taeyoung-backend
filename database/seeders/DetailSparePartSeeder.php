@@ -10,10 +10,9 @@ class DetailSparePartSeeder extends Seeder
 {
     public function run(): void
     {
-//        PURCHASE
         $quotations = Quotation::all();
         foreach ($quotations as $quotation) {
-            $detailSparePart = DetailSparePart::factory()->sale()->create([
+            $detailSparePart = DetailSparePart::factory()->quotation()->create([
                 'quotation_id' => $quotation->id,
             ]);
             $totalSparePart = $detailSparePart->saleValue;

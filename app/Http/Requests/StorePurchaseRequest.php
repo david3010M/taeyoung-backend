@@ -38,7 +38,7 @@ class StorePurchaseRequest extends StoreRequest
                     ->whereNull('deleted_at')
             ],
 
-            'documentType' => 'nullable|string', // BOLETA, FACTURA, TICKET
+            'documentType' => 'nullable|string|in:BOLETA,FACTURA', // BOLETA, FACTURA, TICKET
             'number' => 'required|string',
             'date' => 'required|date',
             'detail' => 'nullable|string',
