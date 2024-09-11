@@ -29,7 +29,8 @@ use Illuminate\Validation\Rule;
  *     schema="DetailSparePartRequest",
  *     required={"quantity", "spare_part_id"},
  *     @OA\Property(property="quantity", type="integer", example="1"),
- *     @OA\Property(property="spare_part_id", type="integer", example="1")
+ *     @OA\Property(property="spare_part_id", type="integer", example="1"),
+ *     @OA\Property(property="salePrice", type="number", example="100")
  * )
  *
  */
@@ -55,6 +56,7 @@ class StoreQuotationRequest extends StoreRequest
             'detailMachinery.*.salePrice' => 'required|numeric',
             'detailSpareParts' => 'required_without:detailMachinery|nullable|array',
             'detailSpareParts.*.quantity' => 'required|numeric',
+            'detailSpareParts.*.salePrice' => 'required|numeric',
             'detailSpareParts.*.spare_part_id' => 'required|exists:spare_parts,id',
         ];
     }

@@ -237,12 +237,11 @@ class QuotationController extends Controller
         }
 
         foreach ($detailSparePartsValidate as $detail) {
-            $sparePart = SparePart::find($detail['spare_part_id']);
             $detailSparePart = DetailSparePart::create([
                 'quantity' => $detail['quantity'],
                 'movementType' => 'quotation',
-                'salePrice' => $sparePart->salePrice,
-                'saleValue' => $sparePart->salePrice * $detail['quantity'],
+                'salePrice' => (float)$detail['salePrice'],
+                'saleValue' => (float)$detail['salePrice'] * $detail['quantity'],
                 'spare_part_id' => $detail['spare_part_id'],
                 'quotation_id' => $quotation->id,
             ]);

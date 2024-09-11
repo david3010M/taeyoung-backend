@@ -29,9 +29,9 @@ class StoreSupplierRequest extends StoreRequest
     public function rules(): array
     {
         return [
-            'typeDocument' => 'required|string|in:DNI,RUC',
+            'typeDocument' => 'required|string|in:DNI,RUC,OTRO',
             'dni' => [
-                'requiredIf:typeDocument,DNI',
+                'nullable',
                 'string',
                 'min:8',
                 'max:8',
@@ -40,7 +40,7 @@ class StoreSupplierRequest extends StoreRequest
                     ->whereNull('deleted_at')
             ],
             'ruc' => [
-                'requiredIf:typeDocument,RUC',
+                'nullable',
                 'string',
                 'min:11',
                 'max:11',

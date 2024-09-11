@@ -7,12 +7,8 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
 /**
- * - EL STOCK JAMAS SE DEBE EDITAR -> AGREGAR, REVERTIR EN COMPRA Y VENTA Y ELIMINAR
- * - EL PRECIO DEL REPUESTO TAMBIEN ES VARIABLE PARA EL DETAIL
- * - AGREGAR NUMERO DE BOLETA DE LA COMPRA, O UNA FACTURA (NUMERO)
  * - CUENTAS POR COBRAR Y CUENTAS POR PAGAR
  * - GASTOS DE VENTA(LO QUE VENDIO) COMPRA(LO QUE COMPRPO) Y OPERACIONES(LO QUE GASTO ADEMÁS DE COMPRA Y VENTA)
- * - TIPO DE DOCUMENTO OTRO
  * - COMPRA PAGADO, SALDO, ESTADO
  * - COMPRA: ESTADOS = PENDIENTE, PAGADO, ANULADO
  */
@@ -66,6 +62,17 @@ class DetailSparePart extends Model
         'order_id',
         'spare_part_id',
     ];
+
+    public static function boot()
+    {
+        parent::boot();
+        static::saved(function ($model) {
+            $model->sparePart->update([
+                'purchasePrice' => $model->purchasePrice && $model->purchasePrice > 0 ? $model->purchasePrice : $model->sparePart->purchasePrice,
+                'salePrice' => $model->salePrice && $model->salePrice > 0 ? $model->salePrice : $model->sparePart->salePrice,
+            ]);
+        });
+    }
 
     public function order()
     {

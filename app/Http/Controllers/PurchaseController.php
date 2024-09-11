@@ -63,7 +63,7 @@ class PurchaseController extends Controller
     {
         $dataQuotation = [
             'type' => 'purchase',
-            'number' => $this->nextCorrelativeQuery(Order::where('type', 'purchase'), 'number'),
+            'number' => $request->input('number'),
             'date' => $request->input('date'),
             'detail' => $request->input('detail'),
 //            'discount' => $request->input('discount'),
@@ -148,12 +148,16 @@ class PurchaseController extends Controller
         $purchase = Order::find($id);
         if (!$purchase) return response()->json(['message' => 'Purchase not found'], 404);
 
-        $purchase->date = $request->input('date');
-        $purchase->detail = $request->input('detail');
-//        $purchase->discount = $request->input('discount');
-        $purchase->currencyType = $request->input('currencyType');
-        $purchase->supplier_id = $request->input('supplier_id');
-        $purchase->quotation_id = $request->input('quotation_id');
+        $data = [
+            'date' => $request->input('date') ?? $purchase->date,
+            'detail' => $request->input('detail') ?? $purchase->detail,
+            'documentType' => $request->input('documentType') ?? $purchase->documentType,
+            'number' => $request->input('number') ?? $purchase->number,
+            'currencyType' => $request->input('currencyType') ?? $purchase->currencyType,
+            'supplier_id' => $request->input('supplier_id') ?? $purchase->supplier_id,
+            'quotation_id' => $request->input('quotation_id') ?? $purchase->quotation_id,
+        ];
+        $purchase->update($data);
 
         $totalMachinery = 0;
         $totalSpareParts = 0;
@@ -230,8 +234,8 @@ class PurchaseController extends Controller
             $detailSparePart = DetailSparePart::create([
                 'quantity' => $detail['quantity'],
                 'movementType' => 'quotation',
-                'purchasePrice' => $sparePart->purchasePrice,
-                'purchaseValue' => $sparePart->purchasePrice * $detail['quantity'],
+                'purchasePrice' => (float)$detail['purchasePrice'],
+                'purchaseValue' => (float)$detail['purchasePrice'] * $detail['quantity'],
                 'spare_part_id' => $detail['spare_part_id'],
                 'order_id' => $order->id,
             ]);

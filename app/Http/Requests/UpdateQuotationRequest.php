@@ -30,6 +30,7 @@ class UpdateQuotationRequest extends UpdateRequest
                 'nullable',
                 Rule::exists('people', 'id')
                     ->where('type', 'client')
+                    ->whereNull('deleted_at')
             ],
             'detailMachinery' => 'nullable|array',
             'detailMachinery.*.description' => 'required|string',
@@ -37,6 +38,7 @@ class UpdateQuotationRequest extends UpdateRequest
             'detailMachinery.*.salePrice' => 'required|numeric',
             'detailSpareParts' => 'nullable|array',
             'detailSpareParts.*.quantity' => 'required|numeric',
+            'detailSpareParts.*.salePrice' => 'required|numeric',
             'detailSpareParts.*.spare_part_id' => 'required|exists:spare_parts,id',
         ];
     }

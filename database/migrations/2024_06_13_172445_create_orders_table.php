@@ -15,6 +15,7 @@ return new class extends Migration {
             $table->string('number');
             $table->date('date');
             $table->string('detail')->nullable(); // TEXT LIBRE
+            $table->string('status')->default('PENDIENTE'); // PENDIENTE, PAGADO, ANULADO
 
             $table->string('type'); // purchase, sale
             $table->string('documentType')->nullable(); // BOLETA, FACTURA, TICKET

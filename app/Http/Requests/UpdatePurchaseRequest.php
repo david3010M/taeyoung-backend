@@ -34,8 +34,18 @@ class UpdatePurchaseRequest extends UpdateRequest
                 Rule::unique('orders', 'quotation_id')
                     ->where('type', 'purchase')
                     ->whereNull('deleted_at')
+                    ->ignore($this->route('purchase'))
             ],
 
+            'documentType' => 'nullable|string', // BOLETA, FACTURA, TICKET
+            'number' => [
+                'nullable',
+                'string',
+                Rule::unique('orders', 'number')
+                    ->where('type', 'purchase')
+                    ->whereNull('deleted_at')
+                    ->ignore($this->route('purchase'))
+            ],
             'date' => 'required|date',
             'detail' => 'nullable|string',
 
@@ -52,6 +62,7 @@ class UpdatePurchaseRequest extends UpdateRequest
             'detailMachinery.*.purchasePrice' => 'required|numeric',
             'detailSpareParts' => 'required_without:detailMachinery|nullable|array',
             'detailSpareParts.*.quantity' => 'required|numeric',
+            'detailSpareParts.*.purchasePrice' => 'required|numeric',
             'detailSpareParts.*.spare_part_id' => 'required|exists:spare_parts,id',
         ];
     }

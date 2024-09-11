@@ -21,6 +21,7 @@ use Illuminate\Validation\Rule;
  *     @OA\Property(property="detailSpareParts", type="array", @OA\Items(
  *         @OA\Property(property="quantity", type="integer", example="2"),
  *         @OA\Property(property="spare_part_id", type="integer", example="1"),
+ *         @OA\Property(property="purchasePrice", type="number", example="100"),
  *     )),
  * )
  */
@@ -37,6 +38,8 @@ class StorePurchaseRequest extends StoreRequest
                     ->whereNull('deleted_at')
             ],
 
+            'documentType' => 'nullable|string', // BOLETA, FACTURA, TICKET
+            'number' => 'required|string',
             'date' => 'required|date',
             'detail' => 'nullable|string',
 
@@ -53,6 +56,7 @@ class StorePurchaseRequest extends StoreRequest
             'detailMachinery.*.purchasePrice' => 'required|numeric',
             'detailSpareParts' => 'required_without:detailMachinery|nullable|array',
             'detailSpareParts.*.quantity' => 'required|numeric',
+            'detailSpareParts.*.purchasePrice' => 'required|numeric',
             'detailSpareParts.*.spare_part_id' => 'required|exists:spare_parts,id',
         ];
     }

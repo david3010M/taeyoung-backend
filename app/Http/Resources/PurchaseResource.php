@@ -50,10 +50,11 @@ class PurchaseResource extends JsonResource
     {
         return [
             'id' => $this->id,
-            'number' => "COMPR-" . $this->number,
+            'number' => $this->number,
             'date' => Carbon::parse($this->date)->format('Y-m-d'),
             'detail' => $this->detail,
 
+            'documentType' => $this->documentType,
             'paymentType' => $this->paymentType,
             'currencyType' => $this->currencyType,
             'totalMachinery' => round($this->totalMachinery, 2),

@@ -4989,10 +4989,6 @@
                     "salePrice": {
                         "type": "number",
                         "example": "150.00"
-                    },
-                    "stock": {
-                        "type": "integer",
-                        "example": "10"
                     }
                 },
                 "type": "object"
