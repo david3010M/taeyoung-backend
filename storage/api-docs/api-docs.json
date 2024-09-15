@@ -5278,7 +5278,11 @@
                     },
                     "paymentType": {
                         "type": "string",
-                        "example": "Contado"
+                        "enum": [
+                            "CONTADO",
+                            "CREDITO"
+                        ],
+                        "example": "CONTADO"
                     },
                     "totalMachinery": {
                         "type": "number",
@@ -5413,55 +5417,5 @@
                 "scheme": "bearer"
             }
         }
-    },
-    "tags": [
-        {
-            "name": "Authentication",
-            "description": "Authentication"
-        },
-        {
-            "name": "Logs",
-            "description": "Logs"
-        },
-        {
-            "name": "Client",
-            "description": "Client"
-        },
-        {
-            "name": "PaymentConcept",
-            "description": "PaymentConcept"
-        },
-        {
-            "name": "Purchase",
-            "description": "Purchase"
-        },
-        {
-            "name": "Quotation",
-            "description": "Quotation"
-        },
-        {
-            "name": "Sale",
-            "description": "Sale"
-        },
-        {
-            "name": "Search",
-            "description": "Search"
-        },
-        {
-            "name": "Spare Parts",
-            "description": "Spare Parts"
-        },
-        {
-            "name": "Supplier",
-            "description": "Supplier"
-        },
-        {
-            "name": "Unit",
-            "description": "Unit"
-        },
-        {
-            "name": "User",
-            "description": "User"
-        }
-    ]
+    }
 }

@@ -241,7 +241,6 @@ class PurchaseController extends Controller
             ]);
 
             $sparePart->stock += $detailSparePart->quantity;
-
             $totalSpareParts += $detailSparePart->purchaseValue;
         }
         return $totalSpareParts;

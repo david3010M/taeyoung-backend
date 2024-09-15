@@ -29,7 +29,7 @@ class PaymentConceptResource extends JsonResource
     {
         return [
             'id' => $this->id,
-            'number' => "CONC" . $this->number,
+            'number' => "CONC-" . $this->number,
             'name' => $this->name,
             'type' => $this->type,
         ];

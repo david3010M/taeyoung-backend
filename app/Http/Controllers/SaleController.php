@@ -3,9 +3,14 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\IndexSaleRequest;
+use App\Http\Requests\StoreSaleRequest;
 use App\Http\Resources\SaleResource;
+use App\Models\AccountReceivable;
 use App\Models\DetailMachinery;
+use App\Models\DetailSparePart;
 use App\Models\Order;
+use App\Models\SparePart;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 
 class SaleController extends Controller
@@ -43,17 +48,17 @@ class SaleController extends Controller
         );
     }
 
-    public function store(Request $request)
+    public function store(StoreSaleRequest $request)
     {
         $dataSale = [
             'type' => 'sale',
-            'number' => $request->input('number'),
+            'number' => $this->nextCorrelativeQuery(Order::where('type', 'sale'), 'number'),
             'date' => $request->input('date'),
-            'detail' => $request->input('detail'),
-//            'discount' => $request->input('discount'),
-            'currencyType' => $request->input('currencyType'),
-            'supplier_id' => $request->input('supplier_id'),
+            'documentType' => $request->input('documentType'),
+            'paymentType' => $request->input('paymentType'),
             'quotation_id' => $request->input('quotation_id'),
+            'client_id' => $request->input('client_id'),
+            'currencyType' => $request->input('currencyType', 'PEN'),
         ];
 
         $sale = Order::create($dataSale);
@@ -81,12 +86,27 @@ class SaleController extends Controller
             $totalSpareParts = $this->addDetailSpareParts($detailSpares, $sale);
         }
 
-        $sale->totalMachinery = $totalMachinery;
         $sale->totalSpareParts = $totalSpareParts;
+        $sale->totalMachinery = $totalMachinery;
         $sale->subtotal = $totalMachinery + $totalSpareParts;
-        $sale->total = $totalMachinery + $totalSpareParts;
-        $sale->totalExpense = $totalMachinery + $totalSpareParts;
+        $sale->igv = $sale->subtotal * 0.18;
+        $sale->discount = $request->input('discount', 0);
+        $sale->total = $sale->subtotal + $sale->igv - $sale->discount;
+        $sale->totalIncome = $sale->total;
+
+        $quotas = $request->input('quotas');
+        $sumQuotas = array_sum(array_column($quotas, 'amount'));
+        if ($sumQuotas != $sale->total) return response()->json(['error' => 'La suma de las cuotas no coincide con el total'], 422);
         $sale->save();
+
+        foreach ($quotas as $quota) {
+            AccountReceivable::create([
+                'days' => $quota['days'],
+                'date' => Carbon::parse($sale->date)->addDays($quota['days']),
+                'amount' => $quota['amount'],
+                'order_id' => $sale->id,
+            ]);
+        }
 
         $sale = Order::find($sale->id);
         return response()->json(new SaleResource($sale));
@@ -121,5 +141,33 @@ class SaleController extends Controller
     public function destroy(int $id)
     {
         //
+    }
+
+    private function addDetailSpareParts(mixed $detailSpareParts, $order)
+    {
+        $detailSparePartsValidate = [];
+        $totalSpareParts = 0;
+        foreach ($detailSpareParts as $detail) {
+            if (array_key_exists($detail['spare_part_id'], $detailSparePartsValidate)) {
+                $detailSparePartsValidate[$detail['spare_part_id']]['quantity'] += $detail['quantity'];
+            } else {
+                $detailSparePartsValidate[$detail['spare_part_id']] = $detail;
+            }
+        }
+
+        foreach ($detailSparePartsValidate as $detail) {
+            $sparePart = SparePart::find($detail['spare_part_id']);
+            $detailSparePart = DetailSparePart::create([
+                'quantity' => $detail['quantity'],
+                'movementType' => 'sale',
+                'salePrice' => (float)$detail['salePrice'],
+                'saleValue' => (float)$detail['salePrice'] * $detail['quantity'],
+                'spare_part_id' => $detail['spare_part_id'],
+                'order_id' => $order->id,
+            ]);
+            $sparePart->stock -= $detail['quantity'];
+            $totalSpareParts += $detailSparePart->saleValue;
+        }
+        return $totalSpareParts;
     }
 }

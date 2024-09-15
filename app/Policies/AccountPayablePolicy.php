@@ -2,11 +2,11 @@
 
 namespace App\Policies;
 
-use App\Models\Currency;
-use App\Models\User;
 use Illuminate\Auth\Access\Response;
+use App\Models\AccountPayable;
+use App\Models\User;
 
-class CurrencyPolicy
+class AccountPayablePolicy
 {
     /**
      * Determine whether the user can view any models.
@@ -19,7 +19,7 @@ class CurrencyPolicy
     /**
      * Determine whether the user can view the model.
      */
-    public function view(User $user, Currency $currency): bool
+    public function view(User $user, AccountPayable $accountPayable): bool
     {
         //
     }
@@ -35,7 +35,7 @@ class CurrencyPolicy
     /**
      * Determine whether the user can update the model.
      */
-    public function update(User $user, Currency $currency): bool
+    public function update(User $user, AccountPayable $accountPayable): bool
     {
         //
     }
@@ -43,7 +43,7 @@ class CurrencyPolicy
     /**
      * Determine whether the user can delete the model.
      */
-    public function delete(User $user, Currency $currency): bool
+    public function delete(User $user, AccountPayable $accountPayable): bool
     {
         //
     }
@@ -51,7 +51,7 @@ class CurrencyPolicy
     /**
      * Determine whether the user can restore the model.
      */
-    public function restore(User $user, Currency $currency): bool
+    public function restore(User $user, AccountPayable $accountPayable): bool
     {
         //
     }
@@ -59,7 +59,7 @@ class CurrencyPolicy
     /**
      * Determine whether the user can permanently delete the model.
      */
-    public function forceDelete(User $user, Currency $currency): bool
+    public function forceDelete(User $user, AccountPayable $accountPayable): bool
     {
         //
     }

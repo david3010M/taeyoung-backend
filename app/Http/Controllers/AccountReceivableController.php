@@ -2,11 +2,12 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Commitment;
-use App\Http\Requests\StoreCommitmentRequest;
-use App\Http\Requests\UpdateCommitmentRequest;
+use App\Models\AccountReceivable;
+use App\Http\Controllers\Controller;
+use App\Http\Requests\StoreAccountReceivableRequest;
+use App\Http\Requests\UpdateAccountReceivableRequest;
 
-class CommitmentController extends Controller
+class AccountReceivableController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -27,7 +28,7 @@ class CommitmentController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(StoreCommitmentRequest $request)
+    public function store(StoreAccountReceivableRequest $request)
     {
         //
     }
@@ -35,7 +36,7 @@ class CommitmentController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(Commitment $commitment)
+    public function show(AccountReceivable $accountReceivable)
     {
         //
     }
@@ -43,7 +44,7 @@ class CommitmentController extends Controller
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(Commitment $commitment)
+    public function edit(AccountReceivable $accountReceivable)
     {
         //
     }
@@ -51,7 +52,7 @@ class CommitmentController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(UpdateCommitmentRequest $request, Commitment $commitment)
+    public function update(UpdateAccountReceivableRequest $request, AccountReceivable $accountReceivable)
     {
         //
     }
@@ -59,7 +60,7 @@ class CommitmentController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(Commitment $commitment)
+    public function destroy(AccountReceivable $accountReceivable)
     {
         //
     }
