@@ -108,4 +108,9 @@ class Order extends Model
         return $this->hasMany(DetailSparePart::class);
     }
 
+    public function accountReceivable()
+    {
+        return $this->hasMany(AccountReceivable::class);
+    }
+
 }

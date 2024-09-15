@@ -60,7 +60,7 @@ class SaleResource extends JsonResource
             'balance' => round($this->balance, 2),
             'status' => $this->status,
 
-            
+
             'detail' => $this->detail,
 
             'currencyType' => $this->currencyType,
@@ -79,6 +79,7 @@ class SaleResource extends JsonResource
             'client_id' => $this->client_id,
             'quotation_id' => $this->quotation_id,
 
+            'accountReceivable' => new AccountReceivableResource($this->accountReceivable),
             'quotation' => new SingleQuotationResource($this->quotation),
             'detailMachinery' => DetailMachineryResource::collection($this->detailMachinery),
             'detailSpareParts' => DetailSparePartResource::collection($this->detailSpareParts),

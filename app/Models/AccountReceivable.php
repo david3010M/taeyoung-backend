@@ -15,6 +15,7 @@ class AccountReceivable extends Model
         'days',
         'date',
         'amount',
+        'balance',
         'status',
         'client_id',
         'currency_id',

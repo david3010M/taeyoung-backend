@@ -94,18 +94,37 @@ class SaleController extends Controller
         $sale->total = $sale->subtotal + $sale->igv - $sale->discount;
         $sale->totalIncome = $sale->total;
 
-        $quotas = $request->input('quotas');
-        $sumQuotas = array_sum(array_column($quotas, 'amount'));
-        if ($sumQuotas != $sale->total) return response()->json(['error' => 'La suma de las cuotas no coincide con el total'], 422);
-        $sale->save();
-
-        foreach ($quotas as $quota) {
+        if ($request->input('paymentType') == 'CONTADO') {
+            $sale->save();
             AccountReceivable::create([
-                'days' => $quota['days'],
-                'date' => Carbon::parse($sale->date)->addDays($quota['days']),
-                'amount' => $quota['amount'],
+                'days' => 0,
+                'date' => $sale->date,
+                'amount' => $sale->total,
+                'balance' => $sale->total,
                 'order_id' => $sale->id,
+                'client_id' => $sale->client_id,
             ]);
+        } else {
+            $quotas = $request->input('quotas');
+            $sumQuotas = array_sum(array_column($quotas, 'amount'));
+            if ($sumQuotas != $sale->total) {
+                $sale->detailMachinery()->delete();
+                $sale->detailSpareParts()->delete();
+                $sale->delete();
+                return response()->json(['error' => 'La suma de las cuotas no coincide con el total, saldo de ' . ($sale->total - $sumQuotas)], 422);
+            }
+            $sale->save();
+
+            foreach ($quotas as $quota) {
+                AccountReceivable::create([
+                    'days' => $quota['days'],
+                    'date' => Carbon::parse($sale->date)->addDays($quota['days']),
+                    'amount' => $quota['amount'],
+                    'balance' => $quota['amount'],
+                    'order_id' => $sale->id,
+                    'client_id' => $sale->client_id,
+                ]);
+            }
         }
 
         $sale = Order::find($sale->id);
@@ -128,7 +147,7 @@ class SaleController extends Controller
      */
     public function show(int $id)
     {
-        $sale = Order::find($id);
+        $sale = Order::where('type', 'sale')->find($id);
         if (!$sale) return response()->json(['message' => 'Sale not found'], 404);
         return response()->json(new SaleResource($sale));
     }
@@ -157,6 +176,9 @@ class SaleController extends Controller
 
         foreach ($detailSparePartsValidate as $detail) {
             $sparePart = SparePart::find($detail['spare_part_id']);
+            if ($sparePart->stock < $detail['quantity']) {
+                return response()->json(['error' => 'No hay stock suficiente para el repuesto ' . $sparePart->name], 422);
+            }
             $detailSparePart = DetailSparePart::create([
                 'quantity' => $detail['quantity'],
                 'movementType' => 'sale',
@@ -167,6 +189,7 @@ class SaleController extends Controller
             ]);
             $sparePart->stock -= $detail['quantity'];
             $totalSpareParts += $detailSparePart->saleValue;
+            $sparePart->save();
         }
         return $totalSpareParts;
     }

@@ -15,9 +15,10 @@ return new class extends Migration {
             $table->integer('days');
             $table->date('date');
             $table->decimal('amount');
+            $table->decimal('balance');
             $table->string('status')->default('PENDIENTE');
             $table->foreignId('client_id')->constrained('people');
-            $table->foreignId('currency_id')->constrained();
+            $table->foreignId('currency_id')->nullable()->constrained();
             $table->foreignId('order_id')->constrained();
             $table->timestamps();
             $table->softDeletes();

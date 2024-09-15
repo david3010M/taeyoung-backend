@@ -121,9 +121,9 @@ class PurchaseController extends Controller
      *     @OA\Response(response=404, description="Purchase not found", @OA\JsonContent(type="object", @OA\Property(property="message", type="string", example="Purchase not found")))
      * )
      */
-    public function show(string $id)
+    public function show(int $id)
     {
-        $purchase = Order::find($id);
+        $purchase = Order::where('type', 'purchase')->find($id);
         if (!$purchase) return response()->json(['message' => 'Purchase not found'], 404);
         return response()->json(new PurchaseResource($purchase));
     }
@@ -242,6 +242,7 @@ class PurchaseController extends Controller
 
             $sparePart->stock += $detailSparePart->quantity;
             $totalSpareParts += $detailSparePart->purchaseValue;
+            $sparePart->save();
         }
         return $totalSpareParts;
     }
