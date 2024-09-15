@@ -30,6 +30,7 @@ class SaleController extends Controller
      *     @OA\Parameter(parameter="client_id", name="client_id", in="query", required=false, description="Client ID", @OA\Schema(type="integer")),
      *     @OA\Parameter(parameter="client$filterName", name="client$filterName", in="query", required=false, description="Client name", @OA\Schema(type="string")),
      *     @OA\Parameter(parameter="client$country_id", name="client$country_id", in="query", required=false, description="Client country ID", @OA\Schema(type="integer")),
+     *     @OA\Parameter(parameter="quotation_id", name="quotation_id", in="query", required=false, description="Quotation ID", @OA\Schema(type="integer")),
      *     @OA\Parameter(parameter="sort", name="sort", in="query", required=false, description="Sort by column", @OA\Schema(type="string")),
      *     @OA\Parameter(parameter="direction", name="direction", in="query", required=false, description="Sort direction", @OA\Schema(type="string", enum={"asc", "desc"})),
      *     @OA\Response(response=200, description="Successful operation", @OA\JsonContent(ref="#/components/schemas/Client")),
@@ -48,6 +49,18 @@ class SaleController extends Controller
         );
     }
 
+    /**
+     * @OA\Post(
+     *     path="/taeyoung-backend/public/api/sale",
+     *     tags={"Sale"},
+     *     summary="Store Sale",
+     *     description="Stores a Sale.",
+     *     security={{"bearerAuth":{}}},
+     *     @OA\RequestBody(required=true, description="Sale data", @OA\JsonContent(ref="#/components/schemas/StoreSaleRequest")),
+     *     @OA\Response(response=200, description="Successful operation", @OA\JsonContent(ref="#/components/schemas/SaleResource")),
+     *     @OA\Response(response=422, description="Validation error", @OA\JsonContent(ref="#/components/schemas/ValidationError"))
+     * )
+     */
     public function store(StoreSaleRequest $request)
     {
         $dataSale = [

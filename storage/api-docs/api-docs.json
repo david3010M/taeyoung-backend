@@ -1963,6 +1963,16 @@
                         }
                     },
                     {
+                        "parameter": "quotation_id",
+                        "name": "quotation_id",
+                        "in": "query",
+                        "description": "Quotation ID",
+                        "required": false,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    },
+                    {
                         "parameter": "sort",
                         "name": "sort",
                         "in": "query",
@@ -2004,6 +2014,52 @@
                             "application/json": {
                                 "schema": {
                                     "$ref": "#/components/schemas/Unauthenticated"
+                                }
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "Validation error",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ValidationError"
+                                }
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            },
+            "post": {
+                "tags": [
+                    "Sale"
+                ],
+                "summary": "Store Sale",
+                "description": "Stores a Sale.",
+                "operationId": "8d483a26901987969ee3fd0a21efd07f",
+                "requestBody": {
+                    "description": "Sale data",
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/StoreSaleRequest"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Successful operation",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/SaleResource"
                                 }
                             }
                         }
@@ -3969,6 +4025,113 @@
                     "salePrice": {
                         "type": "number",
                         "example": "100"
+                    }
+                },
+                "type": "object"
+            },
+            "StoreSaleRequest": {
+                "title": "StoreSaleRequest",
+                "required": [
+                    "date",
+                    "documentType",
+                    "paymentType",
+                    "quotas",
+                    "client_id",
+                    "detailMachinery|detailSpareParts"
+                ],
+                "properties": {
+                    "date": {
+                        "type": "string",
+                        "format": "date",
+                        "example": "2024-08-04"
+                    },
+                    "documentType": {
+                        "type": "string",
+                        "enum": [
+                            "BOLETA",
+                            "FACTURA"
+                        ],
+                        "example": "BOLETA"
+                    },
+                    "paymentType": {
+                        "type": "string",
+                        "enum": [
+                            "CONTADO",
+                            "CREDITO"
+                        ],
+                        "example": "CREDITO"
+                    },
+                    "quotation_id": {
+                        "type": "integer",
+                        "example": "21"
+                    },
+                    "client_id": {
+                        "type": "integer",
+                        "example": "21"
+                    },
+                    "currencyType": {
+                        "type": "string",
+                        "example": "PEN"
+                    },
+                    "discount": {
+                        "type": "number",
+                        "example": "100"
+                    },
+                    "quotas": {
+                        "type": "array",
+                        "items": {
+                            "properties": {
+                                "days": {
+                                    "type": "integer",
+                                    "example": "7"
+                                },
+                                "amount": {
+                                    "type": "number",
+                                    "example": "14378.6"
+                                }
+                            },
+                            "type": "object"
+                        }
+                    },
+                    "detailMachinery": {
+                        "type": "array",
+                        "items": {
+                            "properties": {
+                                "description": {
+                                    "type": "string",
+                                    "example": "Machinery description"
+                                },
+                                "quantity": {
+                                    "type": "integer",
+                                    "example": "2"
+                                },
+                                "salePrice": {
+                                    "type": "number",
+                                    "example": "4000"
+                                }
+                            },
+                            "type": "object"
+                        }
+                    },
+                    "detailSpareParts": {
+                        "type": "array",
+                        "items": {
+                            "properties": {
+                                "quantity": {
+                                    "type": "integer",
+                                    "example": "4"
+                                },
+                                "salePrice": {
+                                    "type": "number",
+                                    "example": "767.5"
+                                },
+                                "spare_part_id": {
+                                    "type": "integer",
+                                    "example": "1"
+                                }
+                            },
+                            "type": "object"
+                        }
                     }
                 },
                 "type": "object"

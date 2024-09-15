@@ -15,6 +15,7 @@ class IndexSaleRequest extends IndexRequest
             'client_id' => 'nullable|integer',
             'client$filterName' => 'nullable|string',
             'client$country_id' => 'nullable|integer',
+            'quotation_id' => 'nullable|integer',
         ];
     }
 }

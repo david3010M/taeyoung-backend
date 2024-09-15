@@ -57,6 +57,8 @@ class Order extends Model
         'supplier_id' => '=',
         'supplier.filterName' => 'like',
         'supplier.country_id' => '=',
+        'quotation_id' => '=',
+        'status' => '=',
     ];
 
     const filtersSale = [
@@ -66,6 +68,8 @@ class Order extends Model
         'client_id' => '=',
         'client.filterName' => 'like',
         'client.country_id' => '=',
+        'quotation_id' => '=',
+        'status' => '=',
     ];
 
     const sortPurchase = [
