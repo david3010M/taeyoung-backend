@@ -96,7 +96,13 @@ class SaleController extends Controller
         }
 
         if ($detailSpares) {
-            $totalSpareParts = $this->addDetailSpareParts($detailSpares, $sale);
+            $totalDetailsSpareParts = $this->addDetailSpareParts($detailSpares, $sale);
+            if (!$totalDetailsSpareParts['success']) {
+                $sale->detailMachinery()->delete();
+                $sale->delete();
+                return response()->json(['error' => $totalDetailsSpareParts['message']], 422);
+            }
+            $totalSpareParts = $totalDetailsSpareParts["totalSpareParts"];
         }
 
         $sale->totalSpareParts = $totalSpareParts;
@@ -179,6 +185,7 @@ class SaleController extends Controller
     {
         $detailSparePartsValidate = [];
         $totalSpareParts = 0;
+
         foreach ($detailSpareParts as $detail) {
             if (array_key_exists($detail['spare_part_id'], $detailSparePartsValidate)) {
                 $detailSparePartsValidate[$detail['spare_part_id']]['quantity'] += $detail['quantity'];
@@ -190,7 +197,10 @@ class SaleController extends Controller
         foreach ($detailSparePartsValidate as $detail) {
             $sparePart = SparePart::find($detail['spare_part_id']);
             if ($sparePart->stock < $detail['quantity']) {
-                return response()->json(['error' => 'No hay stock suficiente para el repuesto ' . $sparePart->name], 422);
+                return [
+                    'success' => false,
+                    'message' => 'No hay stock suficiente para el repuesto ' . $sparePart->name . ' (id: ' . $sparePart->id . ')' . ' (Stock actual: ' . $sparePart->stock . ')'
+                ];
             }
             $detailSparePart = DetailSparePart::create([
                 'quantity' => $detail['quantity'],
@@ -204,6 +214,11 @@ class SaleController extends Controller
             $totalSpareParts += $detailSparePart->saleValue;
             $sparePart->save();
         }
-        return $totalSpareParts;
+
+        return [
+            'success' => true,
+            'totalSpareParts' => $totalSpareParts
+        ];
     }
+
 }
