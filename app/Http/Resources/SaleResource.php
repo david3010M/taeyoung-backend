@@ -54,7 +54,7 @@ class SaleResource extends JsonResource
             'date' => Carbon::parse($this->date)->format('Y-m-d'),
             'documentType' => $this->documentType,
             'paymentType' => $this->paymentType,
-            'number' => $this->number,
+            'number' => "VENT-" . $this->number,
             'client' => (new ClientResource($this->client))->filterName,
             'total' => round($this->total, 2),
             'balance' => round($this->balance, 2),

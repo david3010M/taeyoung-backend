@@ -59,7 +59,6 @@ class OrderFactory extends Factory
     {
         return $this->state(function (array $attributes) {
             return [
-                'number' => $this->faker->unique()->numberBetween(10000000, 99999999),
                 'type' => 'sale',
             ];
         });
