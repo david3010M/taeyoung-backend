@@ -30,7 +30,8 @@ class AccountReceivable extends Model
 
     protected $casts = [
         'date' => 'date:Y-m-d',
-        'amount' => 'decimal:2',
+        'amount' => 'float',
+        'balance' => 'float',
     ];
 
     public function client()

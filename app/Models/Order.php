@@ -117,4 +117,9 @@ class Order extends Model
         return $this->hasMany(AccountReceivable::class);
     }
 
+    public function accountPayable()
+    {
+        return $this->hasMany(AccountPayable::class);
+    }
+
 }

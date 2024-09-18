@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\IndexSaleRequest;
 use App\Http\Requests\StoreSaleRequest;
+use App\Http\Requests\UpdateSaleRequest;
 use App\Http\Resources\SaleResource;
 use App\Models\AccountReceivable;
 use App\Models\DetailMachinery;
@@ -171,14 +172,107 @@ class SaleController extends Controller
         return response()->json(new SaleResource($sale));
     }
 
-    public function update(Request $request, int $id)
+    public function update(UpdateSaleRequest $request, int $id)
     {
-        //
+        $sale = Order::where('type', 'sale')->find($id);
+        if (!$sale) return response()->json(['message' => 'Sale not found'], 404);
+
+        $data = [
+            'date' => $request->input('date', $sale->date),
+            'documentType' => $request->input('documentType', $sale->documentType),
+            'paymentType' => $request->input('paymentType', $sale->paymentType),
+            'quotation_id' => $request->input('quotation_id', $sale->quotation_id),
+            'client_id' => $request->input('client_id', $sale->client_id),
+            'currencyType' => $request->input('currencyType', 'PEN'),
+        ];
+        $sale->update($data);
+
+        $totalMachinery = 0;
+        $totalSpareParts = 0;
+
+        $detailMachinery = $request->input('detailMachinery');
+        $detailSpares = $request->input('detailSpareParts');
+
+        $sale->detailSpareParts()->delete();
+        $sale->detailMachinery()->delete();
+
+        if ($detailMachinery) {
+            $sale->detailMachinery()->delete();
+            foreach ($detailMachinery as $detail) {
+                $detailMachinery = DetailMachinery::create([
+                    'description' => $detail['description'],
+                    'quantity' => $detail['quantity'],
+                    'movementType' => 'sale',
+                    'salePrice' => $detail['salePrice'],
+                    'saleValue' => $detail['salePrice'] * $detail['quantity'],
+                    'order_id' => $sale->id,
+                ]);
+                $totalMachinery += $detailMachinery->salePrice * $detailMachinery->quantity;
+            }
+        }
+
+        if ($detailSpares) {
+            $totalDetailsSpareParts = $this->addDetailSpareParts($detailSpares, $sale);
+            if (!$totalDetailsSpareParts['success']) {
+                return response()->json(['error' => $totalDetailsSpareParts['message']], 422);
+            }
+            $totalSpareParts = $totalDetailsSpareParts["totalSpareParts"];
+        }
+
+        $sale->totalSpareParts = $totalSpareParts;
+        $sale->totalMachinery = $totalMachinery;
+        $sale->subtotal = $totalMachinery + $totalSpareParts;
+        $sale->igv = $sale->subtotal * 0.18;
+        $sale->discount = $request->input('discount', $sale->discount);
+        $sale->total = $sale->subtotal + $sale->igv - $sale->discount;
+        $sale->totalIncome = $sale->total;
+
+        if ($request->input('paymentType') == 'CONTADO') {
+            $sale->save();
+            AccountReceivable::where('order_id', $sale->id)->delete();
+            AccountReceivable::create([
+                'days' => 0,
+                'date' => $sale->date,
+                'amount' => $sale->total,
+                'balance' => $sale->total,
+                'order_id' => $sale->id,
+                'client_id' => $sale->client_id,
+            ]);
+        } else {
+            $quotas = $request->input('quotas');
+            $sumQuotas = array_sum(array_column($quotas, 'amount'));
+            if ($sumQuotas != $sale->total) {
+                return response()->json(['error' => 'La suma de las cuotas no coincide con el total, saldo de ' . ($sale->total - $sumQuotas)], 422);
+            }
+            $sale->save();
+            AccountReceivable::where('order_id', $sale->id)->delete();
+            foreach ($quotas as $quota) {
+                AccountReceivable::create([
+                    'days' => $quota['days'],
+                    'date' => Carbon::parse($sale->date)->addDays($quota['days']),
+                    'amount' => $quota['amount'],
+                    'balance' => $quota['amount'],
+                    'order_id' => $sale->id,
+                    'client_id' => $sale->client_id,
+                ]);
+            }
+        }
+
+        $sale = Order::find($sale->id);
+        return response()->json(new SaleResource($sale));
     }
 
     public function destroy(int $id)
     {
-        //
+        $sale = Order::where('type', 'sale')->find($id);
+        if (!$sale) return response()->json(['message' => 'Sale not found'], 404);
+//        $accountReceivable = AccountReceivable::where('order_id', $sale->id)->sum('balance');
+//        if ($accountReceivable > 0) return response()->json(['error' => 'No se puede eliminar la venta porque tiene cuentas por cobrar pendientes'], 422);
+        $sale->detailMachinery()->delete();
+        $sale->detailSpareParts()->delete();
+        $sale->accountReceivable()->delete();
+        $sale->delete();
+        return response()->json(['message' => 'Sale deleted successfully']);
     }
 
     private function addDetailSpareParts(mixed $detailSpareParts, $order)
