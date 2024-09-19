@@ -2145,6 +2145,139 @@
                         "bearerAuth": []
                     }
                 ]
+            },
+            "put": {
+                "tags": [
+                    "Sale"
+                ],
+                "summary": "Update Sale",
+                "description": "Updates a Sale.",
+                "operationId": "74a8109977a3385ddc8edbaf0a1920f9",
+                "parameters": [
+                    {
+                        "parameter": "id",
+                        "name": "id",
+                        "in": "path",
+                        "description": "Sale ID",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "requestBody": {
+                    "description": "Sale data",
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/UpdateSaleRequest"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Successful operation",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/SaleResource"
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Sale not found",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Sale not found"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "Validation error",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ValidationError"
+                                }
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            },
+            "delete": {
+                "tags": [
+                    "Sale"
+                ],
+                "summary": "Destroy Sale",
+                "description": "Deletes a Sale.",
+                "operationId": "1bf9b1f462fa7b31d2e431a354903ba7",
+                "parameters": [
+                    {
+                        "parameter": "id",
+                        "name": "id",
+                        "in": "path",
+                        "description": "Sale ID",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Successful operation",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Sale deleted successfully"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Sale not found",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Sale not found"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
             }
         },
         "/taeyoung-backend/public/api/searchByDni/{dni}": {
@@ -4418,6 +4551,105 @@
                 },
                 "type": "object"
             },
+            "UpdateSaleRequest": {
+                "title": "UpdateSaleRequest",
+                "properties": {
+                    "date": {
+                        "type": "string",
+                        "format": "date",
+                        "example": "2024-08-04"
+                    },
+                    "documentType": {
+                        "type": "string",
+                        "enum": [
+                            "BOLETA",
+                            "FACTURA"
+                        ],
+                        "example": "BOLETA"
+                    },
+                    "paymentType": {
+                        "type": "string",
+                        "enum": [
+                            "CONTADO",
+                            "CREDITO"
+                        ],
+                        "example": "CREDITO"
+                    },
+                    "quotation_id": {
+                        "type": "integer",
+                        "example": "21"
+                    },
+                    "client_id": {
+                        "type": "integer",
+                        "example": "21"
+                    },
+                    "currencyType": {
+                        "type": "string",
+                        "example": "PEN"
+                    },
+                    "discount": {
+                        "type": "number",
+                        "example": "100"
+                    },
+                    "quotas": {
+                        "type": "array",
+                        "items": {
+                            "properties": {
+                                "days": {
+                                    "type": "integer",
+                                    "example": "7"
+                                },
+                                "amount": {
+                                    "type": "number",
+                                    "example": "14378.6"
+                                }
+                            },
+                            "type": "object"
+                        }
+                    },
+                    "detailMachinery": {
+                        "type": "array",
+                        "items": {
+                            "properties": {
+                                "description": {
+                                    "type": "string",
+                                    "example": "Machinery description"
+                                },
+                                "quantity": {
+                                    "type": "integer",
+                                    "example": "2"
+                                },
+                                "salePrice": {
+                                    "type": "number",
+                                    "example": "4000"
+                                }
+                            },
+                            "type": "object"
+                        }
+                    },
+                    "detailSpareParts": {
+                        "type": "array",
+                        "items": {
+                            "properties": {
+                                "quantity": {
+                                    "type": "integer",
+                                    "example": "4"
+                                },
+                                "salePrice": {
+                                    "type": "number",
+                                    "example": "767.5"
+                                },
+                                "spare_part_id": {
+                                    "type": "integer",
+                                    "example": "1"
+                                }
+                            },
+                            "type": "object"
+                        }
+                    }
+                },
+                "type": "object"
+            },
             "UpdateSupplierRequest": {
                 "title": "UpdateSupplierRequest",
                 "properties": {
@@ -5580,5 +5812,55 @@
                 "scheme": "bearer"
             }
         }
-    }
+    },
+    "tags": [
+        {
+            "name": "Authentication",
+            "description": "Authentication"
+        },
+        {
+            "name": "Logs",
+            "description": "Logs"
+        },
+        {
+            "name": "Client",
+            "description": "Client"
+        },
+        {
+            "name": "PaymentConcept",
+            "description": "PaymentConcept"
+        },
+        {
+            "name": "Purchase",
+            "description": "Purchase"
+        },
+        {
+            "name": "Quotation",
+            "description": "Quotation"
+        },
+        {
+            "name": "Sale",
+            "description": "Sale"
+        },
+        {
+            "name": "Search",
+            "description": "Search"
+        },
+        {
+            "name": "Spare Parts",
+            "description": "Spare Parts"
+        },
+        {
+            "name": "Supplier",
+            "description": "Supplier"
+        },
+        {
+            "name": "Unit",
+            "description": "Unit"
+        },
+        {
+            "name": "User",
+            "description": "User"
+        }
+    ]
 }

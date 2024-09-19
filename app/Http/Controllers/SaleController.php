@@ -172,6 +172,20 @@ class SaleController extends Controller
         return response()->json(new SaleResource($sale));
     }
 
+    /**
+     * @OA\Put(
+     *     path="/taeyoung-backend/public/api/sale/{id}",
+     *     tags={"Sale"},
+     *     summary="Update Sale",
+     *     description="Updates a Sale.",
+     *     security={{"bearerAuth":{}}},
+     *     @OA\Parameter(parameter="id", name="id", in="path", required=true, description="Sale ID", @OA\Schema(type="string")),
+     *     @OA\RequestBody(required=true, description="Sale data", @OA\JsonContent(ref="#/components/schemas/UpdateSaleRequest")),
+     *     @OA\Response(response=200, description="Successful operation", @OA\JsonContent(ref="#/components/schemas/SaleResource")),
+     *     @OA\Response(response=404, description="Sale not found", @OA\JsonContent(type="object", @OA\Property(property="message", type="string", example="Sale not found"))),
+     *     @OA\Response(response=422, description="Validation error", @OA\JsonContent(ref="#/components/schemas/ValidationError"))
+     * )
+     */
     public function update(UpdateSaleRequest $request, int $id)
     {
         $sale = Order::where('type', 'sale')->find($id);
@@ -262,6 +276,18 @@ class SaleController extends Controller
         return response()->json(new SaleResource($sale));
     }
 
+    /**
+     * @OA\Delete(
+     *     path="/taeyoung-backend/public/api/sale/{id}",
+     *     tags={"Sale"},
+     *     summary="Destroy Sale",
+     *     description="Deletes a Sale.",
+     *     security={{"bearerAuth":{}}},
+     *     @OA\Parameter(parameter="id", name="id", in="path", required=true, description="Sale ID", @OA\Schema(type="string")),
+     *     @OA\Response(response=200, description="Successful operation", @OA\JsonContent(type="object", @OA\Property(property="message", type="string", example="Sale deleted successfully"))),
+     *     @OA\Response(response=404, description="Sale not found", @OA\JsonContent(type="object", @OA\Property(property="message", type="string", example="Sale not found")))
+     * )
+     */
     public function destroy(int $id)
     {
         $sale = Order::where('type', 'sale')->find($id);
