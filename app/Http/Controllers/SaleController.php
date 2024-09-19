@@ -109,10 +109,11 @@ class SaleController extends Controller
         $sale->totalSpareParts = $totalSpareParts;
         $sale->totalMachinery = $totalMachinery;
         $sale->subtotal = $totalMachinery + $totalSpareParts;
-        $sale->igv = $sale->subtotal * 0.18;
+        $sale->igv = round($sale->subtotal * 0.18, 2);
         $sale->discount = $request->input('discount', 0);
         $sale->total = $sale->subtotal + $sale->igv - $sale->discount;
         $sale->totalIncome = $sale->total;
+        $sale->balance = $sale->total;
 
         if ($request->input('paymentType') == 'CONTADO') {
             $sale->save();
@@ -127,7 +128,7 @@ class SaleController extends Controller
         } else {
             $quotas = $request->input('quotas');
             $sumQuotas = array_sum(array_column($quotas, 'amount'));
-            if ($sumQuotas != $sale->total) {
+            if (round($sale->total, 2) != round($sumQuotas, 2)) {
                 $sale->detailMachinery()->delete();
                 $sale->detailSpareParts()->delete();
                 $sale->delete();
@@ -188,7 +189,10 @@ class SaleController extends Controller
      */
     public function update(UpdateSaleRequest $request, int $id)
     {
-        $sale = Order::where('type', 'sale')->find($id);
+//        STATUS: PENDIENTE, PAGANDO, PAGADO, VENCIDO
+        $sale = Order::where('type', 'sale')
+            ->where('status', 'PENDIENTE')
+            ->find($id);
         if (!$sale) return response()->json(['message' => 'Sale not found'], 404);
 
         $data = [
@@ -237,9 +241,10 @@ class SaleController extends Controller
         $sale->totalSpareParts = $totalSpareParts;
         $sale->totalMachinery = $totalMachinery;
         $sale->subtotal = $totalMachinery + $totalSpareParts;
-        $sale->igv = $sale->subtotal * 0.18;
+        $sale->igv = round($sale->subtotal * 0.18, 2);
         $sale->discount = $request->input('discount', $sale->discount);
         $sale->total = $sale->subtotal + $sale->igv - $sale->discount;
+        $sale->balance = $sale->total;
         $sale->totalIncome = $sale->total;
 
         if ($request->input('paymentType') == 'CONTADO') {
@@ -256,7 +261,12 @@ class SaleController extends Controller
         } else {
             $quotas = $request->input('quotas');
             $sumQuotas = array_sum(array_column($quotas, 'amount'));
-            if ($sumQuotas != $sale->total) {
+//            return response()->json([
+//                '1' => round($sale->total, 2),
+//                '2' => round($sumQuotas, 2),
+//                '3' => round($sale->total, 2) != round($sumQuotas, 2),
+//            ]);
+            if (round($sale->total, 2) != round($sumQuotas, 2)) {
                 return response()->json(['error' => 'La suma de las cuotas no coincide con el total, saldo de ' . ($sale->total - $sumQuotas)], 422);
             }
             $sale->save();
@@ -271,6 +281,14 @@ class SaleController extends Controller
                     'client_id' => $sale->client_id,
                 ]);
             }
+        }
+
+        $detailSpareParts = $sale->detailSpareParts;
+//        DISMINUIR STOCK DE REPUESTOS
+        foreach ($detailSpareParts as $detail) {
+            $sparePart = SparePart::find($detail->spare_part_id);
+            $sparePart->stock -= $detail->quantity;
+            $sparePart->save();
         }
 
         $sale = Order::find($sale->id);
@@ -331,7 +349,6 @@ class SaleController extends Controller
                 'spare_part_id' => $detail['spare_part_id'],
                 'order_id' => $order->id,
             ]);
-            $sparePart->stock -= $detail['quantity'];
             $totalSpareParts += $detailSparePart->saleValue;
             $sparePart->save();
         }

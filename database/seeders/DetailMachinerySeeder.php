@@ -19,7 +19,7 @@ class DetailMachinerySeeder extends Seeder
 
             $totalMachinery = $detailMachinery->saleValue;
             $subtotal = $totalMachinery + $quotation->subtotal;
-            $igv = $subtotal * 0.18;
+            $igv = round($subtotal * 0.18, 2);
             $total = $subtotal + $igv;
 
             $quotation->update([

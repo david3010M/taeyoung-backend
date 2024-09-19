@@ -17,7 +17,7 @@ class DetailSparePartSeeder extends Seeder
             ]);
             $totalSparePart = $detailSparePart->saleValue;
             $subtotal = $totalSparePart + $quotation->subtotal;
-            $igv = $subtotal * 0.18;
+            $igv = round($subtotal * 0.18, 2);
             $total = $subtotal + $igv;
 
             $quotation->update([

@@ -104,13 +104,22 @@ class OrderSeeder extends Seeder
                 );
             }
 
+            $totalMachinery = $order->detailMachinery->sum('saleValue');
+            $totalSpareParts = $order->detailSpareParts->sum('saleValue');
+            $subtotal = $totalMachinery + $totalSpareParts;
+            $igv = round($subtotal * 0.18, 2);
+            $total = $subtotal + $igv;
+            $balance = $order->status === 'PAGADO' ? 0 : $total;
+
             $order->update([
-                'totalMachinery' => $order->detailMachinery->sum('saleValue'),
-                'totalSpareParts' => $order->detailSpareParts->sum('saleValue'),
-                'total' => $order->detailMachinery->sum('saleValue') + $order->detailSpareParts->sum('saleValue'),
+                'totalMachinery' => $totalMachinery,
+                'totalSpareParts' => $totalSpareParts,
+                'subtotal' => $subtotal,
+                'igv' => $igv,
+                'total' => $total,
                 'quotation_id' => $quotation->id,
-                'totalIncome' => $order->detailMachinery->sum('saleValue') + $order->detailSpareParts->sum('saleValue'),
-                'balance' => $order->status === 'PAGADO' ? 0 : $order->detailMachinery->sum('saleValue') + $order->detailSpareParts->sum('saleValue'),
+                'totalIncome' => $total,
+                'balance' => $balance,
             ]);
         }
     }

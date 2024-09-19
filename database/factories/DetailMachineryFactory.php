@@ -11,7 +11,7 @@ class DetailMachineryFactory extends Factory
         $quantity = $this->faker->numberBetween(1, 10);
         $price = $this->faker->randomFloat(2, 1, 1000);
         $purchasePrice = $price;
-        $salePrice = $price * 1.2;
+        $salePrice = round($price * 1.2, 2);
         return [
             'quantity' => $quantity,
             'description' => $this->faker->sentence,
