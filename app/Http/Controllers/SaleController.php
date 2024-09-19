@@ -209,6 +209,7 @@ class SaleController extends Controller
 
         $sale->detailSpareParts()->delete();
         $sale->detailMachinery()->delete();
+        $sale->accountReceivable()->delete();
 
         if ($detailMachinery) {
             $sale->detailMachinery()->delete();

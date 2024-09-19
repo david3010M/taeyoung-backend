@@ -55,9 +55,9 @@ class UpdateSaleRequest extends UpdateRequest
             ],
             'currencyType' => 'nullable|string',
             'discount' => 'nullable|numeric',
-            'quotas' => 'nullable|array',
-            'quotas.*.days' => 'nullable|int',
-            'quotas.*.amount' => 'nullable|numeric',
+            'quotas' => 'required|array',
+            'quotas.*.days' => 'required|int',
+            'quotas.*.amount' => 'required|numeric',
 
 //            DETAILS
             'detailMachinery' => 'required_without:detailSpareParts|nullable|array',
