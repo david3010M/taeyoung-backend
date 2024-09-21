@@ -22,6 +22,7 @@ use Illuminate\Validation\Rule;
  *     required={"description", "quantity", "salePrice"},
  *     @OA\Property(property="description", type="string", example="Description"),
  *     @OA\Property(property="quantity", type="integer", example="1"),
+ *     @OA\Property(property="purchasePrice", type="number", example="100"),
  *     @OA\Property(property="salePrice", type="number", example="100")
  * )
  *
@@ -30,6 +31,7 @@ use Illuminate\Validation\Rule;
  *     required={"quantity", "spare_part_id"},
  *     @OA\Property(property="quantity", type="integer", example="1"),
  *     @OA\Property(property="spare_part_id", type="integer", example="1"),
+ *     @OA\Property(property="purchasePrice", type="number", example="100"),
  *     @OA\Property(property="salePrice", type="number", example="100")
  * )
  *
