@@ -35,9 +35,11 @@ class UpdateQuotationRequest extends UpdateRequest
             'detailMachinery' => 'nullable|array',
             'detailMachinery.*.description' => 'required|string',
             'detailMachinery.*.quantity' => 'required|int',
+            'detailMachinery.*.purchasePrice' => 'nullable|numeric',
             'detailMachinery.*.salePrice' => 'required|numeric',
             'detailSpareParts' => 'nullable|array',
             'detailSpareParts.*.quantity' => 'required|numeric',
+            'detailSpareParts.*.purchasePrice' => 'nullable|numeric',
             'detailSpareParts.*.salePrice' => 'required|numeric',
             'detailSpareParts.*.spare_part_id' => 'required|exists:spare_parts,id',
         ];

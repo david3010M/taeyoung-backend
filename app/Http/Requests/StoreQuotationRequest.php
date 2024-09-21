@@ -53,9 +53,11 @@ class StoreQuotationRequest extends StoreRequest
             'detailMachinery' => 'required_without:detailSpareParts|nullable|array',
             'detailMachinery.*.description' => 'required|string',
             'detailMachinery.*.quantity' => 'required|int',
+            'detailMachinery.*.purchasePrice' => 'nullable|numeric',
             'detailMachinery.*.salePrice' => 'required|numeric',
             'detailSpareParts' => 'required_without:detailMachinery|nullable|array',
             'detailSpareParts.*.quantity' => 'required|numeric',
+            'detailSpareParts.*.purchasePrice' => 'nullable|numeric',
             'detailSpareParts.*.salePrice' => 'required|numeric',
             'detailSpareParts.*.spare_part_id' => 'required|exists:spare_parts,id',
         ];
