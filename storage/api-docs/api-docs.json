@@ -4134,6 +4134,10 @@
                         "type": "integer",
                         "example": "1"
                     },
+                    "purchasePrice": {
+                        "type": "number",
+                        "example": "100"
+                    },
                     "salePrice": {
                         "type": "number",
                         "example": "100"
@@ -4154,6 +4158,10 @@
                     "spare_part_id": {
                         "type": "integer",
                         "example": "1"
+                    },
+                    "purchasePrice": {
+                        "type": "number",
+                        "example": "100"
                     },
                     "salePrice": {
                         "type": "number",
@@ -5812,55 +5820,5 @@
                 "scheme": "bearer"
             }
         }
-    },
-    "tags": [
-        {
-            "name": "Authentication",
-            "description": "Authentication"
-        },
-        {
-            "name": "Logs",
-            "description": "Logs"
-        },
-        {
-            "name": "Client",
-            "description": "Client"
-        },
-        {
-            "name": "PaymentConcept",
-            "description": "PaymentConcept"
-        },
-        {
-            "name": "Purchase",
-            "description": "Purchase"
-        },
-        {
-            "name": "Quotation",
-            "description": "Quotation"
-        },
-        {
-            "name": "Sale",
-            "description": "Sale"
-        },
-        {
-            "name": "Search",
-            "description": "Search"
-        },
-        {
-            "name": "Spare Parts",
-            "description": "Spare Parts"
-        },
-        {
-            "name": "Supplier",
-            "description": "Supplier"
-        },
-        {
-            "name": "Unit",
-            "description": "Unit"
-        },
-        {
-            "name": "User",
-            "description": "User"
-        }
-    ]
+    }
 }
