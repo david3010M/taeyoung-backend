@@ -113,7 +113,7 @@
         <td class="wContent">
             <div class="headerBlock"></div>
         </td>
-        <td><img class="headerImage" src="{{ asset('img/logo.png') }}" alt="logo"></td>
+        <td><img class="headerImage" src="{{ asset('img/taeyoung.png') }}" alt="logo"></td>
     </tr>
 
 </table>
@@ -122,7 +122,8 @@
     <div class="p64">
         <table class="w100 h100 tableFooter">
             <tr class="w100">
-                <td class="text-center w50"><img class="footerImage" src="{{ asset('img/logo.png') }}" alt="logo"></td>
+                <td class="text-center w50"><img class="footerImage" src="{{ asset('img/taeyoung.png') }}" alt="logo">
+                </td>
                 <td class="text-start w50">
                     <div>20607921238</div>
                     <div>TAEYOUNG INTERNACIONAL E.I.R.L.</div>

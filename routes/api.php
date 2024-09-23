@@ -36,7 +36,6 @@ use Illuminate\Support\Facades\Route;
 
 Route::post('/login', [AuthController::class, 'login'])->name('login');
 
-Route::get('/repuestos', [PdfController::class, 'getRepuestos'])->name('repuesto');
 
 Route::group(
     ['middleware' => ['auth:sanctum']],
@@ -45,6 +44,9 @@ Route::group(
         Route::get('/authenticate', [AuthController::class, 'authenticate'])->name('authenticate');
         Route::get('/logout', [AuthController::class, 'logout'])->name('logout');
         Route::get('/logs', [AuthController::class, 'logs'])->name('logs');
+
+//        REPORTS
+        Route::get('/repuestos', [PdfController::class, 'getRepuestos'])->name('repuesto');
 
 //         SEARCH
         Route::get('searchByDni/{dni}', [SearchController::class, 'searchByDni']);

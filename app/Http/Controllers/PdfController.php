@@ -8,43 +8,43 @@ use Illuminate\Http\Request;
 
 class PdfController extends Controller
 {
+    /**
+     * @OA\Get(
+     *     path="/taeyoung-backend/public/api/repuestos",
+     *     tags={"Reports"},
+     *     security={{"bearerAuth": {}}},
+     *     summary="Get all spare parts",
+     *     @OA\Parameter( name="code", in="query", description="Code of spare part", required=false, @OA\Schema( type="string" ) ),
+     *     @OA\Parameter( name="name", in="query", description="Name of spare part", required=false, @OA\Schema( type="string" ) ),
+     *     @OA\Response( response=200, description="Spare parts found" ),
+     *     @OA\Response( response=400, description="Bad request" ),
+     *     @OA\Response( response=401, description="Unauthorized" ),
+     *     @OA\Response( response=404, description="Not found" ),
+     *     @OA\Response( response=500, description="Internal server error" )
+     * )
+     */
     public function getRepuestos(Request $request)
     {
         $validator = validator($request->query(), [
             'code' => 'nullable|string',
             'name' => 'nullable|string',
-            'page' => 'nullable|integer',
-            'per_page' => 'nullable|integer',
         ]);
+
+        if ($validator->fails()) return response()->json($validator->errors(), 400);
 
         $code = $request->query('code');
         $name = $request->query('name');
-        $page = $request->query('page') ?? 1;
-        $per_page = $request->query('per_page') ?? 5;
-
-        if ($validator->fails()) {
-            $page = 1;
-            $per_page = 5;
-        }
 
         $object = SparePart::where('code', 'like', '%' . $code . '%')
-            ->where('name', 'like', '%' . $name . '%')
-            ->paginate($per_page, ['*'], 'page', $page);
+            ->where('name', 'like', '%' . $name . '%')->get();
 
-//        HORIZONTAL
         $pdf = Pdf::loadView('repuesto', [
             'repuestos' => $object,
-            'page' => $page,
-            'per_page' => $per_page,
             'code' => $code,
             'name' => $name,
-            'total' => $object->total(),
-            'from' => $object->firstItem(),
-            'to' => $object->lastItem(),
         ]);
-//        $pdf->setPaper('a3', 'landscape');
 
-//        return $object;
-        return $pdf->stream('orden-servicio.pdf');
+        return $pdf->download('repuestos_' . date('Y-m-d') . '.pdf');
+//        return $pdf->stream('repuestos.pdf');
     }
 }

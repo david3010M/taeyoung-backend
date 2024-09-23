@@ -29,7 +29,9 @@
 
         .headerImage {
             width: auto;
-            height: 75px;
+            height: 60px;
+            padding-left: 20px;
+            padding-right: 20px;
         }
 
         .footerImage {
@@ -93,8 +95,8 @@
         }
 
         .tableFooter {
-            border-top: 2px solid #FE8700;
-            border-bottom: 2px solid #FE8700;
+            border-top: 2px solid #040780;
+            border-bottom: 2px solid #040780;
         }
 
         .tableFooter td {
@@ -107,6 +109,14 @@
 
         .p64 {
             padding: 64px;
+        }
+
+        .pe64 {
+            padding-right: 64px;
+        }
+
+        .mb40 {
+            margin-bottom: 40px;
         }
 
         .p32 {
@@ -135,21 +145,30 @@
             margin-right: 64px;
         }
 
+        .mx56 {
+            margin-left: 56px;
+            margin-right: 56px;
+        }
+
         .tableSparePart {
             border-collapse: collapse;
+            position: fixed;
+            padding-left: 56px;
+            padding-right: 56px;
+            top: 210px;
         }
 
         .tableSparePart th {
-            padding: 16px;
+            padding: 8px;
             color: white;
-            background-color: #FE8700;
-            border-top: 1px solid #FE8700;
-            border-bottom: 2px solid #FE8700;
+            background-color: #040780;
+            border-top: 1px solid #040780;
+            border-bottom: 2px solid #040780;
         }
 
         .tableSparePart td {
             padding: 8px;
-            border-top: 1px solid #FE8700;
+            border-bottom: 1px solid rgba(30, 41, 59, 0.5);
         }
 
         .bold {
@@ -164,104 +183,163 @@
             font-size: 12px;
         }
 
+        .font14 {
+            font-size: 14px;
+        }
+
+        .saltopagina {
+            page-break-after: always;
+        }
+
+        .absolute {
+            position: fixed;
+            top: 40px;
+            left: 0;
+            width: 100px;
+        }
+
 
     </style>
-
 </head>
 
 
 <body>
 
-{{--PAGE--}}
-<table class="px64 page w100">
-    <tr class="w100 font12">
-        <td>
-            <p class="m0 gray text-start">Mostrando {{$per_page}} de {{$total}} resultados del {{$from}}
-                al {{$to}}</p>
-        </td>
-        <td>
-            <p class="m0 gray text-end">Página {{$page}}</p>
-        </td>
-    </tr>
-</table>
-
 {{--LOGO--}}
-<table class="w100">
+<table class="w100 mb40">
     <tr class="w100">
         <td class="wContent">
             <div class="headerBlock"></div>
         </td>
-        <td><img class="headerImage" src="{{ asset('img/logo.png') }}" alt="logo"></td>
+        <td class="black">
+            <img class="headerImage" src="{{ asset('img/taeyoung.png') }}" alt="logo">
+        </td>
+        <td class="w100">
+            <table class="w100 pe64">
+                <tr>
+                    <td>
+                        <h2 class="m0 text-end font30">CATÁLOGO DE REPUESTOS</h2>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="text-end interletter bold">
+                        {{ Carbon::now()->locale('es')->isoFormat('D [de] MMMM [de] YYYY') }}
+                    </td>
+                </tr>
+            </table>
     </tr>
 </table>
 
-{{--CONTENT--}}
-<table class="p32 px64 w100">
-    <tr>
-        <td>
-            <h2 class="m0 text-end font30">CATÁLOGO DE REPUESTOS</h2>
-        </td>
-    </tr>
-    <tr>
-        <td>
-            @if($name && $code)
-                <p class="gray text-end">Búsqueda por Nombre: "{{ $name }}" y Código: "{{ $code }}"</p>
-            @elseif($name)
-                <p class="gray text-end">Búsqueda por Nombre: "{{ $name }}"</p>
-            @elseif($code)
-                <p class="gray text-end">Búsqueda por Código: "{{ $code }}"</p>
-            @endif
 
-        </td>
-    </tr>
-</table>
+@php
+    $currentPage = 1;
+@endphp
 
-<table class="w100 px64">
-    <tr>
-        <td class="text-end interletter bold">
-            {{ Carbon::now()->locale('es')->isoFormat('D [de] MMMM [de] YYYY') }}
-        </td>
-    </tr>
-</table>
-
-<div class="mx64">
+<div class="mx56">
+    {{--FOOTER--}}
+    <div class="w100 footer black">
+        <div class="px64">
+            <table class="w100 h100 tableFooter">
+                <tr class="w100">
+                    <td class="text-center w50">
+                        <img class="footerImage" src="{{ asset('img/taeyoung.png') }}"
+                             alt="logo">
+                    </td>
+                    <td class="text-start w50">
+                        <div>20607921238</div>
+                        <div>TAEYOUNG INTERNACIONAL E.I.R.L.</div>
+                        <div>{{"Calle Santa Adela Mza. C Lote. 1 Dpto. 401"}}</div>
+                    </td>
+                </tr>
+            </table>
+        </div>
+    </div>
     <table class="w100 tableSparePart">
-        <tr class="text-center">
-            <th>CÓDIGO</th>
-            <th>NOMBRE</th>
-            <th>PRECIO COMPRA</th>
-            <th>PRECIO VENTA</th>
+        <tr class="text-center font14">
+            <th style="width: 20%">CÓDIGO</th>
+            <th style="width: 40%">NOMBRE</th>
+            <th style="width: 20%">PRECIO COMPRA</th>
+            <th style="width: 20%">PRECIO VENTA</th>
         </tr>
 
-        @foreach ($repuestos as $repuesto)
-            <tr class="text-center">
-                <td>{{ $repuesto->code }}</td>
-                <td>{{ $repuesto->name }}</td>
-                <td>$ {{ $repuesto->purchasePrice }}</td>
-                <td>$ {{ $repuesto->salePrice }}</td>
-            </tr>
+
+        @foreach ($repuestos as $index => $repuesto)
+            @if ($index > 0 && $index % 18 == 0)
+    </table>
+
+    {{-- FOOTER PARA CADA PÁGINA --}}
+    <table class="px64 page w100">
+        <tr class="w100 font12">
+            <td>
+                <p class="m0 gray text-end">Página {{ $currentPage }}</p>
+            </td>
+        </tr>
+    </table>
+
+    {{-- Salto de página --}}
+    <div class="saltopagina"></div>
+
+
+    <table class="w100 mb40 absolute">
+        <tr class="w100">
+            <td class="wContent">
+                <div class="headerBlock"></div>
+            </td>
+            <td class="black">
+                <img class="headerImage" src="{{ asset('img/taeyoung.png') }}" alt="logo">
+            </td>
+    </table>
+
+    {{--FOOTER--}}
+    <div class="w100 footer black">
+        <div class="px64">
+            <table class="w100 h100 tableFooter">
+                <tr class="w100">
+                    <td class="text-center w50">
+                        <img class="footerImage" src="{{ asset('img/taeyoung.png') }}"
+                             alt="logo">
+                    </td>
+                    <td class="text-start w50">
+                        <div>20607921238</div>
+                        <div>TAEYOUNG INTERNACIONAL E.I.R.L.</div>
+                        <div>{{"Calle Santa Adela Mza. C Lote. 1 Dpto. 401"}}</div>
+                    </td>
+                </tr>
+            </table>
+        </div>
+    </div>
+
+    @php
+        $currentPage++; // Incrementa el número de página
+    @endphp
+
+    {{-- Nueva tabla con el encabezado para la siguiente página --}}
+    <table class="w100 tableSparePart">
+        <tr class="text-center font14">
+            <th style="width: 20%">CÓDIGO</th>
+            <th style="width: 40%">NOMBRE</th>
+            <th style="width: 20%">PRECIO COMPRA</th>
+            <th style="width: 20%">PRECIO VENTA</th>
+        </tr>
+        @endif
+        <tr class="text-center font14">
+            <td>{{ $repuesto->code }}</td>
+            <td>{{ $repuesto->name }}</td>
+            <td>$ {{ $repuesto->purchasePrice }}</td>
+            <td>$ {{ $repuesto->salePrice }}</td>
+        </tr>
         @endforeach
     </table>
-</div>
 
+    {{-- Footer final con la última página --}}
+    <table class="px64 page w100">
+        <tr class="w100 font12">
+            <td>
+                <p class="m0 gray text-end">Página {{ $currentPage }}</p>
+            </td>
+        </tr>
+    </table>
 
-{{--FOOTER--}}
-<div class="w100 footer black">
-    <div class="px64">
-        <table class="w100 h100 tableFooter">
-            <tr class="w100">
-                <td class="text-center w50">
-                    <img class="footerImage" src="{{ asset('img/logo.png') }}"
-                         alt="logo">
-                </td>
-                <td class="text-start w50">
-                    <div>20607921238</div>
-                    <div>TAEYOUNG INTERNACIONAL E.I.R.L.</div>
-                    <div>Calle Santa Adela Mza. C Lote. 1 Dpto. 401</div>
-                </td>
-            </tr>
-        </table>
-    </div>
 </div>
 
 </body>
