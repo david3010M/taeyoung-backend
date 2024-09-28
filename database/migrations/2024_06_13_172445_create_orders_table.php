@@ -37,6 +37,7 @@ return new class extends Migration {
             $table->foreignId('supplier_id')->nullable()->unsigned()->constrained('people');
             $table->foreignId('quotation_id')->nullable()->constrained('quotations');
             $table->foreignId('client_id')->nullable()->unsigned()->constrained('people');
+            $table->foreignId('currency_id')->nullable()->constrained('currencies');
 
             $table->timestamps();
             $table->softDeletes();

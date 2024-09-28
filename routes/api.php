@@ -1,6 +1,8 @@
 <?php
 
 use App\Http\Controllers\AccessController;
+use App\Http\Controllers\AccountPayableController;
+use App\Http\Controllers\AccountReceivableController;
 use App\Http\Controllers\Auth\AuthController;
 use App\Http\Controllers\ClientController;
 use App\Http\Controllers\CountryController;
@@ -257,6 +259,32 @@ Route::group(
                 'show' => 'sale.show',
                 'update' => 'sale.update',
                 'destroy' => 'sale.destroy',
+            ]
+        );
+
+//        ACCOUNT RECEIVABLE
+        Route::resource('accountReceivable', AccountReceivableController::class)->only(
+            ['index', 'show', 'store', 'update', 'destroy']
+        )->names(
+            [
+                'index' => 'accountReceivable.index',
+                'store' => 'accountReceivable.store',
+                'show' => 'accountReceivable.show',
+                'update' => 'accountReceivable.update',
+                'destroy' => 'accountReceivable.destroy',
+            ]
+        );
+
+//        ACCOUNT PAYABLE
+        Route::resource('accountPayable', AccountPayableController::class)->only(
+            ['index', 'show', 'store', 'update', 'destroy']
+        )->names(
+            [
+                'index' => 'accountPayable.index',
+                'store' => 'accountPayable.store',
+                'show' => 'accountPayable.show',
+                'update' => 'accountPayable.update',
+                'destroy' => 'accountPayable.destroy',
             ]
         );
 

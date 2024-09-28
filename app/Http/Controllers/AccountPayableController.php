@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\IndexAccountReceivableRequest;
+use App\Http\Resources\AccountPayableResource;
 use App\Models\AccountPayable;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\StoreAccountPayableRequest;
@@ -10,57 +12,53 @@ use App\Http\Requests\UpdateAccountPayableRequest;
 class AccountPayableController extends Controller
 {
     /**
-     * Display a listing of the resource.
+     * @OA\Get(
+     *     path="/taeyoung-backend/public/api/accountPayable",
+     *     tags={"Account Payables"},
+     *     summary="Get all account payables",
+     *     description="Get all account payables",
+     *     security={{"bearerAuth": {}}},
+     *     @OA\Parameter( name="date", in="query", description="Filter by date", @OA\Schema(type="string")),
+     *     @OA\Parameter( name="amount", in="query", description="Filter by amount", @OA\Schema(type="string")),
+     *     @OA\Parameter( name="balance", in="query", description="Filter by balance", @OA\Schema(type="string")),
+     *     @OA\Parameter( name="status", in="query", description="Filter by status", @OA\Schema(type="string")),
+     *     @OA\Parameter( name="supplier_id", in="query", description="Filter by client_id", @OA\Schema(type="integer")),
+     *     @OA\Parameter( name="supplier$filterName", in="query", description="Filter by supplier$filterName", @OA\Schema(type="string")),
+     *     @OA\Parameter( name="supplier$country_id", in="query", description="Filter by supplier$country_id", @OA\Schema(type="integer")),
+     *     @OA\Parameter( name="order_id", in="query", description="Filter by order_id", @OA\Schema(type="integer")),
+     *     @OA\Parameter( name="currency$date", in="query", description="Filter by currency$date", @OA\Schema(type="string")),
+     *     @OA\Response(response="200", description="Success", @OA\JsonContent(ref="#/components/schemas/AccountReceivableResource")),
+     *     @OA\Response(response="401", description="Unauthenticated"),
+     *     @OA\Response(response="422", description="Unprocessable Entity")
+     * )
      */
-    public function index()
+    public function index(IndexAccountReceivableRequest $request)
     {
-        //
+        return $this->getFilteredResults(
+            AccountPayable::class,
+            $request,
+            AccountPayable::filters,
+            AccountPayable::sorts,
+            AccountPayableResource::class
+        );
     }
 
-    /**
-     * Show the form for creating a new resource.
-     */
-    public function create()
-    {
-        //
-    }
-
-    /**
-     * Store a newly created resource in storage.
-     */
     public function store(StoreAccountPayableRequest $request)
     {
         //
     }
 
-    /**
-     * Display the specified resource.
-     */
-    public function show(AccountPayable $accountPayable)
+    public function show(int $id)
     {
         //
     }
 
-    /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit(AccountPayable $accountPayable)
+    public function update(UpdateAccountPayableRequest $request, int $id)
     {
         //
     }
 
-    /**
-     * Update the specified resource in storage.
-     */
-    public function update(UpdateAccountPayableRequest $request, AccountPayable $accountPayable)
-    {
-        //
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     */
-    public function destroy(AccountPayable $accountPayable)
+    public function destroy(int $id)
     {
         //
     }

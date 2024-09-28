@@ -34,6 +34,29 @@ class AccountReceivable extends Model
         'balance' => 'float',
     ];
 
+    const filters = [
+        'date' => 'like',
+        'amount' => 'like',
+        'balance' => 'like',
+        'status' => 'like',
+        'client_id' => '=',
+        'client.filterName' => 'like',
+        'client.country_id' => '=',
+        'order_id' => '=',
+        'currency$date' => 'like',
+    ];
+
+    const sorts = [
+        'id',
+        'date',
+        'amount',
+        'balance',
+        'status',
+        'client_id',
+        'order_id',
+        'currency_id',
+    ];
+
     public function client()
     {
         return $this->belongsTo(Person::class);

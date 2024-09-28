@@ -44,4 +44,9 @@ class Currency extends Model
         'date',
     ];
 
+    public function order()
+    {
+        return $this->hasMany(Order::class);
+    }
+
 }

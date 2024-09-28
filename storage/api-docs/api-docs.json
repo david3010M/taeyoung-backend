@@ -6,6 +6,220 @@
         "version": "1.0.0"
     },
     "paths": {
+        "/taeyoung-backend/public/api/accountPayable": {
+            "get": {
+                "tags": [
+                    "Account Payables"
+                ],
+                "summary": "Get all account payables",
+                "description": "Get all account payables",
+                "operationId": "296e92c45e7732e084711d58a97022e4",
+                "parameters": [
+                    {
+                        "name": "date",
+                        "in": "query",
+                        "description": "Filter by date",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "amount",
+                        "in": "query",
+                        "description": "Filter by amount",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "balance",
+                        "in": "query",
+                        "description": "Filter by balance",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "status",
+                        "in": "query",
+                        "description": "Filter by status",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "supplier_id",
+                        "in": "query",
+                        "description": "Filter by client_id",
+                        "schema": {
+                            "type": "integer"
+                        }
+                    },
+                    {
+                        "name": "supplier$filterName",
+                        "in": "query",
+                        "description": "Filter by supplier$filterName",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "supplier$country_id",
+                        "in": "query",
+                        "description": "Filter by supplier$country_id",
+                        "schema": {
+                            "type": "integer"
+                        }
+                    },
+                    {
+                        "name": "order_id",
+                        "in": "query",
+                        "description": "Filter by order_id",
+                        "schema": {
+                            "type": "integer"
+                        }
+                    },
+                    {
+                        "name": "currency$date",
+                        "in": "query",
+                        "description": "Filter by currency$date",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Success",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/AccountReceivableResource"
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthenticated"
+                    },
+                    "422": {
+                        "description": "Unprocessable Entity"
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
+        "/taeyoung-backend/public/api/accountReceivable": {
+            "get": {
+                "tags": [
+                    "Account Receivables"
+                ],
+                "summary": "Get all account receivables",
+                "description": "Get all account receivables",
+                "operationId": "d0793728d70bf894b76269a52352a6b9",
+                "parameters": [
+                    {
+                        "name": "date",
+                        "in": "query",
+                        "description": "Filter by date",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "amount",
+                        "in": "query",
+                        "description": "Filter by amount",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "balance",
+                        "in": "query",
+                        "description": "Filter by balance",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "status",
+                        "in": "query",
+                        "description": "Filter by status",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "client_id",
+                        "in": "query",
+                        "description": "Filter by client_id",
+                        "schema": {
+                            "type": "integer"
+                        }
+                    },
+                    {
+                        "name": "client$filterName",
+                        "in": "query",
+                        "description": "Filter by client$filterName",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "client$country_id",
+                        "in": "query",
+                        "description": "Filter by client$country_id",
+                        "schema": {
+                            "type": "integer"
+                        }
+                    },
+                    {
+                        "name": "order_id",
+                        "in": "query",
+                        "description": "Filter by order_id",
+                        "schema": {
+                            "type": "integer"
+                        }
+                    },
+                    {
+                        "name": "currency$date",
+                        "in": "query",
+                        "description": "Filter by currency$date",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Success",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/AccountReceivableCollection"
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthenticated"
+                    },
+                    "422": {
+                        "description": "Unprocessable Entity"
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
         "/taeyoung-backend/public/api/login": {
             "post": {
                 "tags": [
@@ -1009,6 +1223,57 @@
                                 }
                             }
                         }
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
+        "/taeyoung-backend/public/api/repuestos": {
+            "get": {
+                "tags": [
+                    "Reports"
+                ],
+                "summary": "Get all spare parts",
+                "operationId": "e51fbf3c6aec3110626942721d1e7c6b",
+                "parameters": [
+                    {
+                        "name": "code",
+                        "in": "query",
+                        "description": "Code of spare part",
+                        "required": false,
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "name",
+                        "in": "query",
+                        "description": "Name of spare part",
+                        "required": false,
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Spare parts found"
+                    },
+                    "400": {
+                        "description": "Bad request"
+                    },
+                    "401": {
+                        "description": "Unauthorized"
+                    },
+                    "404": {
+                        "description": "Not found"
+                    },
+                    "500": {
+                        "description": "Internal server error"
                     }
                 },
                 "security": [
@@ -4730,6 +4995,140 @@
                 },
                 "type": "object"
             },
+            "AccountPayableResource": {
+                "properties": {
+                    "id": {
+                        "type": "integer",
+                        "example": "1"
+                    },
+                    "days": {
+                        "type": "integer",
+                        "example": "30"
+                    },
+                    "date": {
+                        "type": "string",
+                        "format": "date",
+                        "example": "2021-01-01"
+                    },
+                    "amount": {
+                        "type": "number",
+                        "example": "1000.00"
+                    },
+                    "balance": {
+                        "type": "number",
+                        "example": "1000.00"
+                    },
+                    "status": {
+                        "type": "string",
+                        "example": "Pending"
+                    },
+                    "supplier_id": {
+                        "type": "integer",
+                        "example": "1"
+                    },
+                    "supplier": {
+                        "type": "string",
+                        "example": "John Doe"
+                    },
+                    "country": {
+                        "type": "string",
+                        "example": "United States"
+                    },
+                    "currency_id": {
+                        "type": "integer",
+                        "example": "1"
+                    },
+                    "order_id": {
+                        "type": "integer",
+                        "example": "1"
+                    }
+                },
+                "type": "object"
+            },
+            "AccountPayableCollection": {
+                "properties": {
+                    "data": {
+                        "type": "array",
+                        "items": {
+                            "$ref": "#/components/schemas/AccountPayableResource"
+                        }
+                    },
+                    "links": {
+                        "$ref": "#/components/schemas/PaginationLinks"
+                    },
+                    "meta": {
+                        "$ref": "#/components/schemas/PaginationMeta"
+                    }
+                },
+                "type": "object"
+            },
+            "AccountReceivableResource": {
+                "properties": {
+                    "id": {
+                        "type": "integer",
+                        "example": "1"
+                    },
+                    "days": {
+                        "type": "integer",
+                        "example": "30"
+                    },
+                    "date": {
+                        "type": "string",
+                        "format": "date",
+                        "example": "2021-01-01"
+                    },
+                    "amount": {
+                        "type": "number",
+                        "example": "1000.00"
+                    },
+                    "balance": {
+                        "type": "number",
+                        "example": "1000.00"
+                    },
+                    "status": {
+                        "type": "string",
+                        "example": "Pending"
+                    },
+                    "client_id": {
+                        "type": "integer",
+                        "example": "1"
+                    },
+                    "client": {
+                        "type": "string",
+                        "example": "John Doe"
+                    },
+                    "country": {
+                        "type": "string",
+                        "example": "United States"
+                    },
+                    "currency_id": {
+                        "type": "integer",
+                        "example": "1"
+                    },
+                    "order_id": {
+                        "type": "integer",
+                        "example": "1"
+                    }
+                },
+                "type": "object"
+            },
+            "AccountReceivableCollection": {
+                "properties": {
+                    "data": {
+                        "type": "array",
+                        "items": {
+                            "$ref": "#/components/schemas/AccountReceivableResource"
+                        }
+                    },
+                    "links": {
+                        "$ref": "#/components/schemas/PaginationLinks"
+                    },
+                    "meta": {
+                        "$ref": "#/components/schemas/PaginationMeta"
+                    }
+                },
+                "type": "object"
+            },
             "Client": {
                 "required": [
                     "id",
@@ -5820,5 +6219,67 @@
                 "scheme": "bearer"
             }
         }
-    }
+    },
+    "tags": [
+        {
+            "name": "Account Payables",
+            "description": "Account Payables"
+        },
+        {
+            "name": "Account Receivables",
+            "description": "Account Receivables"
+        },
+        {
+            "name": "Authentication",
+            "description": "Authentication"
+        },
+        {
+            "name": "Logs",
+            "description": "Logs"
+        },
+        {
+            "name": "Client",
+            "description": "Client"
+        },
+        {
+            "name": "PaymentConcept",
+            "description": "PaymentConcept"
+        },
+        {
+            "name": "Reports",
+            "description": "Reports"
+        },
+        {
+            "name": "Purchase",
+            "description": "Purchase"
+        },
+        {
+            "name": "Quotation",
+            "description": "Quotation"
+        },
+        {
+            "name": "Sale",
+            "description": "Sale"
+        },
+        {
+            "name": "Search",
+            "description": "Search"
+        },
+        {
+            "name": "Spare Parts",
+            "description": "Spare Parts"
+        },
+        {
+            "name": "Supplier",
+            "description": "Supplier"
+        },
+        {
+            "name": "Unit",
+            "description": "Unit"
+        },
+        {
+            "name": "User",
+            "description": "User"
+        }
+    ]
 }

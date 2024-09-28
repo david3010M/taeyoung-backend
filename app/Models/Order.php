@@ -37,6 +37,7 @@ class Order extends Model
         'supplier_id',
         'quotation_id',
         'client_id',
+        'currency_id',
     ];
 
     protected $casts = [
@@ -120,6 +121,11 @@ class Order extends Model
     public function accountPayable()
     {
         return $this->hasMany(AccountPayable::class);
+    }
+
+    public function currency()
+    {
+        return $this->belongsTo(Currency::class);
     }
 
 }
