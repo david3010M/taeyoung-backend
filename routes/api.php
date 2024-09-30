@@ -4,6 +4,7 @@ use App\Http\Controllers\AccessController;
 use App\Http\Controllers\AccountPayableController;
 use App\Http\Controllers\AccountReceivableController;
 use App\Http\Controllers\Auth\AuthController;
+use App\Http\Controllers\BankController;
 use App\Http\Controllers\ClientController;
 use App\Http\Controllers\CountryController;
 use App\Http\Controllers\CurrencyController;
@@ -116,6 +117,19 @@ Route::group(
                 'show' => 'user.show',
                 'update' => 'user.update',
                 'destroy' => 'user.destroy',
+            ]
+        );
+
+//        BANK
+        Route::resource('bank', BankController::class)->only(
+            ['index', 'show', 'store', 'update', 'destroy']
+        )->names(
+            [
+                'index' => 'bank.index',
+                'store' => 'bank.store',
+                'show' => 'bank.show',
+                'update' => 'bank.update',
+                'destroy' => 'bank.destroy',
             ]
         );
 

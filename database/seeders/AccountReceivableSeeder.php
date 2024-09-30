@@ -21,12 +21,13 @@ class AccountReceivableSeeder extends Seeder
                     $ammount = $quotaPerDues;
                 }
                 AccountReceivable::factory()->create([
+                    'paymentType' => 'CREDITO',
                     'order_id' => $sale->id,
                     'client_id' => $sale->client_id,
                     'date' => $sale->date,
                     'days' => $i * 30,
                     'amount' => $ammount,
-                    'balance' => $sale->total,
+                    'balance' => $ammount,
                 ]);
             }
         }

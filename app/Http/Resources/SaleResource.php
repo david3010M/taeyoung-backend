@@ -79,7 +79,7 @@ class SaleResource extends JsonResource
             'client_id' => $this->client_id,
             'quotation_id' => $this->quotation_id,
 
-            'accountReceivable' => new AccountReceivableResource($this->accountReceivable),
+            'accountReceivable' => AccountReceivableResource::collection($this->accountReceivable),
             'quotation' => new SingleQuotationResource($this->quotation),
             'detailMachinery' => DetailMachineryResource::collection($this->detailMachinery),
             'detailSpareParts' => DetailSparePartResource::collection($this->detailSpareParts),

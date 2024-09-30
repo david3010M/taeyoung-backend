@@ -18,7 +18,8 @@ use Illuminate\Http\Resources\Json\JsonResource;
  *     @OA\Property(property="client", type="string", example="John Doe"),
  *     @OA\Property(property="country", type="string", example="United States"),
  *     @OA\Property(property="currency_id", type="integer", example="1"),
- *     @OA\Property(property="order_id", type="integer", example="1")
+ *     @OA\Property(property="order_id", type="integer", example="1"),
+ *     @OA\Property(property="order", type="string", example="123456"),
  * )
  *
  * @OA\Schema (
@@ -35,16 +36,19 @@ class AccountReceivableResource extends JsonResource
     {
         return [
             'id' => $this->id,
+            'paymentType' => $this->paymentType,
             'days' => $this->days,
             'date' => $this->date ? $this->date->format('Y-m-d') : null,
             'amount' => $this->amount,
             'balance' => $this->balance,
+            'paymentAmount' => $this->amount - $this->balance,
             'status' => $this->status,
             'client_id' => $this->client_id,
             'client' => $this->client->filterName,
             'country' => $this->client->country->name,
             'currency_id' => $this->currency_id,
             'order_id' => $this->order_id,
+            'order' => $this->order->number,
         ];
     }
 }

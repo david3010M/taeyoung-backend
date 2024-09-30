@@ -12,6 +12,7 @@ return new class extends Migration {
     {
         Schema::create('account_receivables', function (Blueprint $table) {
             $table->id();
+            $table->string('paymentType')->nullable();
             $table->integer('days');
             $table->date('date');
             $table->decimal('amount');

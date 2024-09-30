@@ -118,6 +118,7 @@ class SaleController extends Controller
         if ($request->input('paymentType') == 'CONTADO') {
             $sale->save();
             AccountReceivable::create([
+                'paymentType' => 'CONTADO',
                 'days' => 0,
                 'date' => $sale->date,
                 'amount' => $sale->total,
@@ -138,6 +139,7 @@ class SaleController extends Controller
 
             foreach ($quotas as $quota) {
                 AccountReceivable::create([
+                    'paymentType' => 'CREDITO',
                     'days' => $quota['days'],
                     'date' => Carbon::parse($sale->date)->addDays($quota['days']),
                     'amount' => $quota['amount'],
