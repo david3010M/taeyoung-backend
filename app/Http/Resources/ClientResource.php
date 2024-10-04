@@ -23,7 +23,8 @@ use Illuminate\Http\Resources\Json\JsonResource;
  *     @OA\Property(property="phone", type="integer", example="123456789"),
  *     @OA\Property(property="representativeDni", type="string", example="12345678"),
  *     @OA\Property(property="representativeNames", type="string", example="Representative Names"),
- *     @OA\Property(property="country", type="string", example="Peru")
+ *     @OA\Property(property="country", type="string", example="Peru"),
+ *     @OA\Property(property="province", type="string", example="Lima"),
  * )
  *
  * @OA\Schema(

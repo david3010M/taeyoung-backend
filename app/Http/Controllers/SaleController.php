@@ -76,6 +76,9 @@ class SaleController extends Controller
         ];
 
         $sale = Order::create($dataSale);
+
+        $igvActive = $request->input('igvActive');
+
         $totalMachinery = 0;
         $totalSpareParts = 0;
 
@@ -110,7 +113,7 @@ class SaleController extends Controller
         $sale->totalMachinery = $totalMachinery;
         $sale->discount = $request->input('discount', 0);
         $sale->subtotal = $totalMachinery + $totalSpareParts - $sale->discount;
-        $sale->igv = round($sale->subtotal * 0.18, 2);
+        $sale->igv = $igvActive ? round($sale->subtotal * 0.18, 2) : 0;
         $sale->total = $sale->subtotal + $sale->igv;
         $sale->totalIncome = $sale->total;
         $sale->balance = $sale->total;
@@ -207,6 +210,8 @@ class SaleController extends Controller
         ];
         $sale->update($data);
 
+        $igvActive = $request->input('igvActive');
+
         $totalMachinery = 0;
         $totalSpareParts = 0;
 
@@ -242,10 +247,10 @@ class SaleController extends Controller
 
         $sale->totalSpareParts = $totalSpareParts;
         $sale->totalMachinery = $totalMachinery;
-        $sale->subtotal = $totalMachinery + $totalSpareParts;
-        $sale->igv = round($sale->subtotal * 0.18, 2);
         $sale->discount = $request->input('discount', $sale->discount);
-        $sale->total = $sale->subtotal + $sale->igv - $sale->discount;
+        $sale->subtotal = $totalMachinery + $totalSpareParts - $sale->discount;
+        $sale->igv = $igvActive ? round($sale->subtotal * 0.18, 2) : 0;
+        $sale->total = $sale->subtotal + $sale->igv;
         $sale->balance = $sale->total;
         $sale->totalIncome = $sale->total;
 

@@ -72,6 +72,8 @@ class QuotationController extends Controller
             'client_id' => $request->input('client_id'),
         ];
 
+        $igvActive = (boolean)$request->input('igvActive');
+
         $quotation = Quotation::create($dataQuotation);
         $totalMachinery = 0;
         $totalSpareParts = 0;
@@ -103,7 +105,7 @@ class QuotationController extends Controller
         $quotation->totalMachinery = $totalMachinery;
         $quotation->discount = (float)$request->input('discount');
         $quotation->subtotal = $totalMachinery + $totalSpareParts - $quotation->discount;
-        $quotation->igv = round($quotation->subtotal * 0.18, 2);
+        $quotation->igv = $igvActive ? round($quotation->subtotal * 0.18, 2) : 0;
         $quotation->total = $quotation->subtotal + $quotation->igv;
         $quotation->update();
 
@@ -160,6 +162,9 @@ class QuotationController extends Controller
             'client_id' => $request->input('client_id') ?? $quotation->client_id,
         ];
         $quotation->update($data);
+
+        $igvActive = $request->input('igvActive');
+
         $totalMachinery = 0;
         $totalSpareParts = 0;
 
@@ -190,10 +195,10 @@ class QuotationController extends Controller
 
         $quotation->totalSpareParts = $totalSpareParts;
         $quotation->totalMachinery = $totalMachinery;
-        $quotation->subtotal = $totalMachinery + $totalSpareParts;
-        $quotation->igv = $quotation->subtotal * 0.18;
         $quotation->discount = (float)$request->input('discount');
-        $quotation->total = $quotation->subtotal + $quotation->igv - $quotation->discount;
+        $quotation->subtotal = $totalMachinery + $totalSpareParts - $quotation->discount;
+        $quotation->igv = $igvActive ? round($quotation->subtotal * 0.18, 2) : 0;
+        $quotation->total = $quotation->subtotal + $quotation->igv;
         $quotation->update();
 
 

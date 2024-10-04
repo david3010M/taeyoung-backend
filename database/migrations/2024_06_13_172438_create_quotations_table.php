@@ -22,6 +22,7 @@ return new class extends Migration {
             $table->decimal('totalMachinery')->nullable();
             $table->decimal('totalSpareParts')->nullable();
             $table->decimal('subtotal')->nullable()->default(0);
+            $table->boolean('igvActive')->default(true);
             $table->decimal('igv')->nullable()->default(0);
             $table->decimal('discount')->nullable()->default(0);
             $table->decimal('total')->nullable()->default(0);

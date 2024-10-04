@@ -53,6 +53,7 @@ class StoreSaleRequest extends StoreRequest
                 Rule::exists('people', 'id')
                     ->where('type', 'client')
             ],
+            'igvActive' => 'required|boolean',
             'currencyType' => 'nullable|string',
             'discount' => 'nullable|numeric',
             'quotas' => 'required|array',

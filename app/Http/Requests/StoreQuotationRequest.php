@@ -51,6 +51,8 @@ class StoreQuotationRequest extends StoreRequest
                     ->where('type', 'client')
             ],
 
+            'igvActive' => 'required|boolean',
+
 //            DETAILS
             'detailMachinery' => 'required_without:detailSpareParts|nullable|array',
             'detailMachinery.*.description' => 'required|string',

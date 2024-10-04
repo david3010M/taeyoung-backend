@@ -32,6 +32,7 @@ class UpdateQuotationRequest extends UpdateRequest
                     ->where('type', 'client')
                     ->whereNull('deleted_at')
             ],
+            'igvActive' => 'required|boolean',
             'detailMachinery' => 'nullable|array',
             'detailMachinery.*.description' => 'required|string',
             'detailMachinery.*.quantity' => 'required|int',
