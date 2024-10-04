@@ -8,8 +8,10 @@ use App\Http\Controllers\BankController;
 use App\Http\Controllers\ClientController;
 use App\Http\Controllers\CountryController;
 use App\Http\Controllers\CurrencyController;
+use App\Http\Controllers\DepartmentController;
 use App\Http\Controllers\DetailSparePartController;
 use App\Http\Controllers\GroupMenuController;
+use App\Http\Controllers\ProvinceController;
 use App\Http\Controllers\PurchaseController;
 use App\Http\Controllers\OptionMenuController;
 use App\Http\Controllers\PaymentConceptController;
@@ -143,6 +145,32 @@ Route::group(
                 'show' => 'country.show',
                 'update' => 'country.update',
                 'destroy' => 'country.destroy',
+            ]
+        );
+
+//        DEPARTMENT
+        Route::resource('department', DepartmentController::class)->only(
+            ['index', 'show', 'store', 'update', 'destroy']
+        )->names(
+            [
+                'index' => 'department.index',
+                'store' => 'department.store',
+                'show' => 'department.show',
+                'update' => 'department.update',
+                'destroy' => 'department.destroy',
+            ]
+        );
+
+//        PROVINCE
+        Route::resource('province', ProvinceController::class)->only(
+            ['index', 'show', 'store', 'update', 'destroy']
+        )->names(
+            [
+                'index' => 'province.index',
+                'store' => 'province.store',
+                'show' => 'province.show',
+                'update' => 'province.update',
+                'destroy' => 'province.destroy',
             ]
         );
 

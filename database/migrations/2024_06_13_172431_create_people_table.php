@@ -24,6 +24,7 @@ return new class extends Migration {
             $table->string('representativeDni')->nullable();
             $table->string('representativeNames')->nullable();
             $table->foreignId('country_id')->nullable()->unsigned()->constrained('countries');
+            $table->foreignId('province_id')->nullable()->unsigned()->constrained('provinces');
             $table->timestamps();
             $table->softDeletes();
         });

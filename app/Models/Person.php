@@ -47,6 +47,7 @@ class Person extends Model
         'representativeDni',
         'representativeNames',
         'country_id',
+        'province_id',
     ];
 
     protected $hidden = [
@@ -63,6 +64,7 @@ class Person extends Model
         'representativeDni' => 'like',
         'representativeNames' => 'like',
         'country_id' => '=',
+        'province_id' => '=',
     ];
 
     const clientSorts = [
@@ -73,6 +75,7 @@ class Person extends Model
         'representativeDni',
         'representativeNames',
         'country_id',
+        'province_id',
     ];
 
     const supplierFilters = [
@@ -96,6 +99,11 @@ class Person extends Model
     public function country()
     {
         return $this->belongsTo(Country::class);
+    }
+
+    public function province()
+    {
+        return $this->belongsTo(Province::class);
     }
 
     public function quotations()

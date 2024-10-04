@@ -43,29 +43,10 @@ class BankController extends Controller
      *      path="/taeyoung-backend/public/api/bank",
      *      tags={"Bank"},
      *      security={{"bearerAuth":{}}},
-     *      @OA\RequestBody(
-     *          required=true,
-     *          @OA\JsonContent(ref="#/components/schemas/BankRequest")
-     *      ),
-     *      @OA\Response(
-     *          response=200,
-     *          description="Bank created successfully",
-     *          @OA\JsonContent(ref="#/components/schemas/Bank")
-     *      ),
-     *      @OA\Response(
-     *          response=422,
-     *          description="Invalid data",
-     *          @OA\JsonContent(
-     *              @OA\Property(property="error", type="string", example="The name has already been taken.")
-     *          )
-     *      ),
-     *      @OA\Response(
-     *          response=401,
-     *          description="Unauthorized",
-     *          @OA\JsonContent(
-     *              @OA\Property(property="message", type="string", example="Unauthenticated")
-     *          )
-     *      )
+     *      @OA\RequestBody( required=true, @OA\JsonContent(ref="#/components/schemas/BankRequest") ),
+     *      @OA\Response( response=200, description="Bank created", @OA\JsonContent(ref="#/components/schemas/Bank") ),
+     *      @OA\Response( response=422, description="Invalid data", @OA\JsonContent(@OA\Property(property="error", type="string", example="The name has already been taken.")) ),
+     *      @OA\Response( response=401, description="Unauthorized", @OA\JsonContent(@OA\Property(property="message", type="string", example="Unauthenticated")) )
      * )
      */
     public function store(Request $request)
@@ -98,32 +79,10 @@ class BankController extends Controller
      *      path="/taeyoung-backend/public/api/bank/{id}",
      *      tags={"Bank"},
      *      security={{"bearerAuth":{}}},
-     *      @OA\Parameter(
-     *          name="id",
-     *          in="path",
-     *          required=true,
-     *          description="Bank ID",
-     *          @OA\Schema(type="integer")
-     *      ),
-     *      @OA\Response(
-     *          response=200,
-     *          description="Bank found",
-     *          @OA\JsonContent(ref="#/components/schemas/Bank")
-     *      ),
-     *      @OA\Response(
-     *          response=404,
-     *          description="Bank not found",
-     *          @OA\JsonContent(
-     *              @OA\Property(property="message", type="string", example="Bank not found")
-     *          )
-     *      ),
-     *      @OA\Response(
-     *          response=401,
-     *          description="Unauthorized",
-     *          @OA\JsonContent(
-     *              @OA\Property(property="message", type="string", example="Unauthenticated")
-     *          )
-     *      )
+     *      @OA\Parameter( name="id", in="path", required=true, description="Bank ID", @OA\Schema(type="integer")),
+     *      @OA\Response( response=200, description="Bank response", @OA\JsonContent(ref="#/components/schemas/Bank") ),
+     *      @OA\Response( response=404, description="Bank not found", @OA\JsonContent(@OA\Property(property="message", type="string", example="Bank not found")) ),
+     *      @OA\Response( response=401, description="Unauthorized", @OA\JsonContent(@OA\Property(property="message", type="string", example="Unauthenticated")) )
      * )
      */
     public function show(int $id)
@@ -143,43 +102,12 @@ class BankController extends Controller
      *      path="/taeyoung-backend/public/api/bank/{id}",
      *      tags={"Bank"},
      *      security={{"bearerAuth":{}}},
-     *      @OA\Parameter(
-     *          name="id",
-     *          in="path",
-     *          required=true,
-     *          description="Bank ID",
-     *          @OA\Schema(type="integer")
-     *      ),
-     *      @OA\RequestBody(
-     *          required=true,
-     *          @OA\JsonContent(ref="#/components/schemas/BankRequest")
-     *      ),
-     *      @OA\Response(
-     *          response=200,
-     *          description="Bank updated successfully",
-     *          @OA\JsonContent(ref="#/components/schemas/Bank")
-     *      ),
-     *      @OA\Response(
-     *          response=404,
-     *          description="Bank not found",
-     *          @OA\JsonContent(
-     *              @OA\Property(property="message", type="string", example="Bank not found")
-     *          )
-     *      ),
-     *      @OA\Response(
-     *          response=422,
-     *          description="Invalid data",
-     *          @OA\JsonContent(
-     *              @OA\Property(property="error", type="string", example="The name has already been taken.")
-     *          )
-     *      ),
-     *      @OA\Response(
-     *          response=401,
-     *          description="Unauthorized",
-     *          @OA\JsonContent(
-     *              @OA\Property(property="message", type="string", example="Unauthenticated")
-     *          )
-     *      )
+     *      @OA\Parameter( name="id", in="path", required=true, description="Bank ID", @OA\Schema(type="integer")),
+     *      @OA\RequestBody( required=true, @OA\JsonContent(ref="#/components/schemas/BankRequest") ),
+     *      @OA\Response( response=200, description="Bank updated", @OA\JsonContent(ref="#/components/schemas/Bank") ),
+     *      @OA\Response( response=404, description="Bank not found", @OA\JsonContent(@OA\Property(property="message", type="string", example="Bank not found")) ),
+     *      @OA\Response( response=422, description="Invalid data", @OA\JsonContent(@OA\Property(property="error", type="string", example="The name has already been taken.")) ),
+     *      @OA\Response( response=401, description="Unauthorized", @OA\JsonContent(@OA\Property(property="message", type="string", example="Unauthenticated")) )
      * )
      */
     public function update(Request $request, int $id)
@@ -218,46 +146,18 @@ class BankController extends Controller
      *      path="/taeyoung-backend/public/api/bank/{id}",
      *      tags={"Bank"},
      *      security={{"bearerAuth":{}}},
-     *      @OA\Parameter(
-     *          name="id",
-     *          in="path",
-     *          required=true,
-     *          description="Bank ID",
-     *          @OA\Schema(type="integer")
-     *      ),
-     *      @OA\Response(
-     *          response=200,
-     *          description="Bank deleted",
-     *          @OA\JsonContent(
-     *              @OA\Property(property="message", type="string", example="Bank deleted")
-     *          )
-     *      ),
-     *      @OA\Response(
-     *          response=404,
-     *          description="Bank not found",
-     *          @OA\JsonContent(
-     *              @OA\Property(property="message", type="string", example="Bank not found")
-     *          )
-     *      ),
-     *      @OA\Response(
-     *          response=401,
-     *          description="Unauthorized",
-     *          @OA\JsonContent(
-     *              @OA\Property(property="message", type="string", example="Unauthenticated")
-     *          )
-     *      )
+     *      @OA\Parameter( name="id", in="path", required=true, description="Bank ID", @OA\Schema(type="integer")),
+     *      @OA\Response( response=200, description="Bank deleted", @OA\JsonContent(@OA\Property(property="message", type="string", example="Bank deleted")) ),
+     *      @OA\Response( response=404, description="Bank not found", @OA\JsonContent(@OA\Property(property="message", type="string", example="Bank not found")) ),
+     *      @OA\Response( response=409, description="Bank related to payment", @OA\JsonContent(@OA\Property(property="message", type="string", example="Bank related to payment")) ),
      * )
      */
     public function destroy(int $id)
     {
         $bank = Bank::find($id);
-
-        if ($bank === null) {
-            return response()->json(['message' => 'Bank not found'], 404);
-        }
-
+        if (!$bank) return response()->json(['message' => 'Bank not found'], 404);
+        if ($bank->payments()->count() > 0) return response()->json(['message' => 'Bank related to payment'], 409);
         $bank->delete();
-
         return response()->json(['message' => 'Bank deleted']);
     }
 }

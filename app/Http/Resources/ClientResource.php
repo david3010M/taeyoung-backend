@@ -54,6 +54,7 @@ class ClientResource extends JsonResource
             'representativeDni' => $this->typeDocument === 'RUC' ? $this->representativeDni : null,
             'representativeNames' => $this->typeDocument === 'RUC' ? $this->representativeNames : null,
             'country' => (new CountryResource($this->country))->name,
+            'province' => $this->province ? (new ProvinceResource($this->province))->name : null,
         ];
     }
 }

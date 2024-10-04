@@ -56,6 +56,7 @@ class StoreClientRequest extends StoreRequest
             'representativeDni' => 'nullable|string|min:8|max:8',
             'representativeNames' => 'nullable|string',
             'country_id' => 'required|integer',
+            'province_id' => 'nullable|integer'
         ];
     }
 }

@@ -64,7 +64,7 @@ class ClientController extends Controller
         $request->merge(['type' => 'client']);
         $client = Person::create($request->all());
         $client->update(['filterName' => $client->typeDocument === 'DNI' ? $client->names . ' ' . $client->fatherSurname . ' ' . $client->motherSurname : $client->businessName]);
-        $client = Person::with('country')->find($client->id);
+        $client = Person::with(['country', 'province'])->find($client->id);
         return response()->json($client);
     }
 
@@ -84,7 +84,7 @@ class ClientController extends Controller
      */
     public function show(string $id)
     {
-        $client = Person::with('country')->where('type', 'client')->find($id);
+        $client = Person::with(['country', 'province'])->where('type', 'client')->find($id);
         if (!$client) return response()->json(['message' => 'Cliente no encontrado'], 404);
         return response()->json($client);
     }
@@ -111,7 +111,7 @@ class ClientController extends Controller
         else $request->merge(['dni' => null, 'names' => null, 'fatherSurname' => null, 'motherSurname' => null]);
         $client->update($request->all());
         $client->update(['filterName' => $client->typeDocument === 'DNI' ? $client->names . ' ' . $client->fatherSurname . ' ' . $client->motherSurname : $client->businessName]);
-        $client = Person::with('country')->where('type', 'client')->find($id);
+        $client = Person::with(['country', 'province'])->where('type', 'client')->find($id);
         return response()->json($client);
     }
 

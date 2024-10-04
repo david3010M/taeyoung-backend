@@ -108,10 +108,10 @@ class SaleController extends Controller
 
         $sale->totalSpareParts = $totalSpareParts;
         $sale->totalMachinery = $totalMachinery;
-        $sale->subtotal = $totalMachinery + $totalSpareParts;
-        $sale->igv = round($sale->subtotal * 0.18, 2);
         $sale->discount = $request->input('discount', 0);
-        $sale->total = $sale->subtotal + $sale->igv - $sale->discount;
+        $sale->subtotal = $totalMachinery + $totalSpareParts - $sale->discount;
+        $sale->igv = round($sale->subtotal * 0.18, 2);
+        $sale->total = $sale->subtotal + $sale->igv;
         $sale->totalIncome = $sale->total;
         $sale->balance = $sale->total;
 

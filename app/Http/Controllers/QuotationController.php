@@ -101,10 +101,10 @@ class QuotationController extends Controller
 
         $quotation->totalSpareParts = $totalSpareParts;
         $quotation->totalMachinery = $totalMachinery;
-        $quotation->subtotal = $totalMachinery + $totalSpareParts;
-        $quotation->igv = $quotation->subtotal * 0.18;
         $quotation->discount = (float)$request->input('discount');
-        $quotation->total = $quotation->subtotal + $quotation->igv - $quotation->discount;
+        $quotation->subtotal = $totalMachinery + $totalSpareParts - $quotation->discount;
+        $quotation->igv = round($quotation->subtotal * 0.18, 2);
+        $quotation->total = $quotation->subtotal + $quotation->igv;
         $quotation->update();
 
         $quotation = Quotation::find($quotation->id);

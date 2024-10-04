@@ -59,6 +59,7 @@ class UpdateClientRequest extends UpdateRequest
             'representativeDni' => 'nullable|string|min:8|max:8',
             'representativeNames' => 'nullable|string',
             'country_id' => 'nullable|integer',
+            'province_id' => 'nullable|integer'
         ];
     }
 }
