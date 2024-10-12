@@ -118,6 +118,21 @@ class ClientController extends Controller
         return response()->json($client);
     }
 
+    /**
+     * DELETE A CLIENT
+     * @OA\Delete (
+     *     path="/taeyoung-backend/public/api/client/{id}",
+     *     tags={"Client"},
+     *     security={{"bearerAuth": {}}},
+     *     summary="Delete a client",
+     *     description="Delete a client",
+     *     @OA\Parameter(parameter="id", name="id", in="path", required=true, description="Client ID", @OA\Schema(type="string")),
+     *     @OA\Response(response=200, description="Client deleted", @OA\JsonContent(type="object", @OA\Property(property="message", type="string", example="Client deleted"))),
+     *     @OA\Response(response=404, description="Client not found", @OA\JsonContent(type="object", @OA\Property(property="message", type="string", example="Client not found"))),
+     *     @OA\Response(response=422, description="Client has quotations or sales associated", @OA\JsonContent(type="object", @OA\Property(property="message", type="string", example="Client has quotations or sales associated"))),
+     *     @OA\Response(response=401, description="Unauthenticated", @OA\JsonContent(ref="#/components/schemas/Unauthenticated"))
+     * )
+     */
     public function destroy(string $id)
     {
         $client = Person::where('type', 'client')->find($id);
@@ -128,6 +143,20 @@ class ClientController extends Controller
         return response()->json(['message' => 'Client deleted']);
     }
 
+    /**
+     * IMPORT CLIENTS FROM EXCEL
+     * @OA\Post (
+     *     path="/taeyoung-backend/public/api/client/excel",
+     *     tags={"Client"},
+     *     security={{"bearerAuth": {}}},
+     *     summary="Import clients from excel",
+     *     description="Import clients from excel",
+     *     @OA\RequestBody( required=true, @OA\MediaType(mediaType="multipart/form-data", @OA\Schema(@OA\Property(property="file", type="file")))),
+     *     @OA\Response(response=200, description="Clients imported successfully", @OA\JsonContent(type="object", @OA\Property(property="message", type="string", example="Clients imported successfully"))),
+     *     @OA\Response(response=401, description="Unauthenticated", @OA\JsonContent(ref="#/components/schemas/Unauthenticated")),
+     *     @OA\Response(response=422, description="Validation error", @OA\JsonContent(ref="#/components/schemas/ValidationError"))
+     * )
+     */
     public function importExcel(Request $request)
     {
         $request->validate([

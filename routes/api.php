@@ -40,8 +40,6 @@ use Illuminate\Support\Facades\Route;
 */
 
 Route::post('/login', [AuthController::class, 'login'])->name('login');
-Route::post('/client/excel', [ClientController::class, 'importExcel'])->name('client-excel');
-
 
 Route::group(
     ['middleware' => ['auth:sanctum']],
@@ -189,6 +187,7 @@ Route::group(
         );
 
 //        CLIENT
+        Route::post('/client/excel', [ClientController::class, 'importExcel'])->name('client-excel');
         Route::resource('client', ClientController::class)->only(
             ['index', 'show', 'store', 'update', 'destroy']
         )->names(
@@ -200,6 +199,7 @@ Route::group(
                 'destroy' => 'client.destroy',
             ]
         );
+
 
 //        UNIT
         Route::resource('unit', UnitController::class)->only(
