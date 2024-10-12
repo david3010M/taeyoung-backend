@@ -54,7 +54,7 @@ class QuotationController extends Controller
      *     summary="Store a new quotation",
      *     description="Store a new quotation",
      *     security={{"bearerAuth": {}}},
-     *     @OA\RequestBody(required=true, description="Quotation data", @OA\JsonContent(ref="#/components/schemas/StoreQuotationRequest")),
+     *     @OA\RequestBody( @OA\MediaType(mediaType="multipart/form-data", @OA\Schema(ref="#/components/schemas/StoreQuotationRequest"))),
      *     @OA\Response(response=200, description="Successful operation", @OA\JsonContent(ref="#/components/schemas/QuotationResource")),
      *     @OA\Response(response=422, description="Validation error", @OA\JsonContent(ref="#/components/schemas/ValidationError")),
      *     @OA\Response(response=401, description="Unauthenticated", @OA\JsonContent(ref="#/components/schemas/Unauthenticated"))

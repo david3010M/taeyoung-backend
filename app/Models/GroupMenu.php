@@ -7,7 +7,6 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
 /**
- *
  * @OA\Schema (
  *     schema="GroupMenu",
  *     title="GroupMenu",
@@ -19,8 +18,6 @@ use Illuminate\Database\Eloquent\SoftDeletes;
  *     @OA\Property(property="order", type="number", example="1"),
  *     @OA\Property(property="option_menus", type="array", @OA\Items(ref="#/components/schemas/OptionMenu"))
  * )
- *
- *
  */
 class GroupMenu extends Model
 {

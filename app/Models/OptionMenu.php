@@ -44,6 +44,4 @@ class OptionMenu extends Model
     {
         return $this->hasMany(Access::class, 'optionmenu_id');
     }
-
-
 }

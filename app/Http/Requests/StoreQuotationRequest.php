@@ -13,8 +13,10 @@ use Illuminate\Validation\Rule;
  *     @OA\Property(property="discount", type="number", example="0"),
  *     @OA\Property(property="currencyType", type="string", example="USD"),
  *     @OA\Property(property="client_id", type="integer", example="21"),
- *     @OA\Property(property="detailMachinery", type="array", @OA\Items(ref="#/components/schemas/DetailMachineryRequest")),
- *     @OA\Property(property="detailSpareParts", type="array", @OA\Items(ref="#/components/schemas/DetailSparePartRequest"))
+ *     @OA\Property(property="igvActive", type="string", example="true"),
+ *     @OA\Property(property="images[]", type="array", @OA\Items(type="file", format="binary")),
+ *     @OA\Property(property="detailMachinery[]", type="array", @OA\Items(ref="#/components/schemas/DetailMachineryRequest")),
+ *     @OA\Property(property="detailSpareParts[]", type="array", @OA\Items(ref="#/components/schemas/DetailSparePartRequest"))
  * )
  *
  * @OA\Schema (
@@ -51,7 +53,9 @@ class StoreQuotationRequest extends StoreRequest
                     ->where('type', 'client')
             ],
 
-            'igvActive' => 'required|boolean',
+            'igvActive' => 'required|string|in:true,false',
+            'images' => 'nullable|array',
+            'images.*' => 'required|file',
 
 //            DETAILS
             'detailMachinery' => 'required_without:detailSpareParts|nullable|array',

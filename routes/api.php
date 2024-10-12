@@ -40,6 +40,7 @@ use Illuminate\Support\Facades\Route;
 */
 
 Route::post('/login', [AuthController::class, 'login'])->name('login');
+Route::post('/client/excel', [ClientController::class, 'importExcel'])->name('client-excel');
 
 
 Route::group(

@@ -15,6 +15,7 @@ use Illuminate\Validation\Rule;
  *     @OA\Property(property="client_id", type="integer", example="21"),
  *     @OA\Property(property="currencyType", type="string", example="PEN"),
  *     @OA\Property(property="discount", type="number", example="100"),
+ *     @OA\Property(property="igvActive", type="boolean", example="true", enum={"true", "false"}),
  *     @OA\Property(property="quotas", type="array", @OA\Items(
  *         @OA\Property(property="days", type="integer", example="7"),
  *         @OA\Property(property="amount", type="number", example="14378.6"),
@@ -53,7 +54,7 @@ class UpdateSaleRequest extends UpdateRequest
                 Rule::exists('people', 'id')
                     ->where('type', 'client')
             ],
-            'igvActive' => 'required|boolean',
+            'igvActive' => 'required|string|in:true,false',
             'currencyType' => 'nullable|string',
             'discount' => 'nullable|numeric',
             'quotas' => 'required|array',

@@ -6,7 +6,10 @@ use App\Http\Requests\IndexClientRequest;
 use App\Http\Requests\StoreClientRequest;
 use App\Http\Requests\UpdateClientRequest;
 use App\Http\Resources\ClientResource;
+use App\Imports\ClientsImport;
+use Illuminate\Http\Request;
 use App\Models\Person;
+use Maatwebsite\Excel\Facades\Excel;
 
 class ClientController extends Controller
 {
@@ -124,4 +127,17 @@ class ClientController extends Controller
         $client->delete();
         return response()->json(['message' => 'Client deleted']);
     }
+
+    public function importExcel(Request $request)
+    {
+        $request->validate([
+            'file' => 'required|mimes:xls,xlsx',
+        ]);
+
+        Excel::import(new ClientsImport, $request->file('file'));
+
+        return response()->json(['message' => 'Clients imported successfully']);
+    }
+
+
 }

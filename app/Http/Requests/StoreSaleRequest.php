@@ -16,16 +16,17 @@ use Illuminate\Validation\Rule;
  *     @OA\Property(property="client_id", type="integer", example="21"),
  *     @OA\Property(property="currencyType", type="string", example="PEN"),
  *     @OA\Property(property="discount", type="number", example="100"),
+ *     @OA\Property(property="igvActive", type="boolean", example="true", enum={"true", "false"}),
  *     @OA\Property(property="quotas", type="array", @OA\Items(
  *         @OA\Property(property="days", type="integer", example="7"),
  *         @OA\Property(property="amount", type="number", example="14378.6"),
  *     )),
- *     @OA\Property(property="detailMachinery", type="array", @OA\Items(
+ *     @OA\Property(property="detailMachinery[]", type="array", @OA\Items(
  *         @OA\Property(property="description", type="string", example="Machinery description"),
  *         @OA\Property(property="quantity", type="integer", example="2"),
  *         @OA\Property(property="salePrice", type="number", example="4000"),
  *     )),
- *     @OA\Property(property="detailSpareParts", type="array", @OA\Items(
+ *     @OA\Property(property="detailSpareParts[]", type="array", @OA\Items(
  *         @OA\Property(property="quantity", type="integer", example="4"),
  *         @OA\Property(property="salePrice", type="number", example="767.5"),
  *         @OA\Property(property="spare_part_id", type="integer", example="1"),
@@ -53,7 +54,7 @@ class StoreSaleRequest extends StoreRequest
                 Rule::exists('people', 'id')
                     ->where('type', 'client')
             ],
-            'igvActive' => 'required|boolean',
+            'igvActive' => 'required|string|in:true,false',
             'currencyType' => 'nullable|string',
             'discount' => 'nullable|numeric',
             'quotas' => 'required|array',

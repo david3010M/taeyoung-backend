@@ -18,9 +18,12 @@ return new class extends Migration {
             $table->string('names')->nullable();
             $table->string('fatherSurname')->nullable();
             $table->string('motherSurname')->nullable();
+            $table->string('sector')->nullable();
             $table->string('address')->nullable();
             $table->string('email')->nullable();
             $table->string('phone')->nullable();
+            $table->string('website')->nullable();
+            $table->string('active')->nullable();
             $table->string('representativeDni')->nullable();
             $table->string('representativeNames')->nullable();
             $table->foreignId('country_id')->nullable()->unsigned()->constrained('countries');

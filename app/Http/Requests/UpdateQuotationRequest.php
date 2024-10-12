@@ -12,6 +12,7 @@ use Illuminate\Validation\Rule;
  *     @OA\Property(property="discount", type="number", example="0"),
  *     @OA\Property(property="currencyType", type="string", example="USD"),
  *     @OA\Property(property="client_id", type="integer", example="21"),
+ *     @OA\Property(property="igvActive", type="boolean", example="true"),
  *     @OA\Property(property="detailMachinery", type="array", @OA\Items(ref="#/components/schemas/DetailMachineryRequest")),
  *     @OA\Property(property="detailSpareParts", type="array", @OA\Items(ref="#/components/schemas/DetailSparePartRequest"))
  * )
@@ -32,7 +33,7 @@ class UpdateQuotationRequest extends UpdateRequest
                     ->where('type', 'client')
                     ->whereNull('deleted_at')
             ],
-            'igvActive' => 'required|boolean',
+            'igvActive' => 'required|string|in:true,false',
             'detailMachinery' => 'nullable|array',
             'detailMachinery.*.description' => 'required|string',
             'detailMachinery.*.quantity' => 'required|int',
