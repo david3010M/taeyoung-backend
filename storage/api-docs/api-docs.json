@@ -94,7 +94,7 @@
                         "content": {
                             "application/json": {
                                 "schema": {
-                                    "$ref": "#/components/schemas/AccountReceivableResource"
+                                    "$ref": "#/components/schemas/AccountPayableResource"
                                 }
                             }
                         }
@@ -104,6 +104,108 @@
                     },
                     "422": {
                         "description": "Unprocessable Entity"
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
+        "/taeyoung-backend/public/api/accountPayable/{id}/payment": {
+            "post": {
+                "tags": [
+                    "Account Payables"
+                ],
+                "summary": "Store a payment",
+                "description": "Store a payment",
+                "operationId": "47997c29c7099128253e9b6e0ef46953",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "Account receivable id",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "requestBody": {
+                    "description": "Store a payment",
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/StoreReceivableMovementRequest"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Success",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/AccountPayableResource"
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "$ref": "#/components/schemas/Unauthenticated"
+                    },
+                    "404": {
+                        "description": "Account receivable not found"
+                    },
+                    "422": {
+                        "$ref": "#/components/schemas/ValidationError"
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
+        "/taeyoung-backend/public/api/accountPayable/{id}": {
+            "get": {
+                "tags": [
+                    "Account Payables"
+                ],
+                "summary": "Get an account payable",
+                "description": "Get an account payable",
+                "operationId": "dcd82809eda54a71da3828021cc1e24d",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "Account payable id",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Success",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/AccountPayableResource"
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "$ref": "#/components/schemas/Unauthenticated"
+                    },
+                    "404": {
+                        "description": "Account payable not found"
                     }
                 },
                 "security": [
@@ -211,6 +313,108 @@
                     },
                     "422": {
                         "description": "Unprocessable Entity"
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
+        "/taeyoung-backend/public/api/accountReceivable/{id}/payment": {
+            "post": {
+                "tags": [
+                    "Account Receivables"
+                ],
+                "summary": "Store a payment",
+                "description": "Store a payment",
+                "operationId": "91b49a0edb76db2a812c4003380b466f",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "Account receivable id",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "requestBody": {
+                    "description": "Store a payment",
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/StoreReceivableMovementRequest"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Success",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/AccountReceivableResource"
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "$ref": "#/components/schemas/Unauthenticated"
+                    },
+                    "404": {
+                        "description": "Account receivable not found"
+                    },
+                    "422": {
+                        "$ref": "#/components/schemas/ValidationError"
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
+        "/taeyoung-backend/public/api/accountReceivable/{id}": {
+            "get": {
+                "tags": [
+                    "Account Receivables"
+                ],
+                "summary": "Get an account receivable",
+                "description": "Get an account receivable",
+                "operationId": "18885c847868dc66b6f8ab23b191e865",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "Account receivable id",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Success",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/AccountReceivableResource"
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "$ref": "#/components/schemas/Unauthenticated"
+                    },
+                    "404": {
+                        "description": "Account receivable not found"
                     }
                 },
                 "security": [
@@ -1433,6 +1637,180 @@
                         }
                     }
                 }
+            }
+        },
+        "/taeyoung-backend/public/api/extension": {
+            "get": {
+                "tags": [
+                    "Extension"
+                ],
+                "summary": "Show all extensions",
+                "description": "SHOW ALL COMMITMENTS",
+                "operationId": "1d02e338ff0db8a0be373f0a81172e5e",
+                "parameters": [
+                    {
+                        "name": "accountReceivable_id",
+                        "in": "query",
+                        "description": "ID of the accountReceivable",
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Show all extensions",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/Extension"
+                                }
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "Error: Unprocessable Entity",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ValidationError"
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Error: Unauthorized",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/Unauthenticated"
+                                }
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            },
+            "post": {
+                "tags": [
+                    "Extension"
+                ],
+                "summary": "Create an extension",
+                "operationId": "c71a4ac985f04e572caa15cd8bdf8b57",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/ExtensionRequest"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Create an extension",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/Extension"
+                                }
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "Error: Unprocessable Entity",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ValidationError"
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Error: Unauthorized",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/Unauthenticated"
+                                }
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
+        "/taeyoung-backend/public/api/extension/{id}": {
+            "delete": {
+                "tags": [
+                    "Extension"
+                ],
+                "summary": "Delete an extension",
+                "operationId": "165fb978dc80121c17603fc00e41c049",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "ID of the extension",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Delete an extension",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/Extension"
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Error: Not Found",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "error": {
+                                            "type": "string",
+                                            "example": "Extension not found"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Error: Unauthorized",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/Unauthenticated"
+                                }
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
             }
         },
         "/taeyoung-backend/public/api/paymentConcept": {
@@ -4914,6 +5292,54 @@
                 },
                 "type": "object"
             },
+            "StoreReceivableMovementRequest": {
+                "title": "StoreReceivableMovementRequest",
+                "description": "Store Receivable Movement Request",
+                "properties": {
+                    "paymentDate": {
+                        "type": "string",
+                        "format": "date",
+                        "example": "2021-10-13"
+                    },
+                    "cash": {
+                        "type": "numeric",
+                        "example": "100.00"
+                    },
+                    "yape": {
+                        "type": "numeric",
+                        "example": "100.00"
+                    },
+                    "plin": {
+                        "type": "numeric",
+                        "example": "100.00"
+                    },
+                    "card": {
+                        "type": "numeric",
+                        "example": "100.00"
+                    },
+                    "deposit": {
+                        "type": "numeric",
+                        "example": "100.00"
+                    },
+                    "isBankPayment": {
+                        "type": "boolean",
+                        "example": "true"
+                    },
+                    "comment": {
+                        "type": "string",
+                        "example": "Comment"
+                    },
+                    "bank_id": {
+                        "type": "integer",
+                        "example": "1"
+                    },
+                    "accountReceivable_id": {
+                        "type": "integer",
+                        "example": "1"
+                    }
+                },
+                "type": "object"
+            },
             "StorePaymentConceptRequest": {
                 "title": "StorePaymentConceptRequest",
                 "required": [
@@ -5699,6 +6125,10 @@
                         "type": "integer",
                         "example": "1"
                     },
+                    "paymentType": {
+                        "type": "string",
+                        "example": "Contado"
+                    },
                     "days": {
                         "type": "integer",
                         "example": "30"
@@ -5739,6 +6169,14 @@
                     "order_id": {
                         "type": "integer",
                         "example": "1"
+                    },
+                    "quotation": {
+                        "type": "string",
+                        "example": "COTI-123456"
+                    },
+                    "order": {
+                        "type": "string",
+                        "example": "VENT-123456"
                     }
                 },
                 "type": "object"
@@ -5765,6 +6203,10 @@
                     "id": {
                         "type": "integer",
                         "example": "1"
+                    },
+                    "paymentType": {
+                        "type": "string",
+                        "example": "Contado"
                     },
                     "days": {
                         "type": "integer",
@@ -5807,9 +6249,13 @@
                         "type": "integer",
                         "example": "1"
                     },
+                    "quotation": {
+                        "type": "string",
+                        "example": "COTI-123456"
+                    },
                     "order": {
                         "type": "string",
-                        "example": "123456"
+                        "example": "VENT-123456"
                     }
                 },
                 "type": "object"
@@ -6714,6 +7160,59 @@
                 },
                 "type": "object"
             },
+            "Extension": {
+                "title": "Extension",
+                "properties": {
+                    "id": {
+                        "type": "integer",
+                        "example": "1"
+                    },
+                    "oldEndDate": {
+                        "type": "string",
+                        "example": "2024-06-27"
+                    },
+                    "newEndDate": {
+                        "type": "string",
+                        "example": "2024-06-27"
+                    },
+                    "reason": {
+                        "type": "string",
+                        "example": "Razón de la extensión"
+                    },
+                    "accountReceivable_id": {
+                        "type": "integer",
+                        "example": "1"
+                    },
+                    "created_at": {
+                        "type": "string",
+                        "example": "2024-06-27 22:59:36"
+                    }
+                },
+                "type": "object"
+            },
+            "ExtensionRequest": {
+                "title": "ExtensionRequest",
+                "required": [
+                    "newEndDate",
+                    "reason",
+                    "accountReceivable_id"
+                ],
+                "properties": {
+                    "newEndDate": {
+                        "type": "string",
+                        "example": "2024-06-27"
+                    },
+                    "reason": {
+                        "type": "string",
+                        "example": "Razón de la extensión"
+                    },
+                    "accountReceivable_id": {
+                        "type": "integer",
+                        "example": "1"
+                    }
+                },
+                "type": "object"
+            },
             "GroupMenu": {
                 "title": "GroupMenu",
                 "required": [
@@ -7072,6 +7571,10 @@
         {
             "name": "Department",
             "description": "Department"
+        },
+        {
+            "name": "Extension",
+            "description": "Extension"
         },
         {
             "name": "PaymentConcept",

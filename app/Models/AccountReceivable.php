@@ -72,5 +72,14 @@ class AccountReceivable extends Model
         return $this->belongsTo(Order::class);
     }
 
+    public function extensions()
+    {
+        return $this->hasMany(Extension::class, 'accountReceivable_id');
+    }
+
+    public function movements()
+    {
+        return $this->hasMany(Movement::class, 'accountReceivable_id');
+    }
 
 }

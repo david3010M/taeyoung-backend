@@ -69,4 +69,9 @@ class AccountPayable extends Model
     {
         return $this->belongsTo(Order::class);
     }
+
+    public function movements()
+    {
+        return $this->hasMany(Movement::class, 'accountPayable_id');
+    }
 }

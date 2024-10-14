@@ -24,19 +24,28 @@ class Movement extends Model
 
         'isBankPayment',
         'deposit',
-        'numberVoucher',
-        'routeVoucher',
+//        'numberVoucher',
+//        'routeVoucher',
 
         'comment',
-
         'status',
 //        'person_id',
         'user_id',
         'bank_id',
-        'paymentConcept_id',
+//        'paymentConcept_id',
         'accountReceivable_id',
         'accountPayable_id',
-        'order_id',
+//        'order_id',
+    ];
+
+    protected $casts = [
+        'paymentDate' => 'date:Y-m-d',
+        'total' => 'float',
+        'cash' => 'float',
+        'yape' => 'float',
+        'plin' => 'float',
+        'card' => 'float',
+        'deposit' => 'float',
     ];
 
     protected $hidden = [

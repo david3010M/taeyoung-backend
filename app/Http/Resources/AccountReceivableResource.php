@@ -9,6 +9,7 @@ use Illuminate\Http\Resources\Json\JsonResource;
  * @OA\Schema(
  *     schema="AccountReceivableResource",
  *     @OA\Property(property="id", type="integer", example="1"),
+ *     @OA\Property(property="paymentType", type="string", example="Contado"),
  *     @OA\Property(property="days", type="integer", example="30"),
  *     @OA\Property(property="date", type="string", format="date", example="2021-01-01"),
  *     @OA\Property(property="amount", type="number", example="1000.00"),
@@ -19,7 +20,8 @@ use Illuminate\Http\Resources\Json\JsonResource;
  *     @OA\Property(property="country", type="string", example="United States"),
  *     @OA\Property(property="currency_id", type="integer", example="1"),
  *     @OA\Property(property="order_id", type="integer", example="1"),
- *     @OA\Property(property="order", type="string", example="123456"),
+ *     @OA\Property(property="quotation", type="string", example="COTI-123456"),
+ *     @OA\Property(property="order", type="string", example="VENT-123456"),
  * )
  *
  * @OA\Schema (
@@ -32,9 +34,12 @@ use Illuminate\Http\Resources\Json\JsonResource;
  */
 class AccountReceivableResource extends JsonResource
 {
+    protected bool $includeReceivableField = false;
+    protected bool $includePayableField = false;
+
     public function toArray(Request $request): array
     {
-        return [
+        $data = [
             'id' => $this->id,
             'paymentType' => $this->paymentType,
             'days' => $this->days,
@@ -48,7 +53,35 @@ class AccountReceivableResource extends JsonResource
             'country' => $this->client->country->name,
             'currency_id' => $this->currency_id,
             'order_id' => $this->order_id,
-            'order' => $this->order->number,
+            'quotation' => "COTI-" . $this->order->quotation->number,
+            'order' => "VENT-" . $this->order->number,
         ];
+
+        if ($this->includeReceivableField) {
+            $data['extensions'] = $this->extensions;
+            $data['movements'] = MovementResource::collection($this->movements)
+                ->map(fn($movement) => $movement->withReceivable());
+        }
+
+        if ($this->includePayableField) {
+            $data['extensions'] = $this->extensions;
+            $data['movements'] = MovementResource::collection($this->movements)
+                ->map(fn($movement) => $movement->withPayable());
+        }
+
+
+        return $data;
+    }
+
+    public function withReceivable(): self
+    {
+        $this->includeReceivableField = true;
+        return $this;
+    }
+
+    public function withPayable(): self
+    {
+        $this->includePayableField = true;
+        return $this;
     }
 }

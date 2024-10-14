@@ -3,6 +3,7 @@
 use App\Http\Controllers\AccessController;
 use App\Http\Controllers\AccountPayableController;
 use App\Http\Controllers\AccountReceivableController;
+use App\Http\Controllers\ExtensionController;
 use App\Http\Controllers\Auth\AuthController;
 use App\Http\Controllers\BankController;
 use App\Http\Controllers\ClientController;
@@ -317,6 +318,7 @@ Route::group(
                 'destroy' => 'accountReceivable.destroy',
             ]
         );
+        Route::post('accountReceivable/{id}/payment', [AccountReceivableController::class, 'storePayment'])->name('accountReceivable.payment');
 
 //        ACCOUNT PAYABLE
         Route::resource('accountPayable', AccountPayableController::class)->only(
@@ -330,6 +332,12 @@ Route::group(
                 'destroy' => 'accountPayable.destroy',
             ]
         );
+        Route::post('accountPayable/{id}/payment', [AccountPayableController::class, 'storePayment'])->name('accountPayable.payment');
+
+//    EXTENSION
+        Route::resource('extension', ExtensionController::class)->only(['index', 'show', 'store', 'update', 'destroy'])
+            ->names(['index' => 'extension.index', 'store' => 'extension.store', 'show' => 'extension.show',
+                'update' => 'extension.update', 'destroy' => 'extension.destroy']);
 
 
     }

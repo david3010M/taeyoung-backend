@@ -12,11 +12,11 @@ return new class extends Migration {
             $table->string('number')->nullable();
             $table->dateTime('paymentDate')->nullable();
             $table->decimal('total')->nullable();
-            $table->decimal('cash')->nullable();
-            $table->decimal('yape')->nullable();
-            $table->decimal('plin')->nullable();
-            $table->decimal('card')->nullable();
-            $table->decimal('deposit')->nullable();
+            $table->decimal('cash')->nullable()->default(0);
+            $table->decimal('yape')->nullable()->default(0);
+            $table->decimal('plin')->nullable()->default(0);
+            $table->decimal('card')->nullable()->default(0);
+            $table->decimal('deposit')->nullable()->default(0);
 
             $table->string('typeDocument')->nullable(); // FACTURA | BOLETA
             $table->boolean('isBankPayment')->nullable()->default(false);
