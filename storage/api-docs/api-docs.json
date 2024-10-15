@@ -125,7 +125,7 @@
                     {
                         "name": "id",
                         "in": "path",
-                        "description": "Account receivable id",
+                        "description": "Account payable id",
                         "required": true,
                         "schema": {
                             "type": "integer"
@@ -138,7 +138,7 @@
                     "content": {
                         "application/json": {
                             "schema": {
-                                "$ref": "#/components/schemas/StoreReceivableMovementRequest"
+                                "$ref": "#/components/schemas/StorePayableMovementRequest"
                             }
                         }
                     }
@@ -158,7 +158,7 @@
                         "$ref": "#/components/schemas/Unauthenticated"
                     },
                     "404": {
-                        "description": "Account receivable not found"
+                        "description": "Account payable not found"
                     },
                     "422": {
                         "$ref": "#/components/schemas/ValidationError"
@@ -5286,6 +5286,54 @@
                         "example": "Juan"
                     },
                     "country_id": {
+                        "type": "integer",
+                        "example": "1"
+                    }
+                },
+                "type": "object"
+            },
+            "StorePayableMovementRequest": {
+                "title": "StorePayableMovementRequest",
+                "description": "Store Payable Movement Request",
+                "properties": {
+                    "paymentDate": {
+                        "type": "string",
+                        "format": "date",
+                        "example": "2021-10-13"
+                    },
+                    "cash": {
+                        "type": "numeric",
+                        "example": "100.00"
+                    },
+                    "yape": {
+                        "type": "numeric",
+                        "example": "100.00"
+                    },
+                    "plin": {
+                        "type": "numeric",
+                        "example": "100.00"
+                    },
+                    "card": {
+                        "type": "numeric",
+                        "example": "100.00"
+                    },
+                    "deposit": {
+                        "type": "numeric",
+                        "example": "100.00"
+                    },
+                    "isBankPayment": {
+                        "type": "boolean",
+                        "example": "true"
+                    },
+                    "comment": {
+                        "type": "string",
+                        "example": "Comment"
+                    },
+                    "bank_id": {
+                        "type": "integer",
+                        "example": "1"
+                    },
+                    "accountPayable_id": {
                         "type": "integer",
                         "example": "1"
                     }

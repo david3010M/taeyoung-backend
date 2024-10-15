@@ -57,11 +57,11 @@ class AccountPayableController extends Controller
      *     summary="Store a payment",
      *     description="Store a payment",
      *     security={{"bearerAuth": {}}},
-     *     @OA\Parameter( name="id", in="path", description="Account receivable id", required=true, @OA\Schema(type="integer")),
-     *     @OA\RequestBody( required=true, description="Store a payment", @OA\JsonContent(ref="#/components/schemas/StoreReceivableMovementRequest")),
+     *     @OA\Parameter( name="id", in="path", description="Account payable id", required=true, @OA\Schema(type="integer")),
+     *     @OA\RequestBody( required=true, description="Store a payment", @OA\JsonContent(ref="#/components/schemas/StorePayableMovementRequest")),
      *     @OA\Response(response="200", description="Success", @OA\JsonContent(ref="#/components/schemas/AccountPayableResource")),
      *     @OA\Response(response="401", ref="#/components/schemas/Unauthenticated"),
-     *     @OA\Response(response="404", description="Account receivable not found"),
+     *     @OA\Response(response="404", description="Account payable not found"),
      *     @OA\Response(response="422", ref="#/components/schemas/ValidationError")
      * )
      */
