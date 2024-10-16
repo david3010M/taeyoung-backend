@@ -35,7 +35,7 @@ class AccountPayable extends Model
     ];
 
     const filters = [
-        'date' => 'like',
+        'date' => 'between',
         'amount' => 'like',
         'balance' => 'like',
         'status' => 'like',

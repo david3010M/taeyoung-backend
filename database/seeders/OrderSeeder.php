@@ -5,6 +5,7 @@ namespace Database\Seeders;
 use App\Models\DetailMachinery;
 use App\Models\DetailSparePart;
 use App\Models\Order;
+use App\Models\Person;
 use App\Models\Quotation;
 use Carbon\Carbon;
 use Illuminate\Database\Seeder;
@@ -15,9 +16,10 @@ class OrderSeeder extends Seeder
     {
 //        PURCHASE
         $quotations = Quotation::all();
+        $supplier = Person::where('type', 'supplier')->get();
         foreach ($quotations as $quotation) {
             $order = Order::factory()->purchase()->create([
-                'supplier_id' => $quotation->client_id,
+                'supplier_id' => $supplier->random()->id,
                 'date' => Carbon::parse($quotation->date)->addDays(15),
             ]);
             $detailSpareParts = $quotation->detailSpareParts;

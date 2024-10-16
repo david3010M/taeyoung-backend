@@ -20,7 +20,7 @@ class AccountPayableController extends Controller
      *     summary="Get all account payables",
      *     description="Get all account payables",
      *     security={{"bearerAuth": {}}},
-     *     @OA\Parameter( name="date", in="query", description="Filter by date", @OA\Schema(type="string")),
+     *     @OA\Parameter( name="date", name="date[]", in="query", required=false, description="Account Payable Date", @OA\Schema(type="array", @OA\Items(type="string", format="date"))),
      *     @OA\Parameter( name="amount", in="query", description="Filter by amount", @OA\Schema(type="string")),
      *     @OA\Parameter( name="balance", in="query", description="Filter by balance", @OA\Schema(type="string")),
      *     @OA\Parameter( name="status", in="query", description="Filter by status", @OA\Schema(type="string")),

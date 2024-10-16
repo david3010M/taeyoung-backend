@@ -16,11 +16,16 @@
                 "operationId": "296e92c45e7732e084711d58a97022e4",
                 "parameters": [
                     {
-                        "name": "date",
+                        "name": "date[]",
                         "in": "query",
-                        "description": "Filter by date",
+                        "description": "Account Payable Date",
+                        "required": false,
                         "schema": {
-                            "type": "string"
+                            "type": "array",
+                            "items": {
+                                "type": "string",
+                                "format": "date"
+                            }
                         }
                     },
                     {
@@ -225,11 +230,16 @@
                 "operationId": "d0793728d70bf894b76269a52352a6b9",
                 "parameters": [
                     {
-                        "name": "date",
+                        "name": "date[]",
                         "in": "query",
-                        "description": "Filter by date",
+                        "description": "Account Receivable Date",
+                        "required": false,
                         "schema": {
-                            "type": "string"
+                            "type": "array",
+                            "items": {
+                                "type": "string",
+                                "format": "date"
+                            }
                         }
                     },
                     {

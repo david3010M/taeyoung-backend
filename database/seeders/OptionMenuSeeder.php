@@ -27,8 +27,8 @@ class OptionMenuSeeder extends Seeder
             ['name' => 'Paises', 'route' => 'paises', 'order' => 5, 'icon' => 'fas fa-cog', 'groupmenu_id' => 5],
             ['name' => 'Tipo de Cambio', 'route' => 'tipoCambio', 'order' => 6, 'icon' => 'fas fa-cog', 'groupmenu_id' => 5],
             ['name' => 'Proveedor', 'route' => 'proveedor', 'order' => 7, 'icon' => 'fas fa-cog', 'groupmenu_id' => 5],
-            ['name' => 'Cliente', 'route' => 'cliente', 'order' => 7, 'icon' => 'fas fa-cog', 'groupmenu_id' => 5],
-            ['name' => 'Conceptos de Pago', 'route' => 'conceptosDePago', 'order' => 8, 'icon' => 'fas fa-cog', 'groupmenu_id' => 5],
+            ['name' => 'Cliente', 'route' => 'cliente', 'order' => 8, 'icon' => 'fas fa-cog', 'groupmenu_id' => 5],
+            ['name' => 'Conceptos de Pago', 'route' => 'conceptosDePago', 'order' => 9, 'icon' => 'fas fa-cog', 'groupmenu_id' => 5],
         ];
 
         foreach ($array as $item) {
