@@ -21,7 +21,8 @@ use Illuminate\Validation\Rule;
  *     @OA\Property(property="phone", type="string", example="987654321"),
  *     @OA\Property(property="representativeDni", type="string", example="12345678"),
  *     @OA\Property(property="representativeNames", type="string", example="Juan"),
- *     @OA\Property(property="country_id", type="integer", example="1")
+ *     @OA\Property(property="country_id", type="integer", example="1"),
+ *     @OA\Property(property="province_id", type="integer", example="1"),
  * )
  */
 class StoreClientRequest extends StoreRequest

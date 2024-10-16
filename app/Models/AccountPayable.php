@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Models\Scopes\UpdateStatusScope;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
@@ -54,6 +55,11 @@ class AccountPayable extends Model
         'order_id',
         'currency_id',
     ];
+
+    protected static function booted()
+    {
+        static::addGlobalScope(new UpdateStatusScope);
+    }
 
     public function supplier()
     {
