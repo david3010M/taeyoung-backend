@@ -46,6 +46,7 @@ class Movement extends Model
         'plin' => 'float',
         'card' => 'float',
         'deposit' => 'float',
+        'isBankPayment' => 'boolean',
     ];
 
     protected $hidden = [
