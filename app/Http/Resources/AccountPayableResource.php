@@ -46,7 +46,7 @@ class AccountPayableResource extends JsonResource
             'date' => $this->date ? $this->date->format('Y-m-d') : null,
             'amount' => $this->amount,
             'balance' => $this->balance,
-            'paymentAmount' => $this->amount - $this->balance,
+            'paymentAmount' => round($this->amount - $this->balance, 2),
             'status' => $this->status,
             'supplier_id' => $this->supplier_id,
             'supplier' => $this->supplier->filterName,

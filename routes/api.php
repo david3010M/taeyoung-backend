@@ -319,6 +319,7 @@ Route::group(
             ]
         );
         Route::post('accountReceivable/{id}/payment', [AccountReceivableController::class, 'storePayment'])->name('accountReceivable.payment');
+        Route::delete('accountReceivable/deletePayment/{id}', [AccountReceivableController::class, 'deletePayment'])->name('accountReceivable.deletePayment');
 
 //        ACCOUNT PAYABLE
         Route::resource('accountPayable', AccountPayableController::class)->only(
@@ -333,6 +334,7 @@ Route::group(
             ]
         );
         Route::post('accountPayable/{id}/payment', [AccountPayableController::class, 'storePayment'])->name('accountPayable.payment');
+        Route::delete('accountPayable/deletePayment/{id}', [AccountPayableController::class, 'deletePayment'])->name('accountPayable.deletePayment');
 
 //    EXTENSION
         Route::resource('extension', ExtensionController::class)->only(['index', 'show', 'store', 'update', 'destroy'])

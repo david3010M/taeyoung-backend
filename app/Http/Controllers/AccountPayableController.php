@@ -9,6 +9,7 @@ use App\Http\Resources\AccountPayableResource;
 use App\Models\AccountPayable;
 use App\Http\Requests\StoreAccountPayableRequest;
 use App\Http\Requests\UpdateAccountPayableRequest;
+use App\Models\AccountReceivable;
 use App\Models\Movement;
 
 class AccountPayableController extends Controller
@@ -130,5 +131,30 @@ class AccountPayableController extends Controller
     public function destroy(int $id)
     {
         //
+    }
+
+    /**
+     * @OA\Delete(
+     *     path="/taeyoung-backend/public/api/accountPayable/deletePayment/{paymentId}",
+     *     tags={"Account Payables"},
+     *     summary="Delete a payment",
+     *     description="Delete a payment",
+     *     security={{"bearerAuth": {}}},
+     *     @OA\Parameter( name="paymentId", in="path", description="Payment id", required=true, @OA\Schema(type="integer")),
+     *     @OA\Response(response="200", description="Success", @OA\JsonContent(@OA\Property(property="message", type="string", example="Pago eliminado correctamente"))),
+     *     @OA\Response(response="401", ref="#/components/schemas/Unauthenticated"),
+     *     @OA\Response(response="404", description="Payment not found", @OA\JsonContent(@OA\Property(property="error", type="string", example="Pago no encontrado")))
+     * )
+     */
+    public function deletePayment(int $id)
+    {
+        $movement = Movement::find($id);
+        if (!$movement) return response()->json(['error' => 'Pago no encontrado'], 404);
+        $accountPayable = AccountPayable::find($movement->accountPayable_id);
+        if (!$accountPayable) return response()->json(['error' => 'Cuenta por pagar no encontrada'], 404);
+        $accountPayable->balance += $movement->total;
+        $accountPayable->save();
+        $movement->delete();
+        return response()->json(['message' => 'Pago eliminado correctamente']);
     }
 }

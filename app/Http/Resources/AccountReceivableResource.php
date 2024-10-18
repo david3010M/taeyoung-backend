@@ -46,7 +46,7 @@ class AccountReceivableResource extends JsonResource
             'date' => $this->date ? $this->date->format('Y-m-d') : null,
             'amount' => $this->amount,
             'balance' => $this->balance,
-            'paymentAmount' => $this->amount - $this->balance,
+            'paymentAmount' => round($this->amount - $this->balance, 2),
             'status' => $this->status,
             'client_id' => $this->client_id,
             'client' => $this->client->filterName,

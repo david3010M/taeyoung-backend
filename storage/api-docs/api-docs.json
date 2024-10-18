@@ -220,6 +220,69 @@
                 ]
             }
         },
+        "/taeyoung-backend/public/api/accountPayable/deletePayment/{paymentId}": {
+            "delete": {
+                "tags": [
+                    "Account Payables"
+                ],
+                "summary": "Delete a payment",
+                "description": "Delete a payment",
+                "operationId": "f62e78b0ccc7743741612a780641d5ec",
+                "parameters": [
+                    {
+                        "name": "paymentId",
+                        "in": "path",
+                        "description": "Payment id",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Success",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Pago eliminado correctamente"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "$ref": "#/components/schemas/Unauthenticated"
+                    },
+                    "404": {
+                        "description": "Payment not found",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "error": {
+                                            "type": "string",
+                                            "example": "Pago no encontrado"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
         "/taeyoung-backend/public/api/accountReceivable": {
             "get": {
                 "tags": [
@@ -425,6 +488,69 @@
                     },
                     "404": {
                         "description": "Account receivable not found"
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
+        "/taeyoung-backend/public/api/accountReceivable/deletePayment/{paymentId}": {
+            "delete": {
+                "tags": [
+                    "Account Receivables"
+                ],
+                "summary": "Delete a payment",
+                "description": "Delete a payment",
+                "operationId": "29c3867f71d3b84c8bf74996934d207b",
+                "parameters": [
+                    {
+                        "name": "paymentId",
+                        "in": "path",
+                        "description": "Payment id",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Success",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Pago eliminado correctamente"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "$ref": "#/components/schemas/Unauthenticated"
+                    },
+                    "404": {
+                        "description": "Payment not found",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "error": {
+                                            "type": "string",
+                                            "example": "Pago no encontrado"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
                     }
                 },
                 "security": [
@@ -5296,6 +5422,10 @@
                         "example": "Juan"
                     },
                     "country_id": {
+                        "type": "integer",
+                        "example": "1"
+                    },
+                    "province_id": {
                         "type": "integer",
                         "example": "1"
                     }

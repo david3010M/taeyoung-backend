@@ -130,4 +130,29 @@ class AccountReceivableController extends Controller
     {
         //
     }
+
+    /**
+     * @OA\Delete(
+     *     path="/taeyoung-backend/public/api/accountReceivable/deletePayment/{paymentId}",
+     *     tags={"Account Receivables"},
+     *     summary="Delete a payment",
+     *     description="Delete a payment",
+     *     security={{"bearerAuth": {}}},
+     *     @OA\Parameter( name="paymentId", in="path", description="Payment id", required=true, @OA\Schema(type="integer")),
+     *     @OA\Response(response="200", description="Success", @OA\JsonContent(@OA\Property(property="message", type="string", example="Pago eliminado correctamente"))),
+     *     @OA\Response(response="401", ref="#/components/schemas/Unauthenticated"),
+     *     @OA\Response(response="404", description="Payment not found", @OA\JsonContent(@OA\Property(property="error", type="string", example="Pago no encontrado")))
+     * )
+     */
+    public function deletePayment(int $id)
+    {
+        $movement = Movement::find($id);
+        if (!$movement) return response()->json(['error' => 'Pago no encontrado'], 404);
+        $accountReceivable = AccountReceivable::find($movement->accountReceivable_id);
+        if (!$accountReceivable) return response()->json(['error' => 'Cuenta por cobrar no encontrada'], 404);
+        $accountReceivable->balance += $movement->total;
+        $accountReceivable->save();
+        $movement->delete();
+        return response()->json(['message' => 'Pago eliminado correctamente']);
+    }
 }
