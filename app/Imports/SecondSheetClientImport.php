@@ -15,12 +15,11 @@ class SecondSheetClientImport implements ToCollection, WithStartRow
     {
         foreach ($rows as $row) {
             $row = json_decode(json_encode($row), true);
-            logger($row);
             $province = Province::where('name', 'like', '%' . $row[5] . '%')->first();
             $country = Country::where('name', 'like', '%' . $row[5] . '%')->first();
             $personExists = Person::where('businessName', $row[1])->first();
             if (!$personExists) {
-                Person::create([
+                $person = Person::make([
                     'type' => 'client',
                     'typeDocument' => 'RUC',
                     'businessName' => $row[1],
@@ -31,9 +30,12 @@ class SecondSheetClientImport implements ToCollection, WithStartRow
                     'email' => $row[7],
                     'website' => $row[8],
                     'active' => $row[9] === 'ACTIVO',
-                    'country_id' => $province ? 179 : $country->id ?? 179,
-                    'province_id' => $province?->id ?? 135,
+                    'country_id' => $country->id ?? 179,
+                    'province_id' => $province?->id ?? ($country ? ($country->id !== 179 ? null : 135) : 135),
                 ]);
+
+                if ($person->filterName) $person->save();
+
             }
         }
     }
