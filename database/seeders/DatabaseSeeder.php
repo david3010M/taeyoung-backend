@@ -20,20 +20,20 @@ class DatabaseSeeder extends Seeder
         $this->call(TypeUserSeeder::class);
         $this->call(OptionMenuSeeder::class);
         $this->call(AccessSeeder::class);
-        $this->call(CurrencySeeder::class);
+//        $this->call(CurrencySeeder::class);
         $this->call(UserSeeder::class);
-        $this->call(SupplierSeeder::class);
-        $this->call(ClientSeeder::class);
+//        $this->call(SupplierSeeder::class);
+//        $this->call(ClientSeeder::class);
         $this->call(UnitSeeder::class);
-        $this->call(SparePartSeeder::class);
+//        $this->call(SparePartSeeder::class);
 //        $this->call(FileSeeder::class);
-        $this->call(QuotationSeeder::class);
-        $this->call(DetailSparePartSeeder::class);
-        $this->call(DetailMachinerySeeder::class);
-        $this->call(OrderSeeder::class);
-        $this->call(PaymentConceptSeeder::class);
-        $this->call(AccountReceivableSeeder::class);
-        $this->call(AccountPayableSeeder::class);
+//        $this->call(QuotationSeeder::class);
+//        $this->call(DetailSparePartSeeder::class);
+//        $this->call(DetailMachinerySeeder::class);
+//        $this->call(OrderSeeder::class);
+//        $this->call(PaymentConceptSeeder::class);
+//        $this->call(AccountReceivableSeeder::class);
+//        $this->call(AccountPayableSeeder::class);
 
 
     }
