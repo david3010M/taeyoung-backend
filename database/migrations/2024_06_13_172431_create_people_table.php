@@ -10,7 +10,8 @@ return new class extends Migration {
         Schema::create('people', function (Blueprint $table) {
             $table->id();
             $table->string('type'); // client or provider
-            $table->string('typeDocument');
+            $table->string('typeDocument'); // RUC, DNI, OTRO
+            $table->string('document')->nullable();
             $table->string('dni')->nullable();
             $table->string('ruc')->nullable();
             $table->string('filterName')->nullable();

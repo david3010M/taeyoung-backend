@@ -58,12 +58,14 @@ class SupplierController extends Controller
      */
     public function store(StoreSupplierRequest $request)
     {
-        if ($request->typeDocument === 'DNI') $request->merge(['ruc' => null, 'businessName' => null, 'representativeDni' => null, 'representativeNames' => null]);
-        else $request->merge(['dni' => null, 'names' => null, 'fatherSurname' => null, 'motherSurname' => null]);
+        if ($request->typeDocument === Person::TYPE_DNI) $request->merge(['ruc' => null, 'businessName' => null, 'representativeDni' => null, 'representativeNames' => null]);
+        elseif ($request->typeDocument === Person::TYPE_RUC) $request->merge(['dni' => null, 'names' => null, 'fatherSurname' => null, 'motherSurname' => null]);
+        else $request->merge(['dni' => null, 'ruc' => null]);
         $request->merge(['type' => 'supplier']);
         $supplier = Person::create($request->all());
-        $supplier->update(['filterName' => $supplier->typeDocument === 'DNI' ? $supplier->names . ' ' . $supplier->fatherSurname . ' ' . $supplier->motherSurname : $supplier->businessName]);
-        $supplier = Person::with('country')->find($supplier->id);
+        $supplier->update(['filterName' => $supplier->typeDocument === 'DNI' ? ($supplier->names . ' ' . $supplier->fatherSurname . ' ' . $supplier->motherSurname) :
+            ($supplier->typeDocument === 'RUC' ? $supplier->businessName : ($supplier->businessName ?? $supplier->names . ' ' . $supplier->fatherSurname . ' ' . $supplier->motherSurname))]);
+        $supplier = Person::with('country')->where('type', 'supplier')->find($supplier->id);
         return response()->json(new SupplierResource($supplier));
     }
 
@@ -103,10 +105,12 @@ class SupplierController extends Controller
     {
         $supplier = Person::where('type', 'supplier')->find($id);
         if (!$supplier) return response()->json(['message' => 'Proveedor no encontrado'], 404);
-        if ($request->typeDocument === 'DNI') $request->merge(['ruc' => null, 'businessName' => null, 'representativeDni' => null, 'representativeNames' => null]);
-        else $request->merge(['dni' => null, 'names' => null, 'fatherSurname' => null, 'motherSurname' => null]);
+        if ($request->typeDocument === Person::TYPE_DNI) $request->merge(['ruc' => null, 'businessName' => null, 'representativeDni' => null, 'representativeNames' => null]);
+        elseif ($request->typeDocument === Person::TYPE_RUC) $request->merge(['dni' => null, 'names' => null, 'fatherSurname' => null, 'motherSurname' => null]);
+        else $request->merge(['dni' => null, 'ruc' => null]);
         $supplier->update($request->all());
-        $supplier->update(['filterName' => $supplier->typeDocument === 'DNI' ? $supplier->names . ' ' . $supplier->fatherSurname . ' ' . $supplier->motherSurname : $supplier->businessName]);
+        $supplier->update(['filterName' => $supplier->typeDocument === 'DNI' ? ($supplier->names . ' ' . $supplier->fatherSurname . ' ' . $supplier->motherSurname) :
+            ($supplier->typeDocument === 'RUC' ? $supplier->businessName : ($supplier->businessName ?? $supplier->names . ' ' . $supplier->fatherSurname . ' ' . $supplier->motherSurname))]);
         $supplier = Person::with('country')->where('type', 'supplier')->find($id);
         return response()->json(new SupplierResource($supplier));
     }

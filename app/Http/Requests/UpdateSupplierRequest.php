@@ -28,7 +28,15 @@ class UpdateSupplierRequest extends UpdateRequest
     public function rules(): array
     {
         return [
-            'typeDocument' => 'required|string|in:DNI,RUC',
+            'typeDocument' => 'required|string|in:DNI,RUC,OTRO',
+            'document' => [
+                'nullable',
+                'string',
+                Rule::unique('people', 'document')
+                    ->where('type', 'supplier')
+                    ->whereNull('deleted_at')
+                    ->ignore($this->route('supplier'))
+            ],
             'dni' => [
                 'nullable',
                 'string',

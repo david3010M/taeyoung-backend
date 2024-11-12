@@ -31,9 +31,14 @@ class Person extends Model
     use HasFactory;
     use SoftDeletes;
 
+    const TYPE_RUC = 'RUC';
+    const TYPE_DNI = 'DNI';
+    const TYPE_OTHER = 'OTRO';
+
     protected $fillable = [
         'type',
         'typeDocument',
+        'document',
         'dni',
         'ruc',
         'filterName',

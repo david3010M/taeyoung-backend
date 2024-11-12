@@ -30,6 +30,13 @@ class StoreSupplierRequest extends StoreRequest
     {
         return [
             'typeDocument' => 'required|string|in:DNI,RUC,OTRO',
+            'document' => [
+                'nullable',
+                'string',
+                Rule::unique('people', 'document')
+                    ->where('type', 'supplier')
+                    ->whereNull('deleted_at')
+            ],
             'dni' => [
                 'nullable',
                 'string',
@@ -46,10 +53,10 @@ class StoreSupplierRequest extends StoreRequest
                 'max:11',
                 Rule::unique('people', 'ruc')->whereNull('deleted_at')
             ],
-            'names' => 'requiredIf:typeDocument,DNI|string',
-            'fatherSurname' => 'requiredIf:typeDocument,DNI|string',
-            'motherSurname' => 'requiredIf:typeDocument,DNI|string',
-            'businessName' => 'requiredIf:typeDocument,RUC|string',
+            'names' => 'nullable|requiredIf:typeDocument,DNI|string',
+            'fatherSurname' => 'nullable|requiredIf:typeDocument,DNI|string',
+            'motherSurname' => 'nullable|requiredIf:typeDocument,DNI|string',
+            'businessName' => 'nullable|requiredIf:typeDocument,RUC|string',
             'address' => 'nullable|string',
             'email' => 'nullable|email',
             'phone' => 'nullable|integer',

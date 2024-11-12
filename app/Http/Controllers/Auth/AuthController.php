@@ -66,9 +66,7 @@ class AuthController extends Controller
 
         if (Auth::attempt($credentials)) {
             $user = Auth::user();
-
             $token = $user->createToken('AuthToken', expiresAt: now()->addDays(7));
-
             $groupMenu = GroupMenu::getFilteredGroupMenus($user->typeuser->id);
 
             return response()->json([
