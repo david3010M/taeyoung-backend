@@ -60,6 +60,8 @@ class SaleResource extends JsonResource
             'balance' => round($this->balance, 2),
             'status' => $this->status,
 
+            'igvActive' => $this->igvActive,
+
 
             'detail' => $this->detail,
 

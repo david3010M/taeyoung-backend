@@ -41,6 +41,7 @@ class Quotation extends Model
         'totalSpareParts',
         'subtotal',
         'igv',
+        'igvActive',
         'discount',
         'total',
         'client_id',
@@ -60,7 +61,7 @@ class Quotation extends Model
         'igv' => 'float',
         'discount' => 'float',
         'total' => 'float',
-
+        'igvActive' => 'boolean',
     ];
 
     const filters = [

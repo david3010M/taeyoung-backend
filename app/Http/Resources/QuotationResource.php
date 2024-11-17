@@ -55,6 +55,7 @@ class QuotationResource extends JsonResource
             'totalMachinery' => round($this->totalMachinery, 2),
             'totalSpareParts' => round($this->totalSpareParts, 2),
             'subtotal' => round($this->subtotal, 2),
+            'igvActive' => $this->igvActive,
             'igv' => round($this->igv, 2),
             'discount' => round($this->discount, 2),
             'total' => round($this->total, 2),

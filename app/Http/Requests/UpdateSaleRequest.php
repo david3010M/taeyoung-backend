@@ -54,7 +54,7 @@ class UpdateSaleRequest extends UpdateRequest
                 Rule::exists('people', 'id')
                     ->where('type', 'client')
             ],
-            'igvActive' => 'required|string|in:true,false',
+            'igvActive' => 'required|boolean',
             'currencyType' => 'nullable|string',
             'discount' => 'nullable|numeric',
             'quotas' => 'required|array',

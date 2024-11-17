@@ -65,6 +65,8 @@ class SaleController extends Controller
      */
     public function store(StoreSaleRequest $request)
     {
+
+        $igvActive = (boolean)$request->igvActive;
         $dataSale = [
             'type' => 'sale',
             'number' => $this->nextCorrelativeQuery(Order::where('type', 'sale'), 'number'),
@@ -74,11 +76,10 @@ class SaleController extends Controller
             'quotation_id' => $request->input('quotation_id'),
             'client_id' => $request->input('client_id'),
             'currencyType' => $request->input('currencyType', 'PEN'),
+            'igvActive' => $igvActive,
         ];
 
         $sale = Order::create($dataSale);
-
-        $igvActive = $request->input('igvActive');
 
         $totalMachinery = 0;
         $totalSpareParts = 0;
@@ -201,6 +202,8 @@ class SaleController extends Controller
             ->find($id);
         if (!$sale) return response()->json(['message' => 'Sale not found'], 404);
 
+        $igvActive = (boolean)$request->igvActive ?? $sale->igvActive;
+
         $data = [
             'date' => $request->input('date', $sale->date),
             'documentType' => $request->input('documentType', $sale->documentType),
@@ -208,10 +211,9 @@ class SaleController extends Controller
             'quotation_id' => $request->input('quotation_id', $sale->quotation_id),
             'client_id' => $request->input('client_id', $sale->client_id),
             'currencyType' => $request->input('currencyType', 'PEN'),
+            'igvActive' => $igvActive,
         ];
         $sale->update($data);
-
-        $igvActive = $request->input('igvActive');
 
         $totalMachinery = 0;
         $totalSpareParts = 0;
@@ -254,6 +256,7 @@ class SaleController extends Controller
         $sale->total = $sale->subtotal + $sale->igv;
         $sale->balance = $sale->total;
         $sale->totalIncome = $sale->total;
+
 
         if ($request->input('paymentType') == 'CONTADO') {
             $sale->save();
