@@ -43,7 +43,8 @@ class UpdateSaleRequest extends UpdateRequest
             'paymentType' => 'nullable|string|in:CONTADO,CREDITO',
             'quotation_id' => [
                 'nullable',
-                Rule::exists('quotations', 'id'),
+                Rule::exists('quotations', 'id')
+                    ->whereNull('deleted_at'),
                 Rule::unique('orders', 'quotation_id')
                     ->where('type', 'sale')
                     ->whereNull('deleted_at')

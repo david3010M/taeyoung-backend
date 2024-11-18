@@ -32,7 +32,8 @@ class StorePurchaseRequest extends StoreRequest
         return [
             'quotation_id' => [
                 'nullable',
-                Rule::exists('quotations', 'id'),
+                Rule::exists('quotations', 'id')
+                    ->whereNull('deleted_at'),
                 Rule::unique('orders', 'quotation_id')
                     ->where('type', 'purchase')
                     ->whereNull('deleted_at')

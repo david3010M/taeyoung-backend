@@ -54,7 +54,7 @@ class StoreQuotationRequest extends StoreRequest
                     ->whereNull('deleted_at')
             ],
 
-            'igvActive' => 'required|string|in:true,false',
+            'igvActive' => 'required|boolean',
             'images' => 'nullable|array',
             'images.*' => 'required|file',
 

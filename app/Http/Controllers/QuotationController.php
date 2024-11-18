@@ -63,6 +63,7 @@ class QuotationController extends Controller
      */
     public function store(StoreQuotationRequest $request)
     {
+        $igvActive = (boolean)$request->igvActive;
         $dataQuotation = [
             'number' => $this->nextCorrelative(Quotation::class, 'number'),
             'date' => $request->input('date'),
@@ -70,9 +71,8 @@ class QuotationController extends Controller
             'currencyType' => $request->input('currencyType'),
             'discount' => $request->input('discount'),
             'client_id' => $request->input('client_id'),
+            'igvActive' => $igvActive,
         ];
-
-        $igvActive = (boolean)$request->input('igvActive');
 
         $quotation = Quotation::create($dataQuotation);
         $totalMachinery = 0;
@@ -153,17 +153,16 @@ class QuotationController extends Controller
     {
         $quotation = Quotation::find($id);
         if (!$quotation) return response()->json(['message' => 'Quotation not found'], 404);
-
+        $igvActive = (boolean)$request->igvActive ?? $quotation->igvActive;
         $data = [
             'detail' => $request->input('detail') ?? $quotation->detail,
             'date' => $request->input('date') ?? $quotation->date,
             'currencyType' => $request->input('currencyType') ?? $quotation->currencyType,
             'discount' => $request->input('discount') ?? $quotation->discount,
             'client_id' => $request->input('client_id') ?? $quotation->client_id,
+            'igvActive' => $igvActive,
         ];
         $quotation->update($data);
-
-        $igvActive = $request->input('igvActive');
 
         $totalMachinery = 0;
         $totalSpareParts = 0;
