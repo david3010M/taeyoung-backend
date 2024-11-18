@@ -53,6 +53,7 @@ class StoreSaleRequest extends StoreRequest
                 'required',
                 Rule::exists('people', 'id')
                     ->where('type', 'client')
+                    ->whereNull('deleted_at')
             ],
             'igvActive' => 'required|boolean',
             'currencyType' => 'nullable|string',
@@ -69,7 +70,11 @@ class StoreSaleRequest extends StoreRequest
             'detailSpareParts' => 'required_without:detailMachinery|nullable|array',
             'detailSpareParts.*.quantity' => 'required|numeric',
             'detailSpareParts.*.salePrice' => 'required|numeric',
-            'detailSpareParts.*.spare_part_id' => 'required|exists:spare_parts,id',
+            'detailSpareParts.*.spare_part_id' => [
+                'required',
+                Rule::exists('spare_parts', 'id')
+                    ->whereNull('deleted_at')
+            ]
         ];
     }
 }

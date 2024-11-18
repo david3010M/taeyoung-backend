@@ -55,6 +55,7 @@ class UpdatePurchaseRequest extends UpdateRequest
                 'required',
                 Rule::exists('people', 'id')
                     ->where('type', 'supplier')
+                    ->whereNull('deleted_at')
             ],
 
             'detailMachinery' => 'required_without:detailSpareParts|nullable|array',
@@ -64,7 +65,11 @@ class UpdatePurchaseRequest extends UpdateRequest
             'detailSpareParts' => 'required_without:detailMachinery|nullable|array',
             'detailSpareParts.*.quantity' => 'required|numeric',
             'detailSpareParts.*.purchasePrice' => 'required|numeric',
-            'detailSpareParts.*.spare_part_id' => 'required|exists:spare_parts,id',
+            'detailSpareParts.*.spare_part_id' => [
+                'required',
+                Rule::exists('spare_parts', 'id')
+                    ->whereNull('deleted_at')
+            ]
         ];
     }
 }

@@ -49,6 +49,7 @@ class StorePurchaseRequest extends StoreRequest
                 'required',
                 Rule::exists('people', 'id')
                     ->where('type', 'supplier')
+                    ->whereNull('deleted_at')
             ],
 
             'detailMachinery' => 'required_without:detailSpareParts|nullable|array',
@@ -58,7 +59,11 @@ class StorePurchaseRequest extends StoreRequest
             'detailSpareParts' => 'required_without:detailMachinery|nullable|array',
             'detailSpareParts.*.quantity' => 'required|numeric',
             'detailSpareParts.*.purchasePrice' => 'required|numeric',
-            'detailSpareParts.*.spare_part_id' => 'required|exists:spare_parts,id',
+            'detailSpareParts.*.spare_part_id' => [
+                'required',
+                Rule::exists('spare_parts', 'id')
+                    ->whereNull('deleted_at')
+            ]
         ];
     }
 }
