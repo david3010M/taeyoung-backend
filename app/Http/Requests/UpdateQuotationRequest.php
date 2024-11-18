@@ -43,7 +43,11 @@ class UpdateQuotationRequest extends UpdateRequest
             'detailSpareParts.*.quantity' => 'required|numeric',
             'detailSpareParts.*.purchasePrice' => 'nullable|numeric',
             'detailSpareParts.*.salePrice' => 'required|numeric',
-            'detailSpareParts.*.spare_part_id' => 'required|exists:spare_parts,id',
+            'detailSpareParts.*.spare_part_id' => [
+                'required',
+                Rule::exists('spare_parts', 'id')
+                    ->whereNull('deleted_at')
+            ]
         ];
     }
 }
