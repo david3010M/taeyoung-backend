@@ -25,6 +25,8 @@ class Order extends Model
         'totalMachinery',
         'totalSpareParts',
 
+        'igvActive',
+
         'subtotal',
         'igv',
         'discount',
