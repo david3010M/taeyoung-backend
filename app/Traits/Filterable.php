@@ -86,7 +86,7 @@ trait Filterable
         $query = $this->applySorting($query, $request, $sorts);
 
         $all = $request->query('all', false) === 'true';
-        $results = $all ? $query->get() : $query->paginate($request->query('per_page', Constants::DEFAULT_PER_PAGE));
+        $results = $all ? $query->limit(Constants::MAX_ALL_PER_QUERY)->get() : $query->paginate($request->query('per_page', Constants::DEFAULT_PER_PAGE));
 
         return $all ? response()->json($resource::collection($results)) : $resource::collection($results);
     }
