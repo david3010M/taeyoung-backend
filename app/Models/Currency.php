@@ -48,4 +48,19 @@ class Currency extends Model
         return $this->hasMany(Order::class);
     }
 
+    public function movements()
+    {
+        return $this->hasMany(Movement::class);
+    }
+
+    public function accountPayable()
+    {
+        return $this->hasMany(AccountPayable::class);
+    }
+
+    public function accountReceivable()
+    {
+        return $this->hasMany(AccountReceivable::class);
+    }
+
 }

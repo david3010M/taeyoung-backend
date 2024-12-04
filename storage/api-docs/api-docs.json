@@ -1719,6 +1719,377 @@
                 ]
             }
         },
+        "/taeyoung-backend/public/api/currency": {
+            "get": {
+                "tags": [
+                    "Currency"
+                ],
+                "summary": "Get all currencies",
+                "description": "Get all currencies",
+                "operationId": "a933af9df9ea5aa471a7908ac1785e3b",
+                "parameters": [
+                    {
+                        "name": "buyRate",
+                        "in": "query",
+                        "description": "Filter by buy rate",
+                        "schema": {
+                            "type": "number"
+                        }
+                    },
+                    {
+                        "name": "saleRate",
+                        "in": "query",
+                        "description": "Filter by sale rate",
+                        "schema": {
+                            "type": "number"
+                        }
+                    },
+                    {
+                        "name": "date",
+                        "in": "query",
+                        "description": "Filter by date",
+                        "schema": {
+                            "type": "string",
+                            "format": "date"
+                        }
+                    },
+                    {
+                        "name": "sort",
+                        "in": "query",
+                        "description": "Sort by column",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "order",
+                        "in": "query",
+                        "description": "Sort by order",
+                        "schema": {
+                            "type": "string",
+                            "enum": [
+                                "asc",
+                                "desc"
+                            ]
+                        }
+                    },
+                    {
+                        "name": "page",
+                        "in": "query",
+                        "description": "Page number",
+                        "schema": {
+                            "type": "integer"
+                        }
+                    },
+                    {
+                        "name": "per_page",
+                        "in": "query",
+                        "description": "Items per page",
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Success",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/CurrencyCollection"
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthenticated",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/Unauthenticated"
+                                }
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "Validation error",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ValidationError"
+                                }
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            },
+            "post": {
+                "tags": [
+                    "Currency"
+                ],
+                "summary": "Create a currency",
+                "description": "Create a currency",
+                "operationId": "f8209253fb0605fbd3423571a7ec3c26",
+                "requestBody": {
+                    "description": "Pass currency data",
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/StoreCurrencyRequest"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Success",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/CurrencyResource"
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthenticated",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/Unauthenticated"
+                                }
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "Validation error",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ValidationError"
+                                }
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
+        "/taeyoung-backend/public/api/currency/{id}": {
+            "get": {
+                "tags": [
+                    "Currency"
+                ],
+                "summary": "Get a currency",
+                "description": "Get a currency",
+                "operationId": "f6c4cd1a519289eec9e7b3fd2c8f2ff5",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "Currency ID",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Success",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/CurrencyResource"
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthenticated",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/Unauthenticated"
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Currency not found",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Currency not found"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            },
+            "put": {
+                "tags": [
+                    "Currency"
+                ],
+                "summary": "Update a currency",
+                "description": "Update a currency",
+                "operationId": "b7f5a0369ae10c0360793974c5bb8853",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "Currency ID",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "requestBody": {
+                    "description": "Pass currency data",
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/UpdateCurrencyRequest"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Success",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/CurrencyResource"
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthenticated",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/Unauthenticated"
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Currency not found",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Currency not found"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            },
+            "delete": {
+                "tags": [
+                    "Currency"
+                ],
+                "summary": "Delete a currency",
+                "description": "Delete a currency",
+                "operationId": "c3f5b81f2db6e3dc2fc8765aa3d2ec74",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "Currency ID",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Success",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Currency deleted"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthenticated",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/Unauthenticated"
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Currency not found",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Currency not found"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
         "/taeyoung-backend/public/api/department": {
             "get": {
                 "tags": [
@@ -5432,6 +5803,24 @@
                 },
                 "type": "object"
             },
+            "StoreCurrencyRequest": {
+                "properties": {
+                    "date": {
+                        "type": "string",
+                        "format": "date",
+                        "example": "2021-01-01"
+                    },
+                    "buyRate": {
+                        "type": "number",
+                        "example": "20.00"
+                    },
+                    "saleRate": {
+                        "type": "number",
+                        "example": "21.00"
+                    }
+                },
+                "type": "object"
+            },
             "StorePayableMovementRequest": {
                 "title": "StorePayableMovementRequest",
                 "description": "Store Payable Movement Request",
@@ -5474,10 +5863,6 @@
                         "example": "Comment"
                     },
                     "bank_id": {
-                        "type": "integer",
-                        "example": "1"
-                    },
-                    "accountPayable_id": {
                         "type": "integer",
                         "example": "1"
                     }
@@ -5526,10 +5911,6 @@
                         "example": "Comment"
                     },
                     "bank_id": {
-                        "type": "integer",
-                        "example": "1"
-                    },
-                    "accountReceivable_id": {
                         "type": "integer",
                         "example": "1"
                     }
@@ -6013,6 +6394,24 @@
                     "country_id": {
                         "type": "integer",
                         "example": "1"
+                    }
+                },
+                "type": "object"
+            },
+            "UpdateCurrencyRequest": {
+                "properties": {
+                    "date": {
+                        "type": "string",
+                        "format": "date",
+                        "example": "2021-01-01"
+                    },
+                    "buyRate": {
+                        "type": "number",
+                        "example": "20.00"
+                    },
+                    "saleRate": {
+                        "type": "number",
+                        "example": "21.00"
                     }
                 },
                 "type": "object"
@@ -6586,6 +6985,45 @@
                         "type": "array",
                         "items": {
                             "$ref": "#/components/schemas/Client"
+                        }
+                    },
+                    "links": {
+                        "$ref": "#/components/schemas/PaginationLinks"
+                    },
+                    "meta": {
+                        "$ref": "#/components/schemas/PaginationMeta"
+                    }
+                },
+                "type": "object"
+            },
+            "CurrencyResource": {
+                "properties": {
+                    "id": {
+                        "type": "integer",
+                        "example": "1"
+                    },
+                    "buyRate": {
+                        "type": "number",
+                        "example": "20.00"
+                    },
+                    "saleRate": {
+                        "type": "number",
+                        "example": "21.00"
+                    },
+                    "date": {
+                        "type": "string",
+                        "format": "date",
+                        "example": "2021-01-01"
+                    }
+                },
+                "type": "object"
+            },
+            "CurrencyCollection": {
+                "properties": {
+                    "data": {
+                        "type": "array",
+                        "items": {
+                            "$ref": "#/components/schemas/CurrencyResource"
                         }
                     },
                     "links": {
@@ -7763,6 +8201,10 @@
         {
             "name": "Client",
             "description": "Client"
+        },
+        {
+            "name": "Currency",
+            "description": "Currency"
         },
         {
             "name": "Department",
