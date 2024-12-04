@@ -47,9 +47,10 @@ Route::group(
     ['middleware' => ['auth:sanctum']],
     function () {
 //        REPORTS
-        Route::get('/repuestos', [PdfController::class, 'getRepuestos'])->name('repuesto');
-        Route::get('/compra/{id}', [PdfController::class, 'getPurchase'])->name('purchase');
-        Route::get('/venta/{id}', [PdfController::class, 'getSale'])->name('sale');
+        Route::get('/repuestos', [PdfController::class, 'getRepuestos'])->name('repuestoReport');
+        Route::get('/compra/{id}', [PdfController::class, 'getPurchase'])->name('purchaseReport');
+        Route::get('/venta/{id}', [PdfController::class, 'getSale'])->name('saleReport');
+        Route::get('/cotizacion/{id}', [PdfController::class, 'getQuotation'])->name('quotationReport');
 
         Route::get('/authenticate', [AuthController::class, 'authenticate'])->name('authenticate');
         Route::get('/logout', [AuthController::class, 'logout'])->name('logout');

@@ -3,8 +3,10 @@
 namespace App\Http\Controllers;
 
 use App\Http\Resources\PurchaseResource;
+use App\Http\Resources\QuotationResource;
 use App\Http\Resources\SaleResource;
 use App\Models\Order;
+use App\Models\Quotation;
 use App\Models\SparePart;
 use Barryvdh\DomPDF\Facade\Pdf;
 use Illuminate\Http\Request;
@@ -116,6 +118,38 @@ class PdfController extends Controller
 
 //        return $pdf->stream('purchase.pdf');
         return $pdf->download('compra_' . $purchase->number . '_' . date('Y-m-d') . '.pdf');
+    }
+
+    /**
+     * @OA\Get(
+     *     path="/taeyoung-backend/public/api/cotizacion/{id}",
+     *     tags={"Reports"},
+     *     security={{"bearerAuth": {}}},
+     *     summary="Get a purchase",
+     *     @OA\Parameter( name="id", in="path", description="ID of sale", required=true, @OA\Schema( type="integer" ) ),
+     *     @OA\Response(
+     *          response=200,
+     *          description="Reporte de Cotización en formato PDF",
+     *          @OA\MediaType( mediaType="application/pdf", @OA\Schema(type="string", format="binary"))
+     *      ),
+     *     @OA\Response( response=400, description="Bad request" ),
+     *     @OA\Response( response=401, description="Unauthorized" ),
+     *     @OA\Response( response=404, description="Not found" ),
+     *     @OA\Response( response=500, description="Internal server error" )
+     * )
+     */
+    public function getQuotation(int $id)
+    {
+        $quotation = Quotation::find($id);
+        if (!$quotation) return response()->json(['message' => 'Not found'], 404);
+
+        $pdf = Pdf::loadView('quotation', [
+//        return view('quotation', [
+            'quotation' => json_decode(QuotationResource::make($quotation)->toJson()),
+        ]);
+
+//        return $pdf->stream('quotation.pdf');
+        return $pdf->download('cotizacion_' . $quotation->number . '_' . date('Y-m-d') . '.pdf');
     }
 
 

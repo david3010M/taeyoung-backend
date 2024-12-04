@@ -41,9 +41,6 @@ class QuotationResource extends JsonResource
 {
     public function toArray(Request $request): array
     {
-        $client = $this->client->typeDocument == 'RUC' ? $this->client->businessName :
-            $this->client->name . ' ' . $this->client->fatherSurname . ' ' . $this->client->motherSurname;
-
         return [
             'id' => $this->id,
             'number' => "COTI-" . $this->number,
@@ -52,6 +49,7 @@ class QuotationResource extends JsonResource
 
             'paymentType' => $this->paymentType, // Contado o Crédito
             'currencyType' => $this->currencyType,
+            'currencySymbol' => $this->currencyType === 'USD' ? '$' : 'S/',
             'totalMachinery' => round($this->totalMachinery, 2),
             'totalSpareParts' => round($this->totalSpareParts, 2),
             'subtotal' => round($this->subtotal, 2),
@@ -60,7 +58,8 @@ class QuotationResource extends JsonResource
             'discount' => round($this->discount, 2),
             'total' => round($this->total, 2),
             'client_id' => $this->client_id,
-            'client' => $client,
+            'client' => ClientResource::make($this->client)->filterName,
+            'clientData' => ClientResource::make($this->client),
             'detailMachinery' => DetailMachineryResource::collection($this->detailMachinery),
             'detailSpareParts' => DetailSparePartResource::collection($this->detailSpareParts),
         ];
