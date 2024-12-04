@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Models\Scopes\UpdateStatusOrderScope;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
@@ -88,6 +89,13 @@ class Order extends Model
         'date',
         'client_id',
     ];
+
+    protected static function booted()
+    {
+        static::addGlobalScope(new UpdateStatusOrderScope);
+    }
+
+    const SALE_STATUS_PAID = 'PAGADO';
 
 
     public function supplier()

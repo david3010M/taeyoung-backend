@@ -129,6 +129,10 @@ class AccountPayableController extends Controller
         $accountPayable->balance -= $totalInPayableCurrency;
         $accountPayable->save();
 
+        $purchase = $accountPayable->order;
+        $purchase->balance -= $totalInPayableCurrency;
+        $purchase->save();
+
         return response()->json(Movement::find($movement->id));
     }
 
@@ -204,6 +208,10 @@ class AccountPayableController extends Controller
         // Actualizar el balance de la cuenta por pagar con el monto convertido
         $accountPayable->balance += $totalInPayableCurrency;
         $accountPayable->save();
+
+        $purchase = $accountPayable->order;
+        $purchase->balance += $totalInPayableCurrency;
+        $purchase->save();
 
         // Eliminar el movimiento
         $movement->delete();

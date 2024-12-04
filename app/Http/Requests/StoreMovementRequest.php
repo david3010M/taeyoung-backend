@@ -8,6 +8,7 @@ namespace App\Http\Requests;
  *     title="StorePayableMovementRequest",
  *     description="Store Payable Movement Request",
  *     type="object",
+ *     @OA\Property( property="currencyType", type="string", example="PEN"),
  *     @OA\Property( property="paymentDate", type="date", example="2021-10-13"),
  *     @OA\Property( property="cash", type="numeric", example="100.00"),
  *     @OA\Property( property="yape", type="numeric", example="100.00"),
@@ -17,7 +18,6 @@ namespace App\Http\Requests;
  *     @OA\Property( property="isBankPayment", type="boolean", example="true"),
  *     @OA\Property( property="comment", type="string", example="Comment"),
  *     @OA\Property( property="bank_id", type="integer", example="1"),
- *     @OA\Property( property="accountPayable_id", type="integer", example="1"),
  * )
  *
  * @OA\Schema(
@@ -25,6 +25,7 @@ namespace App\Http\Requests;
  *      title="StoreReceivableMovementRequest",
  *      description="Store Receivable Movement Request",
  *      type="object",
+ *      @OA\Property( property="currencyType", type="string", example="PEN"),
  *      @OA\Property( property="paymentDate", type="date", example="2021-10-13"),
  *      @OA\Property( property="cash", type="numeric", example="100.00"),
  *      @OA\Property( property="yape", type="numeric", example="100.00"),
@@ -34,7 +35,6 @@ namespace App\Http\Requests;
  *      @OA\Property( property="isBankPayment", type="boolean", example="true"),
  *      @OA\Property( property="comment", type="string", example="Comment"),
  *      @OA\Property( property="bank_id", type="integer", example="1"),
- *      @OA\Property( property="accountReceivable_id", type="integer", example="1"),
  *  )
  */
 class StoreMovementRequest extends StoreRequest

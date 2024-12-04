@@ -5436,6 +5436,10 @@
                 "title": "StorePayableMovementRequest",
                 "description": "Store Payable Movement Request",
                 "properties": {
+                    "currencyType": {
+                        "type": "string",
+                        "example": "PEN"
+                    },
                     "paymentDate": {
                         "type": "string",
                         "format": "date",
@@ -5484,6 +5488,10 @@
                 "title": "StoreReceivableMovementRequest",
                 "description": "Store Receivable Movement Request",
                 "properties": {
+                    "currencyType": {
+                        "type": "string",
+                        "example": "PEN"
+                    },
                     "paymentDate": {
                         "type": "string",
                         "format": "date",

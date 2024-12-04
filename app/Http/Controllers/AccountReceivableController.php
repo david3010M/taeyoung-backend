@@ -10,6 +10,8 @@ use App\Http\Requests\StoreAccountReceivableRequest;
 use App\Http\Requests\UpdateAccountReceivableRequest;
 use App\Models\Currency;
 use App\Models\Movement;
+use App\Models\Order;
+use App\Utils\Constants;
 
 class AccountReceivableController extends Controller
 {
@@ -124,6 +126,10 @@ class AccountReceivableController extends Controller
         $accountReceivable->balance -= $totalInReceivableCurrency;
         $accountReceivable->save();
 
+        $sale = $accountReceivable->order;
+        $sale->balance -= $totalInReceivableCurrency;
+        $sale->save();
+
         return response()->json(Movement::find($movement->id));
     }
 
@@ -205,6 +211,10 @@ class AccountReceivableController extends Controller
         // Actualizar el balance de la cuenta por pagar con el monto convertido
         $accountReceivable->balance += $totalInReceivableCurrency;
         $accountReceivable->save();
+
+        $sale = $accountReceivable->order;
+        $sale->balance += $totalInReceivableCurrency;
+        $sale->save();
 
         // Eliminar el movimiento
         $movement->delete();
