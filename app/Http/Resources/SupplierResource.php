@@ -49,6 +49,7 @@ class SupplierResource extends JsonResource
             'motherSurname' => $this->typeDocument === 'DNI' || $this->typeDocument === 'OTRO' ? $this->motherSurname : null,
             'businessName' => $this->typeDocument === 'RUC' || $this->typeDocument === 'OTRO' ? $this->businessName : null,
             'filterName' => $this->filterName,
+            'filterDocument' => $this->typeDocument === 'DNI' ? $this->dni : ($this->typeDocument === 'RUC' ? $this->ruc : $this->document),
             'address' => $this->address,
             'email' => $this->email,
             'phone' => $this->phone,

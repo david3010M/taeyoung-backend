@@ -57,6 +57,7 @@ class PurchaseResource extends JsonResource
             'documentType' => $this->documentType,
             'paymentType' => $this->paymentType,
             'currencyType' => $this->currencyType,
+            'currencySymbol' => $this->currencyType === 'USD' ? '$' : 'S/',
             'totalMachinery' => round($this->totalMachinery, 2),
             'totalSpareParts' => round($this->totalSpareParts, 2),
 

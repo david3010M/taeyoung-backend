@@ -187,6 +187,14 @@
             font-size: 14px;
         }
 
+        .font20 {
+            font-size: 20px;
+        }
+
+        .font10 {
+            font-size: 10px;
+        }
+
         .saltopagina {
             page-break-after: always;
         }
@@ -218,7 +226,7 @@
             <table class="w100 pe64">
                 <tr>
                     <td>
-                        <h2 class="m0 text-end font30">CATÁLOGO DE REPUESTOS</h2>
+                        <h2 class="m0 text-end font20">CATÁLOGO DE REPUESTOS</h2>
                     </td>
                 </tr>
                 <tr>
@@ -255,7 +263,7 @@
         </div>
     </div>
     <table class="w100 tableData">
-        <tr class="text-center font14">
+        <tr class="text-center font10">
             <th style="width: 20%">CÓDIGO</th>
             <th style="width: 40%">NOMBRE</th>
             <th style="width: 20%">PRECIO COMPRA</th>
@@ -315,14 +323,14 @@
 
     {{-- Nueva tabla con el encabezado para la siguiente página --}}
     <table class="w100 tableData">
-        <tr class="text-center font14">
+        <tr class="text-center font10">
             <th style="width: 20%">CÓDIGO</th>
             <th style="width: 40%">NOMBRE</th>
             <th style="width: 20%">PRECIO COMPRA</th>
             <th style="width: 20%">PRECIO VENTA</th>
         </tr>
         @endif
-        <tr class="text-center font14">
+        <tr class="text-center font10">
             <td>{{ $repuesto->code }}</td>
             <td>{{ $repuesto->name }}</td>
             <td>$ {{ $repuesto->purchasePrice }}</td>

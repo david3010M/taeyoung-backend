@@ -162,9 +162,6 @@
 
         .tableData {
             border-collapse: collapse;
-            /*position: fixed;*/
-            padding-left: 56px;
-            padding-right: 56px;
         }
 
         .tableData th {
@@ -288,11 +285,11 @@
         </div>
     </div>
     <table class="w100 tableData mb40">
-        <tr class="text-center font12">
-            <th style="width: 40%">MAQUINARIA / REPUESTO</th>
-            <th style="width: 20%">CANTIDAD</th>
-            <th style="width: 20%">V. UNITARIO</th>
-            <th style="width: 20%">V. VENTA</th>
+        <tr class="text-center font10">
+            <th style="width: 55%">MAQUINARIA / REPUESTO</th>
+            <th style="width: 15%">CANTIDAD</th>
+            <th style="width: 15%">V. UNITARIO</th>
+            <th style="width: 15%">V. VENTA</th>
         </tr>
 
         @foreach ($sale->detailMachinery as $index => $machinery)
@@ -346,19 +343,19 @@
                     </tr>
                     <tr>
                         <td>
-                            <h2 class="m0 text-end normal font10">IGV
-                                ({{$sale->igvActive == true? '18':'0'}}%):
+                            <h2 class="m0 text-end normal font10">Descuento:
                                 <strong>
-                                    {{$sale->igv}}
+                                    {{$sale->discount}}
                                 </strong>
                             </h2>
                         </td>
                     </tr>
                     <tr>
                         <td>
-                            <h2 class="m0 text-end normal font10">Descuento:
+                            <h2 class="m0 text-end normal font10">IGV
+                                ({{$sale->igvActive == true? '18':'0'}}%):
                                 <strong>
-                                    {{$sale->discount}}
+                                    {{$sale->igv}}
                                 </strong>
                             </h2>
                         </td>

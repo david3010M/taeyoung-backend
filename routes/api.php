@@ -42,14 +42,14 @@ use Illuminate\Support\Facades\Route;
 
 Route::post('/login', [AuthController::class, 'login'])->name('login');
 
-//        REPORTS
-Route::get('/repuestos', [PdfController::class, 'getRepuestos'])->name('repuesto');
-Route::get('/venta/{id}', [PdfController::class, 'getSales'])->name('sale');
-
 
 Route::group(
     ['middleware' => ['auth:sanctum']],
     function () {
+//        REPORTS
+        Route::get('/repuestos', [PdfController::class, 'getRepuestos'])->name('repuesto');
+        Route::get('/compra/{id}', [PdfController::class, 'getPurchase'])->name('purchase');
+        Route::get('/venta/{id}', [PdfController::class, 'getSale'])->name('sale');
 
         Route::get('/authenticate', [AuthController::class, 'authenticate'])->name('authenticate');
         Route::get('/logout', [AuthController::class, 'logout'])->name('logout');
