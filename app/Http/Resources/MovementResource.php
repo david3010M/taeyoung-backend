@@ -14,6 +14,7 @@ class MovementResource extends JsonResource
     {
         $data = [
             'id' => $this->id,
+            'currencyType' => $this->currencyType,
             'number' => "PAGO-" . $this->number,
             'paymentDate' => $this->paymentDate ? $this->paymentDate->format('Y-m-d') : null,
             'total' => $this->total,
@@ -26,6 +27,7 @@ class MovementResource extends JsonResource
             'comment' => $this->comment,
             'status' => $this->status,
             'bank_id' => $this->bank_id,
+            'currency' => $this->currency,
         ];
 
         if ($this->includeReceivableField) {

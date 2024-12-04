@@ -9,7 +9,7 @@ use App\Http\Resources\AccountPayableResource;
 use App\Models\AccountPayable;
 use App\Http\Requests\StoreAccountPayableRequest;
 use App\Http\Requests\UpdateAccountPayableRequest;
-use App\Models\AccountReceivable;
+use App\Models\Currency;
 use App\Models\Movement;
 
 class AccountPayableController extends Controller
@@ -70,13 +70,41 @@ class AccountPayableController extends Controller
     {
         $accountPayable = AccountPayable::find($id);
         if (!$accountPayable) return response()->json(['error' => 'Cuenta por pagar no encontrada'], 404);
-        if ($request->cash == 0 && $request->yape == 0 && $request->plin == 0 && $request->card == 0 && $request->deposit == 0) {
+        if ($accountPayable->balance <= 0) {
+            return response()->json(['error' => 'No se puede registrar un pago en una cuenta por cobrar con saldo 0'], 422);
+        }
+        $totalPayment = $request->cash + $request->yape + $request->plin + $request->card + $request->deposit;
+        if ($totalPayment == 0) {
             return response()->json(['error' => 'Debe ingresar al menos un monto de pago'], 422);
         }
-        if ($accountPayable->balance <= 0) return response()->json(['error' => 'No se puede registrar un pago en una cuenta por pagar con saldo 0'], 422);
-        if ($accountPayable->balance < $request->cash + $request->yape + $request->plin + $request->card + $request->deposit) {
-            return response()->json(['error' => 'El monto a pagar es mayor al saldo de la cuenta por pagar ' . $accountPayable->balance], 422);
+        // Obtén el tipo de cambio
+        $exchangeRate = Currency::where('date', $request->paymentDate)->first();
+        if (!$exchangeRate) {
+            return response()->json(['error' => 'No se ha registrado el tipo de cambio para la fecha seleccionada'], 422);
         }
+
+        // Convertir el pago a la moneda de la cuenta por cobrar
+        $totalInPayableCurrency = $totalPayment;
+        $accountPayableCurrency = $accountPayable->order->currencyType;
+        // Verificar si el pago se realizó en una moneda diferente a la de la cuenta por pagar
+        if ($request->currencyType != $accountPayableCurrency) {
+            if ($request->currencyType == 'PEN' && $accountPayableCurrency == 'USD') {
+                // Convertir el monto pagado de PEN a USD
+                $totalInPayableCurrency = round($totalPayment / $exchangeRate->saleRate, 2);
+            } elseif ($request->currencyType == 'USD' && $accountPayableCurrency == 'PEN') {
+                // Convertir el monto pagado de USD a PEN
+                $totalInPayableCurrency = round($totalPayment * $exchangeRate->buyRate, 2);
+            }
+        }
+
+        // Validar que el monto convertido no exceda el saldo
+        if ($accountPayable->balance < $totalInPayableCurrency) {
+            return response()->json([
+                'error' => 'El monto a pagar excede el saldo de la cuenta por cobrar. Saldo actual: ' . $accountPayable->balance
+            ], 422);
+        }
+
+        // Crear el movimiento
         $data = [
             'number' => $this->nextCorrelative(Movement::class, 'number'),
             'paymentDate' => $request->paymentDate,
@@ -90,17 +118,18 @@ class AccountPayableController extends Controller
             'bank_id' => $request->bank_id,
             'accountPayable_id' => $id,
             'user_id' => auth()->user()->id,
+            'currencyType' => $request->currencyType,
+            'currency_id' => $exchangeRate->id,
+            'total' => $totalPayment,
         ];
-        $movement = Movement::create($data);
-        $movement->total = $movement->cash + $movement->yape + $movement->plin + $movement->card + $movement->deposit;
-        $movement->save();
 
-        $accountPayable->balance -= $movement->total;
+        $movement = Movement::create($data);
+
+        // Actualizar el balance de la cuenta por pagar en su moneda original
+        $accountPayable->balance -= $totalInPayableCurrency;
         $accountPayable->save();
 
-        $movement = Movement::find($movement->id);
-
-        return response()->json($movement);
+        return response()->json(Movement::find($movement->id));
     }
 
     /**
@@ -150,11 +179,36 @@ class AccountPayableController extends Controller
     {
         $movement = Movement::find($id);
         if (!$movement) return response()->json(['error' => 'Pago no encontrado'], 404);
+
         $accountPayable = AccountPayable::find($movement->accountPayable_id);
         if (!$accountPayable) return response()->json(['error' => 'Cuenta por pagar no encontrada'], 404);
-        $accountPayable->balance += $movement->total;
+
+        // Obtener el tipo de cambio para la fecha del pago
+        $exchangeRate = Currency::where('date', $movement->paymentDate)->first();
+        if (!$exchangeRate) {
+            return response()->json(['error' => 'No se ha registrado el tipo de cambio para la fecha del pago'], 422);
+        }
+
+        $accountPayableCurrency = $accountPayable->order->currencyType;
+        $totalInPayableCurrency = $movement->total;
+
+        // Convertir el monto de la moneda del pago a la moneda de la cuenta por pagar si es necesario
+        if ($movement->currencyType != $accountPayableCurrency) {
+            if ($movement->currencyType == 'PEN' && $accountPayableCurrency == 'USD') {
+                $totalInPayableCurrency = round($movement->total / $exchangeRate->saleRate, 2);
+            } elseif ($movement->currencyType == 'USD' && $accountPayableCurrency == 'PEN') {
+                $totalInPayableCurrency = round($movement->total * $exchangeRate->buyRate, 2);
+            }
+        }
+
+        // Actualizar el balance de la cuenta por pagar con el monto convertido
+        $accountPayable->balance += $totalInPayableCurrency;
         $accountPayable->save();
+
+        // Eliminar el movimiento
         $movement->delete();
+
         return response()->json(['message' => 'Pago eliminado correctamente']);
     }
+
 }

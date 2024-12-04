@@ -2,15 +2,20 @@
 
 namespace App\Http\Requests;
 
+use Illuminate\Validation\Rule;
+
 class UpdateCurrencyRequest extends UpdateRequest
 {
     public function rules(): array
     {
         return [
-            'currencyFrom' => 'nullable|string|in:PEN,USD',
-            'currencyTo' => 'nullable|string|in:PEN,USD|different:currencyFrom',
-            'rate' => 'nullable|numeric',
-            'date' => 'nullable|date',
+            'date' => [
+                'nullable',
+                'date',
+                Rule::unique('currencies')->whereNull('deleted_at')->ignore($this->route('currency'))
+            ],
+            'buyRate' => 'nullable|numeric',
+            'saleRate' => 'nullable|numeric',
         ];
     }
 }

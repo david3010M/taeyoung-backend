@@ -22,6 +22,7 @@ class Movement extends Model
         'plin',
         'card',
 
+        'currencyType',
         'isBankPayment',
         'deposit',
 //        'numberVoucher',
@@ -35,6 +36,7 @@ class Movement extends Model
 //        'paymentConcept_id',
         'accountReceivable_id',
         'accountPayable_id',
+        'currency_id',
 //        'order_id',
     ];
 
@@ -54,4 +56,70 @@ class Movement extends Model
         'updated_at',
         'deleted_at',
     ];
+
+    const filters = [
+        'paymentDate' => 'between',
+        'total' => 'like',
+        'cash' => 'like',
+        'yape' => 'like',
+        'plin' => 'like',
+        'card' => 'like',
+        'deposit' => 'like',
+        'currencyType' => 'like',
+        'typeDocument' => 'like',
+        'isBankPayment' => 'like',
+        'comment' => 'like',
+        'status' => 'like',
+        'user_id' => '=',
+        'bank_id' => '=',
+        'accountReceivable_id' => '=',
+        'accountPayable_id' => '=',
+        'currency_id' => '=',
+    ];
+
+    const sorts = [
+        'id',
+        'paymentDate',
+        'total',
+        'cash',
+        'yape',
+        'plin',
+        'card',
+        'deposit',
+        'currencyType',
+        'typeDocument',
+        'isBankPayment',
+        'comment',
+        'status',
+        'user_id',
+        'bank_id',
+        'accountReceivable_id',
+        'accountPayable_id',
+        'currency_id',
+    ];
+
+    public function user()
+    {
+        return $this->belongsTo(User::class);
+    }
+
+    public function bank()
+    {
+        return $this->belongsTo(Bank::class);
+    }
+
+    public function accountReceivable()
+    {
+        return $this->belongsTo(AccountReceivable::class);
+    }
+
+    public function accountPayable()
+    {
+        return $this->belongsTo(AccountPayable::class);
+    }
+
+    public function currency()
+    {
+        return $this->belongsTo(Currency::class, 'currency_id');
+    }
 }

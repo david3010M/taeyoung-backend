@@ -7,6 +7,7 @@ use App\Http\Requests\StoreSaleRequest;
 use App\Http\Requests\UpdateSaleRequest;
 use App\Http\Resources\SaleResource;
 use App\Models\AccountReceivable;
+use App\Models\Currency;
 use App\Models\DetailMachinery;
 use App\Models\DetailSparePart;
 use App\Models\Order;
@@ -65,7 +66,8 @@ class SaleController extends Controller
      */
     public function store(StoreSaleRequest $request)
     {
-
+        $exchangeRate = Currency::where('date', $request->date)->first();
+        if (!$exchangeRate) return response()->json(['error' => 'No se ha registrado el tipo de cambio para la fecha seleccionada'], 422);
         $igvActive = (boolean)$request->igvActive;
         $dataSale = [
             'type' => 'sale',
@@ -75,7 +77,7 @@ class SaleController extends Controller
             'paymentType' => $request->input('paymentType'),
             'quotation_id' => $request->input('quotation_id'),
             'client_id' => $request->input('client_id'),
-            'currencyType' => $request->input('currencyType', 'PEN'),
+            'currencyType' => $request->input('currencyType'),
             'igvActive' => $igvActive,
         ];
 
@@ -117,8 +119,11 @@ class SaleController extends Controller
         $sale->subtotal = $totalMachinery + $totalSpareParts - $sale->discount;
         $sale->igv = $igvActive ? round($sale->subtotal * 0.18, 2) : 0;
         $sale->total = $sale->subtotal + $sale->igv;
-        $sale->totalIncome = $sale->total;
-        $sale->balance = $sale->total;
+        $totalConvert = $sale->currencyType == 'PEN'
+            ? $sale->total // Conversión del total si está en otra moneda
+            : round($sale->total * $exchangeRate->buyRate, 2);
+        $sale->totalIncome = $totalConvert; // Refleja el ingreso final total
+        $sale->balance = $totalConvert;
 
         if ($request->input('paymentType') == 'CONTADO') {
             $sale->save();
@@ -130,6 +135,7 @@ class SaleController extends Controller
                 'balance' => $sale->total,
                 'order_id' => $sale->id,
                 'client_id' => $sale->client_id,
+                'currency_id' => $exchangeRate->id,
             ]);
         } else {
             $quotas = $request->input('quotas');
@@ -151,6 +157,7 @@ class SaleController extends Controller
                     'balance' => $quota['amount'],
                     'order_id' => $sale->id,
                     'client_id' => $sale->client_id,
+                    'currency_id' => $exchangeRate->id,
                 ]);
             }
         }
@@ -201,6 +208,9 @@ class SaleController extends Controller
             ->where('status', 'PENDIENTE')
             ->find($id);
         if (!$sale) return response()->json(['message' => 'Sale not found'], 404);
+
+        $exchangeRate = Currency::where('date', $request->date ?? $sale->date)->first();
+        if (!$exchangeRate) return response()->json(['error' => 'No se ha registrado el tipo de cambio para la fecha seleccionada'], 422);
 
         $igvActive = (boolean)$request->igvActive ?? $sale->igvActive;
 
@@ -254,8 +264,12 @@ class SaleController extends Controller
         $sale->subtotal = $totalMachinery + $totalSpareParts - $sale->discount;
         $sale->igv = $igvActive ? round($sale->subtotal * 0.18, 2) : 0;
         $sale->total = $sale->subtotal + $sale->igv;
-        $sale->balance = $sale->total;
-        $sale->totalIncome = $sale->total;
+
+        $totalConvert = $sale->currencyType == 'PEN'
+            ? $sale->total // Conversión del total si está en otra moneda
+            : round($sale->total * $exchangeRate->buyRate, 2);
+        $sale->totalIncome = $totalConvert; // Refleja el ingreso final total
+        $sale->balance = $totalConvert;
 
 
         if ($request->input('paymentType') == 'CONTADO') {

@@ -45,7 +45,7 @@ class StorePurchaseRequest extends StoreRequest
             'date' => 'required|date',
             'detail' => 'nullable|string',
 
-            'currencyType' => 'nullable|string',
+            'currencyType' => 'required|string|in:USD,PEN', // USD, PEN
             'supplier_id' => [
                 'required',
                 Rule::exists('people', 'id')

@@ -46,7 +46,7 @@ class StoreQuotationRequest extends StoreRequest
             'date' => 'required|date',
             'detail' => 'nullable|string',
             'discount' => 'nullable|numeric',
-            'currencyType' => 'nullable|string',
+            'currencyType' => 'required|string|in:USD,PEN',
             'client_id' => [
                 'required',
                 Rule::exists('people', 'id')

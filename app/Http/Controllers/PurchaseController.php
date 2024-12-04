@@ -6,6 +6,8 @@ use App\Http\Requests\IndexPurchaseRequest;
 use App\Http\Requests\StorePurchaseRequest;
 use App\Http\Requests\UpdatePurchaseRequest;
 use App\Http\Resources\PurchaseResource;
+use App\Models\AccountPayable;
+use App\Models\Currency;
 use App\Models\DetailMachinery;
 use App\Models\DetailSparePart;
 use App\Models\Order;
@@ -61,6 +63,9 @@ class PurchaseController extends Controller
      */
     public function store(StorePurchaseRequest $request)
     {
+        $exchangeRate = Currency::where('date', $request->date)->first();
+        if (!$exchangeRate) return response()->json(['error' => 'No se ha registrado el tipo de cambio para la fecha seleccionada'], 422);
+
         $dataPurchase = [
             'type' => 'purchase',
             'number' => $request->input('number'),
@@ -101,8 +106,24 @@ class PurchaseController extends Controller
         $purchase->totalSpareParts = $totalSpareParts;
         $purchase->subtotal = $totalMachinery + $totalSpareParts;
         $purchase->total = $totalMachinery + $totalSpareParts;
-        $purchase->totalExpense = $totalMachinery + $totalSpareParts;
+
+        $totalConvert = $purchase->currencyType == 'USD'
+            ? $purchase->total // Conversión del total si está en otra moneda
+            : round($purchase->total / $exchangeRate->saleRate, 2);
+        $purchase->totalExpense = $totalConvert; // Refleja el ingreso final total
+        $purchase->balance = $totalConvert;
         $purchase->save();
+
+        AccountPayable::create([
+            'paymentType' => 'CONTADO',
+            'days' => 0,
+            'date' => $purchase->date,
+            'amount' => $purchase->total,
+            'balance' => 0,
+            'supplier_id' => $purchase->supplier_id,
+            'order_id' => $purchase->id,
+            'currency_id' => $exchangeRate->id,
+        ]);
 
         $purchase = Order::find($purchase->id);
         return response()->json(new PurchaseResource($purchase));
@@ -148,6 +169,9 @@ class PurchaseController extends Controller
         $purchase = Order::find($id);
         if (!$purchase) return response()->json(['message' => 'Purchase not found'], 404);
 
+        $exchangeRate = Currency::where('date', $request->date ?? $purchase->date)->first();
+        if (!$exchangeRate) return response()->json(['error' => 'No se ha registrado el tipo de cambio para la fecha seleccionada'], 422);
+
         $data = [
             'date' => $request->input('date') ?? $purchase->date,
             'detail' => $request->input('detail') ?? $purchase->detail,
@@ -190,8 +214,25 @@ class PurchaseController extends Controller
         $purchase->totalSpareParts = $totalSpareParts;
         $purchase->subtotal = $totalMachinery + $totalSpareParts;
         $purchase->total = $totalMachinery + $totalSpareParts;
-        $purchase->totalExpense = $totalMachinery + $totalSpareParts;
+
+        $totalConvert = $purchase->currencyType == 'USD'
+            ? $purchase->total // Conversión del total si está en otra moneda
+            : round($purchase->total / $exchangeRate->saleRate, 2);
+        $purchase->totalExpense = $totalConvert; // Refleja el ingreso final total
+        $purchase->balance = $totalConvert;
         $purchase->save();
+
+        $purchase->accountPayable()->delete();
+        AccountPayable::create([
+            'paymentType' => 'CONTADO',
+            'days' => 0,
+            'date' => $purchase->date,
+            'amount' => $purchase->total,
+            'balance' => 0,
+            'supplier_id' => $purchase->supplier_id,
+            'order_id' => $purchase->id,
+            'currency_id' => $exchangeRate->id,
+        ]);
 
         $purchase = Order::find($purchase->id);
         return response()->json(new PurchaseResource($purchase));

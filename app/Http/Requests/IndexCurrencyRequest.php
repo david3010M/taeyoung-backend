@@ -9,9 +9,8 @@ class IndexCurrencyRequest extends IndexRequest
     public function rules(): array
     {
         return [
-            'currencyFrom' => 'nullable|string',
-            'currencyTo' => 'nullable|string',
-            'rate' => 'nullable|numeric',
+            'buyRate' => 'nullable|numeric',
+            'saleRate' => 'nullable|numeric',
             'date' => 'nullable|date',
         ];
     }

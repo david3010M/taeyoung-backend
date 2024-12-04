@@ -3,7 +3,6 @@
 namespace App\Http\Controllers;
 
 use App\Models\SparePart;
-use Barryvdh\DomPDF\Facade\Pdf;
 use Illuminate\Http\Request;
 
 class PdfController extends Controller
@@ -38,13 +37,44 @@ class PdfController extends Controller
         $object = SparePart::where('code', 'like', '%' . $code . '%')
             ->where('name', 'like', '%' . $name . '%')->get();
 
-        $pdf = Pdf::loadView('repuesto', [
+        if ($object->isEmpty()) return response()->json(['message' => 'Not found'], 404);
+
+//        $pdf = Pdf::loadView('repuesto', [
+        return view('repuesto', [
             'repuestos' => $object,
             'code' => $code,
             'name' => $name,
         ]);
 
-        return $pdf->download('repuestos_' . date('Y-m-d') . '.pdf');
 //        return $pdf->stream('repuestos.pdf');
+//        return $pdf->download('repuestos_' . date('Y-m-d') . '.pdf');
     }
+
+    public function getSales(Request $request)
+    {
+        $validator = validator($request->query(), [
+            'code' => 'nullable|string',
+            'name' => 'nullable|string',
+        ]);
+
+        if ($validator->fails()) return response()->json($validator->errors(), 400);
+
+        $code = $request->query('code');
+        $name = $request->query('name');
+
+        $object = SparePart::where('code', 'like', '%' . $code . '%')
+            ->where('name', 'like', '%' . $name . '%')->get();
+
+//        $pdf = Pdf::loadView('sales', [
+        return view('sales', [
+            'repuestos' => $object,
+            'code' => $code,
+            'name' => $name,
+        ]);
+
+//        return $pdf->download('sales_' . date('Y-m-d') . '.pdf');
+//        return $pdf->stream('sales.pdf');
+    }
+
+
 }

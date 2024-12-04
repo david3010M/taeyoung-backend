@@ -57,7 +57,7 @@ class StoreSaleRequest extends StoreRequest
                     ->whereNull('deleted_at')
             ],
             'igvActive' => 'required|boolean',
-            'currencyType' => 'nullable|string',
+            'currencyType' => 'required|string|in:USD,PEN',
             'discount' => 'nullable|numeric',
             'quotas' => 'required|array',
             'quotas.*.days' => 'required|int',

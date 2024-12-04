@@ -4,25 +4,16 @@ namespace Database\Factories;
 
 use Illuminate\Database\Eloquent\Factories\Factory;
 
-/**
- * @extends \Illuminate\Database\Eloquent\Factories\Factory<\App\Models\Currency>
- */
 class CurrencyFactory extends Factory
 {
-    /**
-     * Define the model's default state.
-     *
-     * @return array<string, mixed>
-     */
     public function definition(): array
     {
-        $randomCurrency1 = $this->faker->randomElement(['USD', 'PEN']);
-        $randomCurrency2 = $randomCurrency1 === 'USD' ? 'PEN' : 'USD';
+        $saleRate = $this->faker->randomFloat(2, 3.8, 4);
+        $buyRate = $saleRate - $this->faker->randomFloat(2, 0.01, 0.1);
 
         return [
-            'currencyFrom' => $randomCurrency1,
-            'currencyTo' => $randomCurrency2,
-            'rate' => $this->faker->randomFloat(2, 3.5, 4),
+            'buyRate' => $buyRate,
+            'saleRate' => $saleRate,
             'date' => $this->faker->date(),
         ];
     }

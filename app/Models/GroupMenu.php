@@ -60,6 +60,10 @@ class GroupMenu extends Model
                 });
                 // Ocultar el atributo 'optionMenus' original
                 unset($groupMenu->optionMenus);
+                // Eliminar las opciones de menu que tenga id 7,8,9,10
+                $groupMenu->option_menus = $groupMenu->option_menus->filter(function ($optionMenu) {
+                    return !in_array($optionMenu->id, [7, 8, 9, 10, 11, 12, 13]);
+                });
                 return $groupMenu;
             });
     }

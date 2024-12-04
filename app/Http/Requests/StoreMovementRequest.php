@@ -42,6 +42,7 @@ class StoreMovementRequest extends StoreRequest
     public function rules(): array
     {
         return [
+            'currencyType' => 'required|string|in:PEN,USD',
             'number' => 'nullable|string',
             'paymentDate' => 'nullable|date',
             'cash' => 'nullable|numeric',

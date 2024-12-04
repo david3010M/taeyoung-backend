@@ -12,10 +12,9 @@ return new class extends Migration {
     {
         Schema::create('currencies', function (Blueprint $table) {
             $table->id();
-            $table->string('currencyFrom');
-            $table->string('currencyTo');
-            $table->float('rate');
-            $table->dateTime('date');
+            $table->date('date');
+            $table->string('buyRate');
+            $table->string('saleRate');
             $table->timestamps();
             $table->softDeletes();
         });

@@ -12,10 +12,9 @@ class Currency extends Model
     use SoftDeletes;
 
     protected $fillable = [
-        'currencyFrom',
-        'currencyTo',
-        'rate',
         'date',
+        'buyRate',
+        'saleRate',
     ];
 
     protected $hidden = [
@@ -26,20 +25,20 @@ class Currency extends Model
 
     protected $casts = [
         'date' => 'datetime',
-        'rate' => 'decimal:2',
+        'buyRate' => 'decimal:2',
+        'saleRate' => 'decimal:2',
     ];
 
     const filters = [
-        'currencyFrom' => 'like',
-        'currencyTo' => 'like',
-        'rate' => 'like',
-        'date' => '<='
+        'date' => '<=',
+        'buyRate' => 'like',
+        'saleRate' => 'like',
     ];
 
     const sorts = [
         'id',
-        'currencyFrom',
-        'currencyTo',
+        'buyRate',
+        'saleRate',
         'rate',
         'date',
     ];

@@ -8,6 +8,7 @@ use App\Http\Resources\AccountReceivableResource;
 use App\Models\AccountReceivable;
 use App\Http\Requests\StoreAccountReceivableRequest;
 use App\Http\Requests\UpdateAccountReceivableRequest;
+use App\Models\Currency;
 use App\Models\Movement;
 
 class AccountReceivableController extends Controller
@@ -63,13 +64,42 @@ class AccountReceivableController extends Controller
     {
         $accountReceivable = AccountReceivable::find($id);
         if (!$accountReceivable) return response()->json(['error' => 'Cuenta por cobrar no encontrada'], 404);
+
         if ($request->cash == 0 && $request->yape == 0 && $request->plin == 0 && $request->card == 0 && $request->deposit == 0) {
             return response()->json(['error' => 'Debe ingresar al menos un monto de pago'], 422);
         }
-        if ($accountReceivable->balance <= 0) return response()->json(['error' => 'No se puede registrar un pago en una cuenta por cobrar con saldo 0'], 422);
-        if ($accountReceivable->balance < $request->cash + $request->yape + $request->plin + $request->card + $request->deposit) {
-            return response()->json(['error' => 'El monto a pagar es mayor al saldo de la cuenta por cobrar ' . $accountReceivable->balance], 422);
+
+        if ($accountReceivable->balance <= 0) {
+            return response()->json(['error' => 'No se puede registrar un pago en una cuenta por cobrar con saldo 0'], 422);
         }
+
+        $totalPayment = $request->cash + $request->yape + $request->plin + $request->card + $request->deposit;
+
+        // Obtén el tipo de cambio
+        $exchangeRate = Currency::where('date', $request->paymentDate)->first();
+        if (!$exchangeRate) {
+            return response()->json(['error' => 'No se ha registrado el tipo de cambio para la fecha seleccionada'], 422);
+        }
+
+        // Convertir el pago a la moneda de la cuenta por cobrar
+        $totalInReceivableCurrency = $totalPayment;
+        $accountReceivableCurrency = $accountReceivable->order->currencyType;
+        if ($request->currencyType != $accountReceivableCurrency) {
+            if ($request->currencyType == 'PEN' && $accountReceivableCurrency == 'USD') {
+                $totalInReceivableCurrency = round($totalPayment / $exchangeRate->saleRate, 2);
+            } elseif ($request->currencyType == 'USD' && $accountReceivableCurrency == 'PEN') {
+                $totalInReceivableCurrency = round($totalPayment * $exchangeRate->buyRate, 2);
+            }
+        }
+
+        // Validar que el monto convertido no exceda el saldo
+        if ($accountReceivable->balance < $totalInReceivableCurrency) {
+            return response()->json([
+                'error' => 'El monto a pagar excede el saldo de la cuenta por cobrar. Saldo actual: ' . $accountReceivable->balance
+            ], 422);
+        }
+
+        // Crear el movimiento
         $data = [
             'number' => $this->nextCorrelative(Movement::class, 'number'),
             'paymentDate' => $request->paymentDate,
@@ -83,18 +113,20 @@ class AccountReceivableController extends Controller
             'bank_id' => $request->bank_id,
             'accountReceivable_id' => $id,
             'user_id' => auth()->user()->id,
+            'currencyType' => $request->currencyType,
+            'currency_id' => $exchangeRate->id,
+            'total' => $totalPayment,
         ];
-        $movement = Movement::create($data);
-        $movement->total = $movement->cash + $movement->yape + $movement->plin + $movement->card + $movement->deposit;
-        $movement->save();
 
-        $accountReceivable->balance -= $movement->total;
+        $movement = Movement::create($data);
+
+        // Actualizar el balance de la cuenta por cobrar
+        $accountReceivable->balance -= $totalInReceivableCurrency;
         $accountReceivable->save();
 
-        $movement = Movement::find($movement->id);
-
-        return response()->json($movement);
+        return response()->json(Movement::find($movement->id));
     }
+
 
     public function store(StoreAccountReceivableRequest $request)
     {
@@ -116,7 +148,7 @@ class AccountReceivableController extends Controller
      */
     public function show(int $id)
     {
-        $accountReceivable = AccountReceivable::with(['movements', 'extensions'])->find($id);
+        $accountReceivable = AccountReceivable::with(['movements.currency', 'extensions'])->find($id);
         if (!$accountReceivable) return response()->json(['error' => 'Cuenta por cobrar no encontrada'], 404);
         return response()->json((new AccountReceivableResource($accountReceivable))->withReceivable());
     }
@@ -148,11 +180,35 @@ class AccountReceivableController extends Controller
     {
         $movement = Movement::find($id);
         if (!$movement) return response()->json(['error' => 'Pago no encontrado'], 404);
+
         $accountReceivable = AccountReceivable::find($movement->accountReceivable_id);
         if (!$accountReceivable) return response()->json(['error' => 'Cuenta por cobrar no encontrada'], 404);
-        $accountReceivable->balance += $movement->total;
+
+        // Obtener el tipo de cambio para la fecha del pago
+        $exchangeRate = Currency::where('date', $movement->paymentDate)->first();
+        if (!$exchangeRate) {
+            return response()->json(['error' => 'No se ha registrado el tipo de cambio para la fecha del pago'], 422);
+        }
+
+        $accountReceivableCurrency = $accountReceivable->order->currencyType;
+        $totalInReceivableCurrency = $movement->total;
+
+        // Convertir el monto de la moneda del pago a la moneda de la cuenta por pagar si es necesario
+        if ($movement->currencyType != $accountReceivableCurrency) {
+            if ($movement->currencyType == 'PEN' && $accountReceivableCurrency == 'USD') {
+                $totalInReceivableCurrency = round($movement->total / $exchangeRate->saleRate, 2);
+            } elseif ($movement->currencyType == 'USD' && $accountReceivableCurrency == 'PEN') {
+                $totalInReceivableCurrency = round($movement->total * $exchangeRate->buyRate, 2);
+            }
+        }
+
+        // Actualizar el balance de la cuenta por pagar con el monto convertido
+        $accountReceivable->balance += $totalInReceivableCurrency;
         $accountReceivable->save();
+
+        // Eliminar el movimiento
         $movement->delete();
+
         return response()->json(['message' => 'Pago eliminado correctamente']);
     }
 }

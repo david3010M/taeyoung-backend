@@ -18,6 +18,7 @@ return new class extends Migration {
             $table->decimal('card')->nullable()->default(0);
             $table->decimal('deposit')->nullable()->default(0);
 
+            $table->string('currencyType')->nullable(); // SOLES | DOLARES
             $table->string('typeDocument')->nullable(); // FACTURA | BOLETA
             $table->boolean('isBankPayment')->nullable()->default(false);
             $table->string('numberVoucher')->nullable();
@@ -32,6 +33,7 @@ return new class extends Migration {
             $table->foreignId('order_id')->nullable()->unsigned()->constrained('orders');
             $table->foreignId('accountReceivable_id')->nullable()->unsigned()->constrained('account_receivables');
             $table->foreignId('accountPayable_id')->nullable()->unsigned()->constrained('account_payables');
+            $table->foreignId('currency_id')->nullable()->unsigned()->constrained('currencies');
 
             $table->timestamps();
             $table->softDeletes();
