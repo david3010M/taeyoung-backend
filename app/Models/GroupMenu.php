@@ -48,6 +48,7 @@ class GroupMenu extends Model
                 $query->where('typeuser_id', $userTypeId);
             });
         }])
+        ->where('id', '!=', 4)
             ->get()
             ->map(function ($groupMenu) use ($userTypeId) {
                 // Filtrar optionMenus según el acceso del usuario
