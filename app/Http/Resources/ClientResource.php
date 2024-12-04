@@ -49,6 +49,7 @@ class ClientResource extends JsonResource
             'motherSurname' => $this->typeDocument === 'DNI' ? $this->motherSurname : null,
             'businessName' => $this->typeDocument === 'RUC' ? $this->businessName : null,
             'filterName' => $this->filterName,
+            'filterDocument' => $this->typeDocument === 'DNI' ? $this->dni : $this->ruc,
             'address' => $this->address,
             'email' => $this->email,
             'phone' => $this->phone,

@@ -44,7 +44,7 @@ Route::post('/login', [AuthController::class, 'login'])->name('login');
 
 //        REPORTS
 Route::get('/repuestos', [PdfController::class, 'getRepuestos'])->name('repuesto');
-Route::get('/venta', [PdfController::class, 'getSales'])->name('sale');
+Route::get('/venta/{id}', [PdfController::class, 'getSales'])->name('sale');
 
 
 Route::group(

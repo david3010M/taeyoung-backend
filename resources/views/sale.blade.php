@@ -1,10 +1,11 @@
-<!DOCTYPE html>
+@php use Carbon\Carbon; @endphp
+    <!DOCTYPE html>
 <html lang="es">
 
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Hoja de Servicio</title>
+    <title>Venta</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <style>
@@ -16,9 +17,6 @@
             padding-top: 5rem;
             width: 100vw;
             height: 100vh;
-            /*margin: 0;*/
-            /*padding: 0;*/
-            /*background-color: #2d3748;*/
             font-family: Inter, sans-serif;
         }
 
@@ -31,7 +29,9 @@
 
         .headerImage {
             width: auto;
-            height: 75px;
+            height: 60px;
+            padding-left: 20px;
+            padding-right: 20px;
         }
 
         .footerImage {
@@ -63,7 +63,16 @@
         }
 
         .text-start {
-            text-align: start;
+            text-align: left;
+        }
+
+        .text-end {
+            text-align: right;
+        }
+
+        .interletter {
+            color: #4e413e;
+            letter-spacing: 1.5px;
         }
 
         /*    FOOTER*/
@@ -79,9 +88,17 @@
             font-size: 14px;
         }
 
+        .page {
+            position: absolute;
+            bottom: 190px;
+            right: 0;
+        }
+
         .tableFooter {
-            border-top: 1px solid #040780;
-            border-bottom: 1px solid #040780;
+            /*border-top: 2px solid #040780;*/
+            /*border-bottom: 2px solid #040780;*/
+            border-top: 2px solid #000;
+            border-bottom: 2px solid #000;
         }
 
         .tableFooter td {
@@ -93,6 +110,22 @@
         }
 
         .p64 {
+            padding: 64px;
+        }
+
+        .pe64 {
+            padding-right: 64px;
+        }
+
+        .mb40 {
+            margin-bottom: 40px;
+        }
+
+        .p32 {
+            padding: 32px 32px 24px;
+        }
+
+        .px64 {
             padding-left: 64px;
             padding-right: 64px;
         }
@@ -101,37 +134,250 @@
             width: 50%;
         }
 
-    </style>
+        .m0 {
+            margin: 0;
+        }
 
+        .font20 {
+            font-size: 20px;
+        }
+
+        .font30 {
+            font-size: 30px;
+        }
+
+        .mx64 {
+            margin-left: 64px;
+            margin-right: 64px;
+        }
+
+        .mx56 {
+            margin-left: 56px;
+            margin-right: 56px;
+        }
+
+        .pl56 {
+            padding-left: 56px;
+        }
+
+        .tableData {
+            border-collapse: collapse;
+            /*position: fixed;*/
+            padding-left: 56px;
+            padding-right: 56px;
+        }
+
+        .tableData th {
+            padding: 8px;
+            color: white;
+            background-color: #040780;
+            border-top: 1px solid #040780;
+            border-bottom: 2px solid #040780;
+        }
+
+        .tableData td {
+            padding: 8px;
+            border-bottom: 1px solid rgba(30, 41, 59, 0.5);
+        }
+
+        .bold {
+            font-weight: bold;
+        }
+
+        .gray {
+            color: #4d4d4d;
+        }
+
+        .font10 {
+            font-size: 10px;
+        }
+
+        .font12 {
+            font-size: 12px;
+        }
+
+        .font14 {
+            font-size: 14px;
+        }
+
+        .saltopagina {
+            page-break-after: always;
+        }
+
+        .absolute {
+            position: fixed;
+            top: 40px;
+            left: 0;
+            width: 100px;
+        }
+
+        .normal {
+            font-weight: normal;
+        }
+
+
+    </style>
 </head>
 
 
 <body>
 
-<table class="w100">
+{{--LOGO--}}
+<table class="w100 mb40">
     <tr class="w100">
         <td class="wContent">
             <div class="headerBlock"></div>
         </td>
-        <td><img class="headerImage" src="{{ asset('img/taeyoung.png') }}" alt="logo"></td>
+        <td class="black">
+            <img class="headerImage" src="{{ asset('img/taeyoung.png') }}" alt="logo">
+        </td>
+        <td class="w100">
+            <table class="w100 pe64">
+                <tr>
+                    <td>
+                        <h2 class="m0 text-end normal font20">VENTA <strong class="">N° {{$sale->number}}</strong></h2>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="text-end interletter bold">
+                        {{ Carbon::parse($sale->date)->locale('es')->isoFormat('D [de] MMMM [de] YYYY') }}
+                    </td>
+                </tr>
+            </table>
+        </td>
     </tr>
-
 </table>
 
-<div class="w100 footer black">
-    <div class="p64">
-        <table class="w100 h100 tableFooter">
-            <tr class="w100">
-                <td class="text-center w50"><img class="footerImage" src="{{ asset('img/taeyoung.png') }}" alt="logo">
-                </td>
-                <td class="text-start w50">
-                    <div>20607921238</div>
-                    <div>TAEYOUNG INTERNACIONAL E.I.R.L.</div>
-                    <div>Calle Santa Adela Mza. C Lote. 1 Dpto. 401</div>
-                </td>
-            </tr>
-        </table>
+{{--RAZON SOCIAL--}}
+<table class="w100 mb40">
+    <tr class="w100">
+        <td class="w100">
+            <table class="w100 pl56">
+                <tr>
+                    <td>
+                        <h2 class="m0 text-start normal font20"><strong>{{ $sale->client }}</strong></h2>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="text-start bold font14 gray">
+                        {{ $sale->clientData->filterDocument }}
+                    </td>
+                </tr>
+            </table>
+    </tr>
+</table>
+
+
+<div class="mx56">
+    {{--FOOTER--}}
+    <div class="w100 footer black">
+        <div class="px64">
+            <table class="w100 h100 tableFooter">
+                <tr class="w100">
+                    <td class="text-center w50">
+                        <img class="footerImage" src="{{ asset('img/taeyoung.png') }}"
+                             alt="logo">
+                    </td>
+                    <td class="text-start w50">
+                        <div>20607921238</div>
+                        <div>TAEYOUNG INTERNACIONAL E.I.R.L.</div>
+                        <div>{{"Calle Santa Adela Mza. C Lote. 1 Dpto. 401"}}</div>
+                    </td>
+                </tr>
+            </table>
+        </div>
     </div>
+    <table class="w100 tableData mb40">
+        <tr class="text-center font12">
+            <th style="width: 40%">MAQUINARIA / REPUESTO</th>
+            <th style="width: 20%">CANTIDAD</th>
+            <th style="width: 20%">V. UNITARIO</th>
+            <th style="width: 20%">V. VENTA</th>
+        </tr>
+
+        @foreach ($sale->detailMachinery as $index => $machinery)
+            <tr class="text-center font10">
+                <td>{{ $machinery->description }}</td>
+                <td>{{ $machinery->quantity }}</td>
+                <td>{{$sale->currencySymbol}} {{ $machinery->salePrice }}</td>
+                <td>{{$sale->currencySymbol}} {{ $machinery->saleValue }}</td>
+            </tr>
+        @endforeach
+        @foreach ($sale->detailSpareParts as $index => $sparePart)
+            <tr class="text-center font10" style=background-color:#f4f4f4>
+                <td>{{ $sparePart->sparePart->name }}</td>
+                <td>{{ $sparePart->quantity }}</td>
+                <td>{{$sale->currencySymbol}} {{ $sparePart->salePrice }}</td>
+                <td>{{$sale->currencySymbol}} {{ $sparePart->saleValue }}</td>
+            </tr>
+        @endforeach
+    </table>
+
+    <table class="w100 mb40">
+        <tr class="w100">
+            <td class="w100">
+                <table class="w100">
+                    <tr>
+                        <td>
+                            <h2 class="m0 text-end normal font10">Total maquinaria:
+                                <strong>
+                                    {{$sale->currencySymbol}} {{$sale->totalMachinery}}
+                                </strong>
+                            </h2>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <h2 class="m0 text-end normal font10">Total repuestos:
+                                <strong>
+                                    {{$sale->currencySymbol}} {{$sale->totalSpareParts}}
+                                </strong>
+                            </h2>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <h2 class="m0 text-end normal font10">Subtotal:
+                                <strong>
+                                    {{$sale->currencySymbol}} {{$sale->subtotal}}
+                                </strong>
+                            </h2>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <h2 class="m0 text-end normal font10">IGV
+                                ({{$sale->igvActive == true? '18':'0'}}%):
+                                <strong>
+                                    {{$sale->igv}}
+                                </strong>
+                            </h2>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <h2 class="m0 text-end normal font10">Descuento:
+                                <strong>
+                                    {{$sale->discount}}
+                                </strong>
+                            </h2>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <h2 class="m0 text-end normal font10">Total:
+                                <strong>
+                                    {{$sale->currencySymbol}} {{$sale->total}}
+                                </strong>
+                            </h2>
+                        </td>
+                    </tr>
+                </table>
+            </td>
+        </tr>
+    </table>
+
+
 </div>
 
 </body>

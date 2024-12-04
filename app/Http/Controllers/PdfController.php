@@ -2,7 +2,10 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Resources\SaleResource;
+use App\Models\Order;
 use App\Models\SparePart;
+use Barryvdh\DomPDF\Facade\Pdf;
 use Illuminate\Http\Request;
 
 class PdfController extends Controller
@@ -50,8 +53,11 @@ class PdfController extends Controller
 //        return $pdf->download('repuestos_' . date('Y-m-d') . '.pdf');
     }
 
-    public function getSales(Request $request)
+    public function getSales(Request $request, int $id)
     {
+        $sale = Order::where('type', 'sale')->find($id);
+        if (!$sale) return response()->json(['message' => 'Not found'], 404);
+
         $validator = validator($request->query(), [
             'code' => 'nullable|string',
             'name' => 'nullable|string',
@@ -65,15 +71,15 @@ class PdfController extends Controller
         $object = SparePart::where('code', 'like', '%' . $code . '%')
             ->where('name', 'like', '%' . $name . '%')->get();
 
-//        $pdf = Pdf::loadView('sales', [
-        return view('sales', [
-            'repuestos' => $object,
+//        $pdf = Pdf::loadView('sale', [
+        return view('sale', [
             'code' => $code,
             'name' => $name,
+            'sale' => json_decode((SaleResource::make($sale)->forReport())->toJson()),
         ]);
 
+        return $pdf->stream('sales.pdf');
 //        return $pdf->download('sales_' . date('Y-m-d') . '.pdf');
-//        return $pdf->stream('sales.pdf');
     }
 
 

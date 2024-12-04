@@ -150,7 +150,7 @@
             margin-right: 56px;
         }
 
-        .tableSparePart {
+        .tableData {
             border-collapse: collapse;
             position: fixed;
             padding-left: 56px;
@@ -158,7 +158,7 @@
             top: 210px;
         }
 
-        .tableSparePart th {
+        .tableData th {
             padding: 8px;
             color: white;
             background-color: #040780;
@@ -166,7 +166,7 @@
             border-bottom: 2px solid #040780;
         }
 
-        .tableSparePart td {
+        .tableData td {
             padding: 8px;
             border-bottom: 1px solid rgba(30, 41, 59, 0.5);
         }
@@ -254,7 +254,7 @@
             </table>
         </div>
     </div>
-    <table class="w100 tableSparePart">
+    <table class="w100 tableData">
         <tr class="text-center font14">
             <th style="width: 20%">CÓDIGO</th>
             <th style="width: 40%">NOMBRE</th>
@@ -314,7 +314,7 @@
     @endphp
 
     {{-- Nueva tabla con el encabezado para la siguiente página --}}
-    <table class="w100 tableSparePart">
+    <table class="w100 tableData">
         <tr class="text-center font14">
             <th style="width: 20%">CÓDIGO</th>
             <th style="width: 40%">NOMBRE</th>

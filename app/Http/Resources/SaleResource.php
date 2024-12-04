@@ -47,9 +47,11 @@ use Illuminate\Http\Resources\Json\JsonResource;
  */
 class SaleResource extends JsonResource
 {
+    protected bool $report = false;
+
     public function toArray(Request $request): array
     {
-        return [
+        $data = [
             'id' => $this->id,
             'date' => Carbon::parse($this->date)->format('Y-m-d'),
             'documentType' => $this->documentType,
@@ -62,10 +64,10 @@ class SaleResource extends JsonResource
 
             'igvActive' => $this->igvActive,
 
-
             'detail' => $this->detail,
 
             'currencyType' => $this->currencyType,
+            'currencySymbol' => $this->currencyType === 'PEN' ? 'S/' : '$',
             'totalMachinery' => round($this->totalMachinery, 2),
             'totalSpareParts' => round($this->totalSpareParts, 2),
 
@@ -86,5 +88,17 @@ class SaleResource extends JsonResource
             'detailMachinery' => DetailMachineryResource::collection($this->detailMachinery),
             'detailSpareParts' => DetailSparePartResource::collection($this->detailSpareParts),
         ];
+
+        if ($this->report) {
+            $data['clientData'] = new ClientResource($this->client);
+        }
+
+        return $data;
+    }
+
+    public function forReport(): self
+    {
+        $this->report = true;
+        return $this;
     }
 }
