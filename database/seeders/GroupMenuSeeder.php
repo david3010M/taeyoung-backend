@@ -14,8 +14,7 @@ class GroupMenuSeeder extends Seeder
             ['name' => 'Transacciones', 'icon' => 'ShoppingBag', 'order' => 1],
             ['name' => 'Cuentas', 'icon' => 'ShoppingCart', 'order' => 2],
             ['name' => 'Inventario', 'icon' => 'Package', 'order' => 3],
-            ['name' => 'Reportes', 'icon' => 'FileText', 'order' => 4],
-            ['name' => 'Configuración', 'icon' => 'Settings', 'order' => 5]
+            ['name' => 'Configuración', 'icon' => 'Settings', 'order' => 4]
         ];
 
         foreach ($array as $item) {
