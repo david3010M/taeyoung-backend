@@ -12,7 +12,7 @@ class OptionMenuSeeder extends Seeder
         $array = [
             ['id' => 1, 'name' => 'Cotización', 'route' => 'cotizacion', 'order' => 1, 'icon' => 'fas fa-shopping-cart', 'groupmenu_id' => 1],
             ['id' => 2, 'name' => 'Venta', 'route' => 'venta', 'order' => 2, 'icon' => 'fas fa-cogs', 'groupmenu_id' => 1],
-            ['id' => 3, 'name' => 'Compra', 'route' => 'compra', 'order' => 1, 'icon' => 'fas fa-shopping-cart', 'groupmenu_id' => 1],
+            ['id' => 3, 'name' => 'Compra', 'route' => 'compra', 'order' => 3, 'icon' => 'fas fa-shopping-cart', 'groupmenu_id' => 1],
             ['id' => 4, 'name' => 'Cuentas por Cobrar', 'route' => 'cuentasCobrar', 'order' => 1, 'icon' => 'fas fa-boxes', 'groupmenu_id' => 2],
             ['id' => 5, 'name' => 'Cuentas por Pagar', 'route' => 'cuentasPagar', 'order' => 2, 'icon' => 'fas fa-boxes', 'groupmenu_id' => 2],
             ['id' => 6, 'name' => 'Repuestos', 'route' => 'repuestos', 'order' => 1, 'icon' => 'fas fa-boxes', 'groupmenu_id' => 3],
