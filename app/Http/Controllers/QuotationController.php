@@ -158,7 +158,7 @@ class QuotationController extends Controller
         if (!$quotation) return response()->json(['message' => 'Quotation not found'], 404);
         $exchangeRate = Currency::where('date', $request->date ?? $quotation->date)->first();
         if (!$exchangeRate) return response()->json(['error' => 'No se ha registrado el tipo de cambio para la fecha seleccionada'], 422);
-        $igvActive = (boolean)$request->igvActive ?? $quotation->igvActive;
+        $igvActive = $request->igvActive == 'true' ?? $quotation->igvActive;
         $data = [
             'detail' => $request->input('detail') ?? $quotation->detail,
             'date' => $request->input('date') ?? $quotation->date,
