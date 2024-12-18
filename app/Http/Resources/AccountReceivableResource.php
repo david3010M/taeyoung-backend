@@ -54,7 +54,7 @@ class AccountReceivableResource extends JsonResource
             'country' => $this->client->country->name,
             'currency_id' => $this->currency_id,
             'order_id' => $this->order_id,
-            'quotation' => "COTI-" . $this->order->quotation->number,
+            'quotation' => $this->order->quotation ? ("COTI-" . $this->order->quotation->number) : null,
             'order' => "VENT-" . $this->order->number,
         ];
 
