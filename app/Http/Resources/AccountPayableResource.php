@@ -53,7 +53,7 @@ class AccountPayableResource extends JsonResource
             'country' => $this->supplier->country->name,
             'currency_id' => $this->currency_id,
             'order_id' => $this->order_id,
-            'quotation' => $this->order->quotation ? ("COTI-" . $this->order->quotation->number) : null,
+            'quotation' => $this->order?->quotation ? ("COTI-" . $this->order?->quotation->number) : null,
             'order' => "VENT-" . $this->order->number,
         ];
 

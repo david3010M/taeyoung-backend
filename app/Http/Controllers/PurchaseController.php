@@ -254,6 +254,9 @@ class PurchaseController extends Controller
     {
         $purchase = Order::find($id);
         if (!$purchase) return response()->json(['message' => 'Purchase not found'], 404);
+        $purchase->detailMachinery()->delete();
+        $purchase->detailSpareParts()->delete();
+        $purchase->accountPayable()->delete();
         $purchase->delete();
         return response()->json(['message' => 'Purchase deleted']);
     }
