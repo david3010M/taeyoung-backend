@@ -138,4 +138,9 @@ class Order extends Model
         return $this->belongsTo(Currency::class);
     }
 
+    public function files()
+    {
+        return $this->hasMany(File::class);
+    }
+
 }

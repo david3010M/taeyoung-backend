@@ -13,8 +13,9 @@ return new class extends Migration {
         Schema::create('files', function (Blueprint $table) {
             $table->id();
             $table->string('path');
-            $table->string('type')->nullable()->default('pdf');
-            $table->foreignId('spare_part_id')->nullable()->constrained()->nullOnDelete();
+            $table->string('type')->nullable();
+            $table->foreignId('quotation_id')->nullable()->constrained()->nullOnDelete();
+            $table->foreignId('order_id')->nullable()->constrained()->nullOnDelete();
             $table->timestamps();
             $table->softDeletes();
         });

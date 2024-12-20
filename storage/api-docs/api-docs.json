@@ -2320,6 +2320,228 @@
                 ]
             }
         },
+        "/taeyoung-backend/public/api/file": {
+            "get": {
+                "tags": [
+                    "File"
+                ],
+                "summary": "Get all files",
+                "description": "Display a listing of the resource.",
+                "operationId": "3af1febf40fc22ace72b484f785d8ecc",
+                "responses": {
+                    "200": {
+                        "description": "Files",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/FileCollection"
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthenticated",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/Unauthenticated"
+                                }
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
+        "/taeyoung-backend/public/api/quotation/{id}/file": {
+            "post": {
+                "tags": [
+                    "File"
+                ],
+                "summary": "Store a new file for a quotation",
+                "description": "Store a newly created resource in storage.",
+                "operationId": "00f1bc4d40c598c6ff39b7d7eb503862",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "Quotation id",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "requestBody": {
+                    "content": {
+                        "multipart/form-data": {
+                            "schema": {
+                                "$ref": "#/components/schemas/FileRequest"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "File created",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/FileCollection"
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Quotation not found",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Quotation not found"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
+        "/taeyoung-backend/public/api/order/{id}/file": {
+            "post": {
+                "tags": [
+                    "File"
+                ],
+                "summary": "Store a new file for a order",
+                "description": "Store a newly created resource in storage.",
+                "operationId": "879eed74d41bd344bfbdb85c4413ee64",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "Order id",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "requestBody": {
+                    "content": {
+                        "multipart/form-data": {
+                            "schema": {
+                                "$ref": "#/components/schemas/FileRequest"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "File created",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/FileCollection"
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Order not found",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Order not found"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
+        "/taeyoung-backend/public/api/file/{id}": {
+            "delete": {
+                "tags": [
+                    "File"
+                ],
+                "summary": "Delete a file",
+                "operationId": "f862ea7f49e4c040246df090216a6666",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "File id",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "File deleted",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "example": "File deleted"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "File not found",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "example": "File not found"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
         "/taeyoung-backend/public/api/paymentConcept": {
             "get": {
                 "tags": [
@@ -5887,6 +6109,22 @@
                 },
                 "type": "object"
             },
+            "FileRequest": {
+                "title": "FileRequest",
+                "required": [
+                    "files[]"
+                ],
+                "properties": {
+                    "files[]": {
+                        "type": "array",
+                        "items": {
+                            "type": "file",
+                            "format": "binary"
+                        }
+                    }
+                },
+                "type": "object"
+            },
             "StoreClientRequest": {
                 "title": "Store Client Request",
                 "required": [
@@ -7318,6 +7556,53 @@
                 },
                 "type": "object"
             },
+            "FileResource": {
+                "title": "FileResource",
+                "description": "File resource",
+                "properties": {
+                    "id": {
+                        "type": "integer",
+                        "example": "1"
+                    },
+                    "path": {
+                        "type": "string",
+                        "example": "http://develop.garzasoft.com/storage/quotation/20210819120000_file.jpg"
+                    },
+                    "quotation_id": {
+                        "type": "integer",
+                        "example": "1"
+                    },
+                    "order_id": {
+                        "type": "integer",
+                        "example": "1"
+                    },
+                    "created_at": {
+                        "type": "string",
+                        "format": "date-time",
+                        "example": "2024-08-19 12:00:00"
+                    }
+                },
+                "type": "object"
+            },
+            "FileCollection": {
+                "title": "FileCollection",
+                "description": "File resource collection",
+                "properties": {
+                    "data": {
+                        "type": "array",
+                        "items": {
+                            "$ref": "#/components/schemas/FileResource"
+                        }
+                    },
+                    "links": {
+                        "$ref": "#/components/schemas/PaginationLinks"
+                    },
+                    "meta": {
+                        "$ref": "#/components/schemas/PaginationMeta"
+                    }
+                },
+                "type": "object"
+            },
             "PaymentConceptResource": {
                 "title": "PaymentConceptResource",
                 "properties": {
@@ -8363,6 +8648,10 @@
         {
             "name": "Extension",
             "description": "Extension"
+        },
+        {
+            "name": "File",
+            "description": "File"
         },
         {
             "name": "PaymentConcept",

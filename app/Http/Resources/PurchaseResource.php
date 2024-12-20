@@ -78,6 +78,7 @@ class PurchaseResource extends JsonResource
             'quotation' => new SingleQuotationResource($this->quotation),
             'detailMachinery' => DetailMachineryResource::collection($this->detailMachinery),
             'detailSpareParts' => DetailSparePartResource::collection($this->detailSpareParts),
+            'files' => FileResource::collection($this->files),
         ];
     }
 }

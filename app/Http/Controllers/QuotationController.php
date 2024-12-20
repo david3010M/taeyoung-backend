@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\FileRequest;
 use App\Http\Requests\IndexQuotationRequest;
 use App\Http\Requests\StoreQuotationRequest;
 use App\Http\Requests\UpdateQuotationRequest;
@@ -10,6 +11,7 @@ use App\Http\Resources\QuotationResource;
 use App\Models\Currency;
 use App\Models\DetailMachinery;
 use App\Models\DetailSparePart;
+use App\Models\File;
 use App\Models\Quotation;
 use App\Models\SparePart;
 use App\Traits\Filterable;

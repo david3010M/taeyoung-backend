@@ -11,13 +11,13 @@ use App\Http\Controllers\CountryController;
 use App\Http\Controllers\CurrencyController;
 use App\Http\Controllers\DepartmentController;
 use App\Http\Controllers\DetailSparePartController;
+use App\Http\Controllers\FileController;
 use App\Http\Controllers\GroupMenuController;
 use App\Http\Controllers\ProvinceController;
 use App\Http\Controllers\PurchaseController;
 use App\Http\Controllers\OptionMenuController;
 use App\Http\Controllers\PaymentConceptController;
 use App\Http\Controllers\PdfController;
-use App\Http\Controllers\PersonController;
 use App\Http\Controllers\QuotationController;
 use App\Http\Controllers\SaleController;
 use App\Http\Controllers\SearchController;
@@ -26,7 +26,6 @@ use App\Http\Controllers\SupplierController;
 use App\Http\Controllers\TypeUserController;
 use App\Http\Controllers\UnitController;
 use App\Http\Controllers\UserController;
-use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -243,6 +242,11 @@ Route::group(
                 'destroy' => 'quotation.destroy',
             ]
         );
+
+        Route::get('file', [FileController::class, 'index'])->name('file.index');
+        Route::post('quotation/{id}/file', [FileController::class, 'storeQuotationFile'])->name('quotation.file');
+        Route::post('order/{id}/file', [FileController::class, 'storeOrderFile'])->name('order.file');
+        Route::delete('file/{id}', [FileController::class, 'destroy'])->name('file.destroy');
 
 //        MACHINERY PURCHASE
         Route::resource('purchase', PurchaseController::class)->only(

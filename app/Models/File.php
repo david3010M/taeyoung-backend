@@ -13,18 +13,18 @@ class File extends Model
 
     protected $fillable = [
         'path',
-        'type',
-        'spare_part_id',
+        'order_id',
+        'quotation_id',
+        'created_at',
     ];
 
     protected $hidden = [
-        'created_at',
         'updated_at',
         'deleted_at',
     ];
 
     protected $casts = [
-        'created_at' => 'datetime',
+        'created_at' => 'datetime:d-m-Y H:i:s',
         'updated_at' => 'datetime',
         'deleted_at' => 'datetime',
     ];
