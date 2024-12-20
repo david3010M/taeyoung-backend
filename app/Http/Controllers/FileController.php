@@ -26,7 +26,7 @@ class FileController extends Controller
     public function index()
     {
         $files = File::paginate(10);
-        return response()->json(FileResource::collection($files));
+        return FileResource::collection($files);
     }
 
 

@@ -66,6 +66,10 @@
             text-align: left;
         }
 
+        .text-justify {
+            text-align: justify;
+        }
+
         .text-end {
             text-align: right;
         }
@@ -251,17 +255,26 @@
 <table class="w100 mb40">
     <tr class="w100">
         <td class="w100">
-            <table class="w100 pl56">
+            <table class="w100 pl56 pe64">
                 <tr>
                     <td>
                         <h2 class="m0 text-start normal font20">
-                            <strong>{{ $quotation->clientData->filterName }}</strong>
+                            <strong>Sr(es). {{ $quotation->clientData->filterName }}</strong>
                         </h2>
                     </td>
                 </tr>
                 <tr>
                     <td class="text-start bold font14 gray">
                         {{ $quotation->clientData->filterDocument }}
+                    </td>
+                </tr>
+                <tr>
+                    <td class="text-justify font12">
+                        Nos es grato presentar nuestra empresa para Latinoamérica TAEYOUNG INTERNACIONAL, dedicada a la
+                        venta, servicio técnico e instalaciones, líder en el desarrollo de maquinarias para el
+                        procesamiento de plantas industriales. En la presente encontrará nuestra oferta, esperando sea
+                        de su total interés y que podamos cumplir con sus expectativas. Quedaremos atentos de poder
+                        ampliar nuestra información y de conocer su opinión al respecto.
                     </td>
                 </tr>
             </table>
