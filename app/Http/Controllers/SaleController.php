@@ -67,7 +67,9 @@ class SaleController extends Controller
     public function store(StoreSaleRequest $request)
     {
         $exchangeRate = Currency::where('date', $request->date)->first();
-        if (!$exchangeRate) return response()->json(['error' => 'No se ha registrado el tipo de cambio para la fecha seleccionada'], 422);
+        if ($request->input('currencyType') == 'USD') {
+            if (!$exchangeRate) return response()->json(['error' => 'No se ha registrado el tipo de cambio para la fecha seleccionada'], 422);
+        }
         $igvActive = (boolean)$request->igvActive;
         $dataSale = [
             'type' => 'sale',
@@ -210,8 +212,10 @@ class SaleController extends Controller
         if (!$sale) return response()->json(['message' => 'Sale not found'], 404);
 
         $exchangeRate = Currency::where('date', $request->date ?? $sale->date)->first();
-        if (!$exchangeRate) return response()->json(['error' => 'No se ha registrado el tipo de cambio para la fecha seleccionada'], 422);
 
+        if ($request->input('currencyType') == 'USD') {
+            if (!$exchangeRate) return response()->json(['error' => 'No se ha registrado el tipo de cambio para la fecha seleccionada'], 422);
+        }
         $igvActive = (boolean)$request->igvActive ?? $sale->igvActive;
 
         $data = [

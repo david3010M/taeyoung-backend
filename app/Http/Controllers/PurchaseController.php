@@ -64,8 +64,9 @@ class PurchaseController extends Controller
     public function store(StorePurchaseRequest $request)
     {
         $exchangeRate = Currency::where('date', $request->date)->first();
-        if (!$exchangeRate) return response()->json(['error' => 'No se ha registrado el tipo de cambio para la fecha seleccionada'], 422);
-
+        if ($request->input('currencyType') == 'USD') {
+            if (!$exchangeRate) return response()->json(['error' => 'No se ha registrado el tipo de cambio para la fecha seleccionada'], 422);
+        }
         $dataPurchase = [
             'type' => 'purchase',
             'number' => $request->input('number'),
@@ -170,8 +171,10 @@ class PurchaseController extends Controller
         if (!$purchase) return response()->json(['message' => 'Purchase not found'], 404);
 
         $exchangeRate = Currency::where('date', $request->date ?? $purchase->date)->first();
-        if (!$exchangeRate) return response()->json(['error' => 'No se ha registrado el tipo de cambio para la fecha seleccionada'], 422);
 
+        if ($request->input('currencyType') == 'USD') {
+            if (!$exchangeRate) return response()->json(['error' => 'No se ha registrado el tipo de cambio para la fecha seleccionada'], 422);
+        }
         $data = [
             'date' => $request->input('date') ?? $purchase->date,
             'detail' => $request->input('detail') ?? $purchase->detail,

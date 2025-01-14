@@ -67,7 +67,10 @@ class QuotationController extends Controller
     public function store(StoreQuotationRequest $request)
     {
         $exchangeRate = Currency::where('date', $request->date)->first();
-        if (!$exchangeRate) return response()->json(['error' => 'No se ha registrado el tipo de cambio para la fecha seleccionada'], 422);
+
+        if ($request->input('currencyType') == 'USD') {
+            if (!$exchangeRate) return response()->json(['error' => 'No se ha registrado el tipo de cambio para la fecha seleccionada'], 422);
+        }
         $igvActive = (boolean)$request->igvActive;
         $dataQuotation = [
             'number' => $this->nextCorrelative(Quotation::class, 'number'),
@@ -159,7 +162,10 @@ class QuotationController extends Controller
         $quotation = Quotation::find($id);
         if (!$quotation) return response()->json(['message' => 'Quotation not found'], 404);
         $exchangeRate = Currency::where('date', $request->date ?? $quotation->date)->first();
-        if (!$exchangeRate) return response()->json(['error' => 'No se ha registrado el tipo de cambio para la fecha seleccionada'], 422);
+
+        if ($request->input('currencyType') == 'USD') {
+            if (!$exchangeRate) return response()->json(['error' => 'No se ha registrado el tipo de cambio para la fecha seleccionada'], 422);
+        }
         $igvActive = $request->igvActive == 'true' ?? $quotation->igvActive;
         $data = [
             'detail' => $request->input('detail') ?? $quotation->detail,

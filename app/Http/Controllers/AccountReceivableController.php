@@ -79,8 +79,11 @@ class AccountReceivableController extends Controller
 
         // Obtén el tipo de cambio
         $exchangeRate = Currency::where('date', $request->paymentDate)->first();
-        if (!$exchangeRate) {
-            return response()->json(['error' => 'No se ha registrado el tipo de cambio para la fecha seleccionada'], 422);
+
+        if ($request->input('currencyType') == 'USD') {
+            if (!$exchangeRate) {
+                return response()->json(['error' => 'No se ha registrado el tipo de cambio para la fecha seleccionada'], 422);
+            }
         }
 
         // Convertir el pago a la moneda de la cuenta por cobrar
