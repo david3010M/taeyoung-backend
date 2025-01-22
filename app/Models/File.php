@@ -13,6 +13,7 @@ class File extends Model
 
     protected $fillable = [
         'path',
+        'type',
         'order_id',
         'quotation_id',
         'created_at',

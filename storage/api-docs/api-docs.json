@@ -2420,6 +2420,69 @@
                 ]
             }
         },
+        "/taeyoung-backend/public/api/quotation/{id}/images": {
+            "post": {
+                "tags": [
+                    "Images"
+                ],
+                "summary": "Store a new image for a quotation",
+                "description": "Store a newly created resource in storage.",
+                "operationId": "48b1c6c259efc26f854aa95eab5e70c7",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "Quotation id",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "requestBody": {
+                    "content": {
+                        "multipart/form-data": {
+                            "schema": {
+                                "$ref": "#/components/schemas/ImageRequest"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "File created",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/FileCollection"
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Quotation not found",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Quotation not found"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
         "/taeyoung-backend/public/api/order/{id}/file": {
             "post": {
                 "tags": [
@@ -6125,6 +6188,22 @@
                 },
                 "type": "object"
             },
+            "ImageRequest": {
+                "title": "ImageRequest",
+                "required": [
+                    "images[]"
+                ],
+                "properties": {
+                    "images[]": {
+                        "type": "array",
+                        "items": {
+                            "type": "file",
+                            "format": "binary"
+                        }
+                    }
+                },
+                "type": "object"
+            },
             "StoreClientRequest": {
                 "title": "Store Client Request",
                 "required": [
@@ -8652,6 +8731,10 @@
         {
             "name": "File",
             "description": "File"
+        },
+        {
+            "name": "Images",
+            "description": "Images"
         },
         {
             "name": "PaymentConcept",

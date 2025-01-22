@@ -245,6 +245,7 @@ Route::group(
 
         Route::get('file', [FileController::class, 'index'])->name('file.index');
         Route::post('quotation/{id}/file', [FileController::class, 'storeQuotationFile'])->name('quotation.file');
+        Route::post('quotation/{id}/images', [FileController::class, 'storeQuotationImages'])->name('quotation.images');
         Route::post('order/{id}/file', [FileController::class, 'storeOrderFile'])->name('order.file');
         Route::delete('file/{id}', [FileController::class, 'destroy'])->name('file.destroy');
 

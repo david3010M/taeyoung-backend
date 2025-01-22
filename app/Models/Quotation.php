@@ -105,7 +105,12 @@ class Quotation extends Model
 
     public function files()
     {
-        return $this->hasMany(File::class);
+        return $this->hasMany(File::class)->where('type', 'file');
+    }
+
+    public function images()
+    {
+        return $this->hasMany(File::class)->where('type', 'image');
     }
 
 }

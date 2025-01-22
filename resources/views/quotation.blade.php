@@ -20,6 +20,13 @@
             font-family: Inter, sans-serif;
         }
 
+        .image-cell {
+            width: 50%;
+            padding: 10px;
+            text-align: center;
+            vertical-align: top;
+        }
+
         .headerBlock {
             background-color: black;
             height: 75px;
@@ -384,6 +391,24 @@
 
 </div>
 
+<div class="saltopagina"></div>
+<div class="px64">
+    <h2 class="text-start bold font20">Imágenes relacionadas</h2>
+    <table class="w100">
+        @foreach (array_chunk($quotation->images, 2) as $row)
+            <tr>
+                @foreach ($row as $image)
+                    <td class="image-cell">
+                        <img src="{{ asset($image->path) }}" alt="Imagen" style="width: 100%; height: auto; margin-bottom: 20px;">
+                    </td>
+                @endforeach
+                @if (count($row) < 2)
+                    <td class="image-cell"></td> <!-- Celda vacía si no hay una segunda imagen -->
+                @endif
+            </tr>
+        @endforeach
+    </table>
+</div>
 </body>
 
 </html>

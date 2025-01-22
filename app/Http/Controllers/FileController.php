@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\FileRequest;
+use App\Http\Requests\ImageRequest;
 use App\Http\Resources\FileResource;
 use App\Models\File;
 use App\Models\Order;
@@ -56,6 +57,45 @@ class FileController extends Controller
             $file->storeAs('public/quotation', $filename);
             $routeImage = asset('storage/quotation/' . $filename);
             $dataImage = [
+                'type' => 'file',
+                'path' => $routeImage,
+                'quotation_id' => $quotation->id,
+            ];
+            File::create($dataImage);
+        }
+
+        $filesAdded = File::where('quotation_id', $quotation->id)->get();
+
+        return response()->json($filesAdded);
+    }
+
+    /**
+     * Store a newly created resource in storage.
+     * @OA\Post(
+     *     path="/taeyoung-backend/public/api/quotation/{id}/images",
+     *     tags={"Images"},
+     *     summary="Store a new image for a quotation",
+     *     security={{"bearerAuth": {}}},
+     *     @OA\Parameter(name="id", in="path", description="Quotation id", required=true, @OA\Schema(type="integer")),
+     *     @OA\RequestBody(@OA\MediaType(mediaType="multipart/form-data", @OA\Schema(ref="#/components/schemas/ImageRequest"))),
+     *     @OA\Response(response=200, description="File created", @OA\JsonContent(ref="#/components/schemas/FileCollection")),
+     *     @OA\Response(response=404, description="Quotation not found", @OA\JsonContent( type="object", @OA\Property(property="message", type="string", example="Quotation not found"))),
+     * )
+     */
+    public function storeQuotationImages(ImageRequest $request, int $id)
+    {
+        $quotation = Quotation::find($id);
+        if (!$quotation) return response()->json(['message' => 'Quotation not found'], 404);
+
+        $files = $request->file('images');
+        foreach ($files as $file) {
+            $currentTime = now();
+            $originalName = str_replace(' ', '_', $file->getClientOriginalName());
+            $filename = $currentTime->format('YmdHis') . '_' . $originalName;
+            $file->storeAs('public/quotation', $filename);
+            $routeImage = asset('storage/quotation/' . $filename);
+            $dataImage = [
+                'type' => 'image',
                 'path' => $routeImage,
                 'quotation_id' => $quotation->id,
             ];

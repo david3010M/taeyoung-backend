@@ -63,6 +63,7 @@ class QuotationResource extends JsonResource
             'detailMachinery' => DetailMachineryResource::collection($this->detailMachinery),
             'detailSpareParts' => DetailSparePartResource::collection($this->detailSpareParts),
             'files' => FileResource::collection($this->files),
+            'images' => FileResource::collection($this->images),
         ];
     }
 }
