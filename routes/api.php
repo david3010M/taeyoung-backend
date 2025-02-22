@@ -27,6 +27,8 @@ use App\Http\Controllers\TypeUserController;
 use App\Http\Controllers\UnitController;
 use App\Http\Controllers\UserController;
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\MachineryController;
+
 
 /*
 |--------------------------------------------------------------------------
@@ -45,6 +47,31 @@ Route::post('/login', [AuthController::class, 'login'])->name('login');
 Route::group(
     ['middleware' => ['auth:sanctum']],
     function () {
+
+
+        //BANK ACCOUNT
+        Route::resource('bankaccount', BankAccountController::class)->only(
+            ['index', 'show', 'store', 'update', 'destroy']
+        )->names(
+            [
+                'index'   => 'bankaccount.index',
+                'store'   => 'bankaccount.store',
+                'show'    => 'bankaccount.show',
+                'update'  => 'bankaccount.update',
+                'destroy' => 'bankaccount.destroy',
+            ]
+        );
+        Route::resource('machinery', MachineryController::class)->only(
+            ['index', 'show', 'store', 'update', 'destroy']
+        )->names(
+            [
+                'index'   => 'machinery.index',
+                'store'   => 'machinery.store',
+                'show'    => 'machinery.show',
+                'update'  => 'machinery.update',
+                'destroy' => 'machinery.destroy',
+            ]
+        );
 //        REPORTS
         Route::get('/repuestos', [PdfController::class, 'getRepuestos'])->name('repuestoReport');
         Route::get('/compra/{id}', [PdfController::class, 'getPurchase'])->name('purchaseReport');
@@ -54,6 +81,7 @@ Route::group(
         Route::get('/authenticate', [AuthController::class, 'authenticate'])->name('authenticate');
         Route::get('/logout', [AuthController::class, 'logout'])->name('logout');
         Route::get('/logs', [AuthController::class, 'logs'])->name('logs');
+
 
 //         SEARCH
         Route::get('searchByDni/{dni}', [SearchController::class, 'searchByDni']);

@@ -45,6 +45,7 @@ class Quotation extends Model
         'discount',
         'total',
         'client_id',
+        'status',
     ];
 
     protected $hidden = [

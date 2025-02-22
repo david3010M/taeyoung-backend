@@ -8,8 +8,9 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 
 class DetailMachinery extends Model
 {
-    use HasFactory;
-    use SoftDeletes;
+    use HasFactory, SoftDeletes;
+
+    protected $table = 'detail_machineries';
 
     protected $fillable = [
         'description',
@@ -19,6 +20,9 @@ class DetailMachinery extends Model
         'salePrice',
         'purchaseValue',
         'saleValue',
+        'realPrice',
+        'contablePrice',
+        'machinery_id',
         'quotation_id',
         'order_id',
     ];
@@ -26,24 +30,29 @@ class DetailMachinery extends Model
     protected $hidden = [
         'created_at',
         'updated_at',
-        'deleted_at'
+        'deleted_at',
     ];
 
     protected $casts = [
         'purchasePrice' => 'decimal:2',
-        'salePrice' => 'decimal:2'
+        'salePrice'     => 'decimal:2',
+        'realPrice'     => 'decimal:2',
+        'contablePrice' => 'decimal:2',
     ];
 
     const filters = [
-        'description' => 'like',
-        'quantity' => 'like',
-        'movementType' => 'like',
+        'description'   => 'like',
+        'quantity'      => 'like',
+        'movementType'  => 'like',
         'purchasePrice' => 'like',
-        'salePrice' => 'like',
+        'salePrice'     => 'like',
         'purchaseValue' => 'like',
-        'saleValue' => 'like',
-        'order_id' => 'like',
-        'quotation_id' => 'like'
+        'saleValue'     => 'like',
+        'realPrice'     => 'like',
+        'contablePrice' => 'like',
+        'machinery_id'  => 'like',
+        'order_id'      => 'like',
+        'quotation_id'  => 'like',
     ];
 
     const sorts = [
@@ -55,18 +64,53 @@ class DetailMachinery extends Model
         'salePrice',
         'purchaseValue',
         'saleValue',
+        'realPrice',
+        'contablePrice',
+        'machinery_id',
         'order_id',
-        'quotation_id'
+        'quotation_id',
     ];
 
+    /**
+     * Replicar la lógica para actualizar purchasePrice/salePrice en el modelo Machinery.
+     */
+    public static function boot()
+    {
+        parent::boot();
+
+        static::saved(function ($model) {
+            // Si la relación machinery existe y el modelo la trae cargada
+            if ($model->machinery) {
+                $model->machinery->update([
+                    // Si purchasePrice en el detalle es > 0, lo usamos. De lo contrario, se deja el que ya tiene la machinery
+                    'purchasePrice' => ($model->purchasePrice && $model->purchasePrice > 0)
+                        ? $model->purchasePrice
+                        : $model->machinery->purchasePrice,
+
+                    // Igual para salePrice
+                    'salePrice'     => ($model->salePrice && $model->salePrice > 0)
+                        ? $model->salePrice
+                        : $model->machinery->salePrice,
+                ]);
+            }
+        });
+    }
+
+    // Relación con la tabla orders (opcional)
     public function order()
     {
         return $this->belongsTo(Order::class);
     }
 
+    // Relación con la tabla quotations
     public function quotation()
     {
         return $this->belongsTo(Quotation::class);
     }
 
+    // Relación con la tabla machineries
+    public function machinery()
+    {
+        return $this->belongsTo(Machinery::class);
+    }
 }

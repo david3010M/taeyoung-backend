@@ -38,11 +38,12 @@ class SaleController extends Controller
      *     @OA\Parameter(parameter="direction", name="direction", in="query", required=false, description="Sort direction", @OA\Schema(type="string", enum={"asc", "desc"})),
      *     @OA\Response(response=200, description="Successful operation", @OA\JsonContent(ref="#/components/schemas/Client")),
      *     @OA\Response(response=401, description="Unauthenticated", @OA\JsonContent(ref="#/components/schemas/Unauthenticated")),
-     *     @OA\Response(response=422, description="Validation error", @OA\JsonContent(ref="#/components/schemas/ValidationError")),
+     *     @OA\Response(response=422, description="Validation error", @OA\JsonContent(ref="#/components/schemas/ValidationError"))
      * )
      */
     public function index(IndexSaleRequest $request)
     {
+        // Filtra, ordena y pagina usando tu método getFilteredResults
         return $this->getFilteredResults(
             Order::where('type', 'sale'),
             $request,
@@ -66,107 +67,126 @@ class SaleController extends Controller
      */
     public function store(StoreSaleRequest $request)
     {
+        // Verifica tipo de cambio si currencyType = USD
         $exchangeRate = Currency::where('date', $request->date)->first();
-        if ($request->input('currencyType') == 'USD') {
-            if (!$exchangeRate) return response()->json(['error' => 'No se ha registrado el tipo de cambio para la fecha seleccionada'], 422);
+        if ($request->input('currencyType') === 'USD' && !$exchangeRate) {
+            return response()->json(['error' => 'No se ha registrado el tipo de cambio para la fecha seleccionada'], 422);
         }
-        $igvActive = (boolean)$request->igvActive;
+
+        $igvActive = (bool)$request->igvActive;
         $dataSale = [
-            'type' => 'sale',
-            'number' => $this->nextCorrelativeQuery(Order::where('type', 'sale'), 'number'),
-            'date' => $request->input('date'),
+            'type'         => 'sale',
+            'number'       => $this->nextCorrelativeQuery(Order::where('type', 'sale'), 'number'),
+            'date'         => $request->input('date'),
             'documentType' => $request->input('documentType'),
-            'paymentType' => $request->input('paymentType'),
+            'paymentType'  => $request->input('paymentType'),
             'quotation_id' => $request->input('quotation_id'),
-            'client_id' => $request->input('client_id'),
+            'client_id'    => $request->input('client_id'),
             'currencyType' => $request->input('currencyType'),
-            'igvActive' => $igvActive,
+            'igvActive'    => $igvActive,
         ];
 
+        // Crea la venta (Order con type=sale)
         $sale = Order::create($dataSale);
 
-        $totalMachinery = 0;
+        $totalMachinery  = 0;
         $totalSpareParts = 0;
 
         $detailMachinery = $request->input('detailMachinery');
-        $detailSpares = $request->input('detailSpareParts');
+        $detailSpares    = $request->input('detailSpareParts');
 
+        // Crea los detalles de maquinaria
         if ($detailMachinery) {
             foreach ($detailMachinery as $detail) {
-                $detailMachinery = DetailMachinery::create([
-                    'description' => $detail['description'],
-                    'quantity' => $detail['quantity'],
-                    'movementType' => 'sale',
-                    'salePrice' => $detail['salePrice'],
-                    'saleValue' => $detail['salePrice'] * $detail['quantity'],
-                    'order_id' => $sale->id,
+                DetailMachinery::create([
+                    'machinery_id'   => $detail['machinery_id'],
+                    'quantity'       => $detail['quantity'],
+                    'movementType'   => 'sale',
+                    'salePrice'      => $detail['salePrice'],
+                    'saleValue'      => $detail['salePrice'] * $detail['quantity'],
+                    'realPrice'      => $detail['realPrice'] ?? null,
+                    'contablePrice'  => $detail['contablePrice'] ?? null,
+                    'order_id'       => $sale->id,
                 ]);
-                $totalMachinery += $detailMachinery->salePrice * $detailMachinery->quantity;
+                $totalMachinery += $detail['salePrice'] * $detail['quantity'];
             }
         }
 
+        // Crea los detalles de repuestos
         if ($detailSpares) {
             $totalDetailsSpareParts = $this->addDetailSpareParts($detailSpares, $sale);
             if (!$totalDetailsSpareParts['success']) {
+                // Si falla (stock, etc.), revertimos
                 $sale->detailMachinery()->delete();
                 $sale->delete();
                 return response()->json(['error' => $totalDetailsSpareParts['message']], 422);
             }
-            $totalSpareParts = $totalDetailsSpareParts["totalSpareParts"];
+            $totalSpareParts = $totalDetailsSpareParts['totalSpareParts'];
         }
 
+        // Calcula totales
         $sale->totalSpareParts = $totalSpareParts;
-        $sale->totalMachinery = $totalMachinery;
-        $sale->discount = $request->input('discount', 0);
-        $sale->subtotal = $totalMachinery + $totalSpareParts - $sale->discount;
-        $sale->igv = $igvActive ? round($sale->subtotal * 0.18, 2) : 0;
-        $sale->total = $sale->subtotal + $sale->igv;
-        $totalConvert = $sale->currencyType == 'PEN'
-            ? $sale->total // Conversión del total si está en otra moneda
-            : round($sale->total * $exchangeRate->buyRate, 2);
-        $sale->totalIncome = $totalConvert; // Refleja el ingreso final total
-        $sale->balance = $totalConvert;
+        $sale->totalMachinery  = $totalMachinery;
+        $sale->discount        = $request->input('discount', 0);
+        $sale->subtotal        = $totalMachinery + $totalSpareParts - $sale->discount;
+        $sale->igv             = $igvActive ? round($sale->subtotal * 0.18, 2) : 0;
+        $sale->total           = $sale->subtotal + $sale->igv;
 
-        if ($request->input('paymentType') == 'CONTADO') {
+        // Convierte total si es USD
+        if ($sale->currencyType === 'USD') {
+            $totalConvert = round($sale->total * $exchangeRate->buyRate, 2);
+        } else {
+            $totalConvert = $sale->total;
+        }
+        $sale->totalIncome = $totalConvert;
+        $sale->balance     = $totalConvert;
+
+        // Crea cuentas por cobrar (contado o crédito)
+        if ($request->input('paymentType') === 'CONTADO') {
             $sale->save();
             AccountReceivable::create([
                 'paymentType' => 'CONTADO',
-                'days' => 0,
-                'date' => $sale->date,
-                'amount' => $sale->total,
-                'balance' => $sale->total,
-                'order_id' => $sale->id,
-                'client_id' => $sale->client_id,
-                'currency_id' => $exchangeRate->id,
+                'days'        => 0,
+                'date'        => $sale->date,
+                'amount'      => $sale->total,
+                'balance'     => $sale->total,
+                'order_id'    => $sale->id,
+                'client_id'   => $sale->client_id,
+                'currency_id' => $exchangeRate ? $exchangeRate->id : null,
             ]);
         } else {
-            $quotas = $request->input('quotas');
+            // CREDITO
+            $quotas    = $request->input('quotas');
             $sumQuotas = array_sum(array_column($quotas, 'amount'));
-            if (round($sale->total, 2) != round($sumQuotas, 2)) {
+
+            if (round($sale->total, 2) !== round($sumQuotas, 2)) {
+                // Revertir si no coincide
                 $sale->detailMachinery()->delete();
                 $sale->detailSpareParts()->delete();
                 $sale->delete();
-                return response()->json(['error' => 'La suma de las cuotas no coincide con el total, saldo de ' . ($sale->total - $sumQuotas)], 422);
+                return response()->json([
+                    'error' => 'La suma de las cuotas no coincide con el total, saldo de ' . ($sale->total - $sumQuotas)
+                ], 422);
             }
             $sale->save();
 
             foreach ($quotas as $quota) {
                 AccountReceivable::create([
                     'paymentType' => 'CREDITO',
-                    'days' => $quota['days'],
-                    'date' => Carbon::parse($sale->date)->addDays($quota['days']),
-                    'amount' => $quota['amount'],
-                    'balance' => $quota['amount'],
-                    'order_id' => $sale->id,
-                    'client_id' => $sale->client_id,
-                    'currency_id' => $exchangeRate->id,
+                    'days'        => $quota['days'],
+                    'date'        => Carbon::parse($sale->date)->addDays($quota['days']),
+                    'amount'      => $quota['amount'],
+                    'balance'     => $quota['amount'],
+                    'order_id'    => $sale->id,
+                    'client_id'   => $sale->client_id,
+                    'currency_id' => $exchangeRate ? $exchangeRate->id : null,
                 ]);
             }
         }
 
+        // Retornar la venta con su resource
         $sale = Order::find($sale->id);
         return response()->json(new SaleResource($sale));
-
     }
 
     /**
@@ -176,7 +196,7 @@ class SaleController extends Controller
      *     summary="Show Sale",
      *     description="Returns a Sale.",
      *     security={{"bearerAuth":{}}},
-     *     @OA\Parameter(parameter="id", name="id", in="path", required=true, description="Purchase ID", @OA\Schema(type="string")),
+     *     @OA\Parameter(parameter="id", name="id", in="path", required=true, description="Sale ID", @OA\Schema(type="string")),
      *     @OA\Response(response=200, description="Successful operation", @OA\JsonContent(ref="#/components/schemas/SaleResource")),
      *     @OA\Response(response=401, description="Unauthenticated", @OA\JsonContent(ref="#/components/schemas/Unauthenticated")),
      *     @OA\Response(response=404, description="Sale not found", @OA\JsonContent(type="object", @OA\Property(property="message", type="string", example="Sale not found")))
@@ -185,7 +205,9 @@ class SaleController extends Controller
     public function show(int $id)
     {
         $sale = Order::where('type', 'sale')->find($id);
-        if (!$sale) return response()->json(['message' => 'Sale not found'], 404);
+        if (!$sale) {
+            return response()->json(['message' => 'Sale not found'], 404);
+        }
         return response()->json(new SaleResource($sale));
     }
 
@@ -205,120 +227,122 @@ class SaleController extends Controller
      */
     public function update(UpdateSaleRequest $request, int $id)
     {
-//        STATUS: PENDIENTE, PAGANDO, PAGADO, VENCIDO
+        // STATUS: PENDIENTE, PAGANDO, PAGADO, VENCIDO
         $sale = Order::where('type', 'sale')
             ->where('status', 'PENDIENTE')
             ->find($id);
-        if (!$sale) return response()->json(['message' => 'Sale not found'], 404);
 
-        $exchangeRate = Currency::where('date', $request->date ?? $sale->date)->first();
-
-        if ($request->input('currencyType') == 'USD') {
-            if (!$exchangeRate) return response()->json(['error' => 'No se ha registrado el tipo de cambio para la fecha seleccionada'], 422);
+        if (!$sale) {
+            return response()->json(['message' => 'Sale not found'], 404);
         }
-        $igvActive = (boolean)$request->igvActive ?? $sale->igvActive;
 
+        // Verifica tipo de cambio si currencyType = USD
+        $exchangeRate = Currency::where('date', $request->date ?? $sale->date)->first();
+        if ($request->input('currencyType') === 'USD' && !$exchangeRate) {
+            return response()->json(['error' => 'No se ha registrado el tipo de cambio para la fecha seleccionada'], 422);
+        }
+
+        $igvActive = (bool)($request->igvActive ?? $sale->igvActive);
+
+        // Actualizar datos principales de la venta
         $data = [
-            'date' => $request->input('date', $sale->date),
+            'date'         => $request->input('date', $sale->date),
             'documentType' => $request->input('documentType', $sale->documentType),
-            'paymentType' => $request->input('paymentType', $sale->paymentType),
+            'paymentType'  => $request->input('paymentType', $sale->paymentType),
             'quotation_id' => $request->input('quotation_id', $sale->quotation_id),
-            'client_id' => $request->input('client_id', $sale->client_id),
+            'client_id'    => $request->input('client_id', $sale->client_id),
             'currencyType' => $request->input('currencyType', 'PEN'),
-            'igvActive' => $igvActive,
+            'igvActive'    => $igvActive,
         ];
         $sale->update($data);
 
-        $totalMachinery = 0;
-        $totalSpareParts = 0;
-
-        $detailMachinery = $request->input('detailMachinery');
-        $detailSpares = $request->input('detailSpareParts');
-
+        // Borrar detalle anterior
         $sale->detailSpareParts()->delete();
         $sale->detailMachinery()->delete();
         $sale->accountReceivable()->delete();
 
-        if ($detailMachinery) {
-            $sale->detailMachinery()->delete();
-            foreach ($detailMachinery as $detail) {
-                $detailMachinery = DetailMachinery::create([
-                    'description' => $detail['description'],
-                    'quantity' => $detail['quantity'],
-                    'movementType' => 'sale',
-                    'salePrice' => $detail['salePrice'],
-                    'saleValue' => $detail['salePrice'] * $detail['quantity'],
-                    'order_id' => $sale->id,
+        $totalMachinery  = 0;
+        $totalSpareParts = 0;
+
+        // detailMachinery
+        if ($request->filled('detailMachinery')) {
+            foreach ($request->detailMachinery as $detail) {
+                DetailMachinery::create([
+                    'machinery_id'   => $detail['machinery_id'],
+                    'quantity'       => $detail['quantity'],
+                    'movementType'   => 'sale',
+                    'salePrice'      => $detail['salePrice'],
+                    'saleValue'      => $detail['salePrice'] * $detail['quantity'],
+                    'realPrice'      => $detail['realPrice'] ?? null,
+                    'contablePrice'  => $detail['contablePrice'] ?? null,
+                    'order_id'       => $sale->id,
                 ]);
-                $totalMachinery += $detailMachinery->salePrice * $detailMachinery->quantity;
+                $totalMachinery += $detail['salePrice'] * $detail['quantity'];
             }
         }
 
-        if ($detailSpares) {
-            $totalDetailsSpareParts = $this->addDetailSpareParts($detailSpares, $sale);
+        // detailSpareParts
+        if ($request->filled('detailSpareParts')) {
+            $totalDetailsSpareParts = $this->addDetailSpareParts($request->detailSpareParts, $sale);
             if (!$totalDetailsSpareParts['success']) {
                 return response()->json(['error' => $totalDetailsSpareParts['message']], 422);
             }
-            $totalSpareParts = $totalDetailsSpareParts["totalSpareParts"];
+            $totalSpareParts = $totalDetailsSpareParts['totalSpareParts'];
         }
 
+        // Calcula totales
         $sale->totalSpareParts = $totalSpareParts;
-        $sale->totalMachinery = $totalMachinery;
-        $sale->discount = $request->input('discount', $sale->discount);
-        $sale->subtotal = $totalMachinery + $totalSpareParts - $sale->discount;
-        $sale->igv = $igvActive ? round($sale->subtotal * 0.18, 2) : 0;
-        $sale->total = $sale->subtotal + $sale->igv;
+        $sale->totalMachinery  = $totalMachinery;
+        $sale->discount        = $request->input('discount', $sale->discount);
+        $sale->subtotal        = $totalMachinery + $totalSpareParts - $sale->discount;
+        $sale->igv             = $igvActive ? round($sale->subtotal * 0.18, 2) : 0;
+        $sale->total           = $sale->subtotal + $sale->igv;
 
-        $totalConvert = $sale->currencyType == 'PEN'
-            ? $sale->total // Conversión del total si está en otra moneda
-            : round($sale->total * $exchangeRate->buyRate, 2);
-        $sale->totalIncome = $totalConvert; // Refleja el ingreso final total
-        $sale->balance = $totalConvert;
+        if ($sale->currencyType === 'USD' && $exchangeRate) {
+            $totalConvert = round($sale->total * $exchangeRate->buyRate, 2);
+        } else {
+            $totalConvert = $sale->total;
+        }
+        $sale->totalIncome = $totalConvert;
+        $sale->balance     = $totalConvert;
 
-
-        if ($request->input('paymentType') == 'CONTADO') {
+        // Manejo de cuotas (CONTADO o CREDITO)
+        if ($request->input('paymentType') === 'CONTADO') {
             $sale->save();
-            AccountReceivable::where('order_id', $sale->id)->delete();
+            // Crea una sola cuenta por cobrar
             AccountReceivable::create([
-                'days' => 0,
-                'date' => $sale->date,
-                'amount' => $sale->total,
-                'balance' => $sale->total,
-                'order_id' => $sale->id,
+                'days'      => 0,
+                'date'      => $sale->date,
+                'amount'    => $sale->total,
+                'balance'   => $sale->total,
+                'order_id'  => $sale->id,
                 'client_id' => $sale->client_id,
             ]);
         } else {
-            $quotas = $request->input('quotas');
+            // CREDITO
+            $quotas    = $request->input('quotas');
             $sumQuotas = array_sum(array_column($quotas, 'amount'));
-//            return response()->json([
-//                '1' => round($sale->total, 2),
-//                '2' => round($sumQuotas, 2),
-//                '3' => round($sale->total, 2) != round($sumQuotas, 2),
-//            ]);
-            if (round($sale->total, 2) != round($sumQuotas, 2)) {
-                return response()->json(['error' => 'La suma de las cuotas no coincide con el total, saldo de ' . ($sale->total - $sumQuotas)], 422);
+
+            if (round($sale->total, 2) !== round($sumQuotas, 2)) {
+                return response()->json([
+                    'error' => 'La suma de las cuotas no coincide con el total, saldo de ' . ($sale->total - $sumQuotas)
+                ], 422);
             }
             $sale->save();
-            AccountReceivable::where('order_id', $sale->id)->delete();
+
             foreach ($quotas as $quota) {
                 AccountReceivable::create([
-                    'days' => $quota['days'],
-                    'date' => Carbon::parse($sale->date)->addDays($quota['days']),
-                    'amount' => $quota['amount'],
-                    'balance' => $quota['amount'],
-                    'order_id' => $sale->id,
+                    'days'      => $quota['days'],
+                    'date'      => Carbon::parse($sale->date)->addDays($quota['days']),
+                    'amount'    => $quota['amount'],
+                    'balance'   => $quota['amount'],
+                    'order_id'  => $sale->id,
                     'client_id' => $sale->client_id,
                 ]);
             }
         }
 
-        $detailSpareParts = $sale->detailSpareParts;
-//        DISMINUIR STOCK DE REPUESTOS
-        foreach ($detailSpareParts as $detail) {
-            $sparePart = SparePart::find($detail->spare_part_id);
-            $sparePart->stock -= $detail->quantity;
-            $sparePart->save();
-        }
+        // (Se ha quitado el bloque que disminuye stock en repuestos)
 
         $sale = Order::find($sale->id);
         return response()->json(new SaleResource($sale));
@@ -339,21 +363,28 @@ class SaleController extends Controller
     public function destroy(int $id)
     {
         $sale = Order::where('type', 'sale')->find($id);
-        if (!$sale) return response()->json(['message' => 'Sale not found'], 404);
-//        $accountReceivable = AccountReceivable::where('order_id', $sale->id)->sum('balance');
-//        if ($accountReceivable > 0) return response()->json(['error' => 'No se puede eliminar la venta porque tiene cuentas por cobrar pendientes'], 422);
+        if (!$sale) {
+            return response()->json(['message' => 'Sale not found'], 404);
+        }
+
         $sale->detailMachinery()->delete();
         $sale->detailSpareParts()->delete();
         $sale->accountReceivable()->delete();
         $sale->delete();
+
         return response()->json(['message' => 'Sale deleted successfully']);
     }
 
-    private function addDetailSpareParts(mixed $detailSpareParts, $order)
+    /**
+     * Crea los DetailSparePart asociados a la venta, validando stock o cualquier otra lógica.
+     * Devuelve ['success' => bool, 'totalSpareParts' => float, 'message' => string?].
+     */
+    private function addDetailSpareParts(mixed $detailSpareParts, Order $order): array
     {
         $detailSparePartsValidate = [];
         $totalSpareParts = 0;
 
+        // Agrupar items repetidos (si se desea)
         foreach ($detailSpareParts as $detail) {
             if (array_key_exists($detail['spare_part_id'], $detailSparePartsValidate)) {
                 $detailSparePartsValidate[$detail['spare_part_id']]['quantity'] += $detail['quantity'];
@@ -364,28 +395,34 @@ class SaleController extends Controller
 
         foreach ($detailSparePartsValidate as $detail) {
             $sparePart = SparePart::find($detail['spare_part_id']);
-            if ($sparePart->stock < $detail['quantity']) {
-                return [
-                    'success' => false,
-                    'message' => 'No hay stock suficiente para el repuesto ' . $sparePart->name . ' (id: ' . $sparePart->id . ')' . ' (Stock actual: ' . $sparePart->stock . ')'
-                ];
-            }
-            $detailSparePart = DetailSparePart::create([
-                'quantity' => $detail['quantity'],
-                'movementType' => 'sale',
-                'salePrice' => (float)$detail['salePrice'],
-                'saleValue' => (float)$detail['salePrice'] * $detail['quantity'],
-                'spare_part_id' => $detail['spare_part_id'],
-                'order_id' => $order->id,
+            // Aquí podrías validar stock, etc.
+            // if ($sparePart->stock < $detail['quantity']) {
+            //     return [
+            //         'success' => false,
+            //         'message' => 'No hay stock suficiente para el repuesto ' . $sparePart->name
+            //     ];
+            // }
+
+            $dsp = DetailSparePart::create([
+                'quantity'       => $detail['quantity'],
+                'movementType'   => 'sale',
+                'salePrice'      => (float)$detail['salePrice'],
+                'saleValue'      => (float)$detail['salePrice'] * $detail['quantity'],
+                'realPrice'      => $detail['realPrice'] ?? null,
+                'contablePrice'  => $detail['contablePrice'] ?? null,
+                'spare_part_id'  => $detail['spare_part_id'],
+                'order_id'       => $order->id,
             ]);
-            $totalSpareParts += $detailSparePart->saleValue;
-            $sparePart->save();
+            $totalSpareParts += $dsp->saleValue;
+
+            // Si no quieres disminuir stock todavía, no lo hagas
+            // $sparePart->stock -= $detail['quantity'];
+            // $sparePart->save();
         }
 
         return [
-            'success' => true,
-            'totalSpareParts' => $totalSpareParts
+            'success'         => true,
+            'totalSpareParts' => $totalSpareParts,
         ];
     }
-
 }

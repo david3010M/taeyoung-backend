@@ -18,6 +18,8 @@ class IndexQuotationRequest extends IndexRequest
             'date.1' => 'nullable|date_format:Y-m-d',
             'sort' => 'nullable|string|in:date,currencyFrom,currencyTo,id,number',
             'direction' => 'nullable|string|in:asc,desc',
+            'status' => 'nullable|string|in:Pendiente,Finalizado',
+
         ];
     }
 }

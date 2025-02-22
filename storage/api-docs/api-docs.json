@@ -821,6 +821,411 @@
                 ]
             }
         },
+        "/taeyoung-backend/public/api/bankaccount": {
+            "get": {
+                "tags": [
+                    "BankAccount"
+                ],
+                "summary": "Lista las cuentas bancarias con paginación",
+                "operationId": "2178d8e52c22b28c33e08f825fb27745",
+                "parameters": [
+                    {
+                        "name": "page",
+                        "in": "query",
+                        "description": "Número de página",
+                        "schema": {
+                            "type": "integer"
+                        }
+                    },
+                    {
+                        "name": "per_page",
+                        "in": "query",
+                        "description": "Elementos por página",
+                        "schema": {
+                            "type": "integer"
+                        }
+                    },
+                    {
+                        "name": "sort",
+                        "in": "query",
+                        "description": "Columna para ordenar",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "direction",
+                        "in": "query",
+                        "description": "Dirección de orden",
+                        "schema": {
+                            "type": "string",
+                            "enum": [
+                                "asc",
+                                "desc"
+                            ]
+                        }
+                    },
+                    {
+                        "name": "name",
+                        "in": "query",
+                        "description": "Filtro por nombre de cuenta",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "bank_id",
+                        "in": "query",
+                        "description": "Filtro por ID de banco",
+                        "schema": {
+                            "type": "integer"
+                        }
+                    },
+                    {
+                        "name": "status",
+                        "in": "query",
+                        "description": "Filtro por estado (active, etc.)",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Colección de cuentas bancarias",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/BankAccountCollection"
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "No autenticado",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Unauthenticated."
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            },
+            "post": {
+                "tags": [
+                    "BankAccount"
+                ],
+                "summary": "Crea una nueva cuenta bancaria",
+                "operationId": "cf2985dfb3bdcd0c52e2dd4e092acac0",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/BankAccountRequest"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Cuenta bancaria creada",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/BankAccountResource"
+                                }
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "Datos inválidos",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "error": {
+                                            "type": "string",
+                                            "example": "El campo name ya existe."
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "No autenticado",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Unauthenticated."
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
+        "/taeyoung-backend/public/api/bankaccount/{id}": {
+            "get": {
+                "tags": [
+                    "BankAccount"
+                ],
+                "summary": "Muestra una cuenta bancaria específica",
+                "operationId": "aff0a119c6c6ac2625b6e3f9fafb5cda",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "ID de la cuenta bancaria",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Detalle de la cuenta bancaria",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/BankAccountResource"
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Cuenta bancaria no encontrada",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "example": "BankAccount not found"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "No autenticado",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Unauthenticated."
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            },
+            "put": {
+                "tags": [
+                    "BankAccount"
+                ],
+                "summary": "Actualiza una cuenta bancaria específica",
+                "operationId": "4765403639764d250eab04d589909946",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "ID de la cuenta bancaria",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/BankAccountRequest"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Cuenta bancaria actualizada",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/BankAccountResource"
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Cuenta bancaria no encontrada",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "example": "BankAccount not found"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "Datos inválidos",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "error": {
+                                            "type": "string",
+                                            "example": "El campo name ya existe."
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "No autenticado",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Unauthenticated."
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            },
+            "delete": {
+                "tags": [
+                    "BankAccount"
+                ],
+                "summary": "Elimina una cuenta bancaria específica",
+                "operationId": "b1654537a20f3a87e8a63c1b830dda8c",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "ID de la cuenta bancaria",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Cuenta bancaria eliminada",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "example": "BankAccount deleted"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Cuenta bancaria no encontrada",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "example": "BankAccount not found"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "No autenticado",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Unauthenticated."
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
         "/taeyoung-backend/public/api/bank": {
             "get": {
                 "tags": [
@@ -2605,6 +3010,403 @@
                 ]
             }
         },
+        "/taeyoung-backend/public/api/machinery": {
+            "get": {
+                "tags": [
+                    "Machinery"
+                ],
+                "summary": "Obtiene todas las maquinarias con paginación",
+                "operationId": "e9c9219e8dcf6551e7d31830cc843b0b",
+                "parameters": [
+                    {
+                        "name": "page",
+                        "in": "query",
+                        "description": "Número de página",
+                        "schema": {
+                            "type": "integer"
+                        }
+                    },
+                    {
+                        "name": "per_page",
+                        "in": "query",
+                        "description": "Elementos por página",
+                        "schema": {
+                            "type": "integer"
+                        }
+                    },
+                    {
+                        "name": "sort",
+                        "in": "query",
+                        "description": "Columna para ordenar",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "direction",
+                        "in": "query",
+                        "description": "Dirección de ordenamiento",
+                        "schema": {
+                            "type": "string",
+                            "enum": [
+                                "asc",
+                                "desc"
+                            ]
+                        }
+                    },
+                    {
+                        "name": "name",
+                        "in": "query",
+                        "description": "Filtro por nombre",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "code",
+                        "in": "query",
+                        "description": "Filtro por código",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Colección de maquinarias",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/MachineryCollection"
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "No autenticado",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Unauthenticated."
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            },
+            "post": {
+                "tags": [
+                    "Machinery"
+                ],
+                "summary": "Crea una nueva maquinaria",
+                "operationId": "5d9229dd188e794b6f23a8ef0222ecd8",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/MachineryRequest"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Maquinaria creada",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/MachineryResource"
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "No autenticado",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Unauthenticated."
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "Datos inválidos",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "error": {
+                                            "type": "string",
+                                            "example": "El campo name es obligatorio."
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
+        "/taeyoung-backend/public/api/machinery/{id}": {
+            "get": {
+                "tags": [
+                    "Machinery"
+                ],
+                "summary": "Muestra la maquinaria especificada",
+                "operationId": "5652720d55631a984c4a3a665a9a7098",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "ID de la maquinaria",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Detalle de la maquinaria",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/MachineryResource"
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Maquinaria no encontrada",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Machinery not found"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "No autenticado",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Unauthenticated."
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            },
+            "put": {
+                "tags": [
+                    "Machinery"
+                ],
+                "summary": "Actualiza la maquinaria especificada",
+                "operationId": "4513ffcb724051aa643646fbeeb621f7",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "ID de la maquinaria",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/MachineryRequest"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Maquinaria actualizada",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/MachineryResource"
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Maquinaria no encontrada",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Machinery not found"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "Datos inválidos",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "error": {
+                                            "type": "string",
+                                            "example": "El campo name es obligatorio."
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "No autenticado",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Unauthenticated."
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            },
+            "delete": {
+                "tags": [
+                    "Machinery"
+                ],
+                "summary": "Elimina la maquinaria especificada",
+                "operationId": "01f8a1754a1dd6d6bc888a81841e5b19",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "ID de la maquinaria",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Maquinaria eliminada",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Machinery deleted"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Maquinaria no encontrada",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Machinery not found"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "No autenticado",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Unauthenticated."
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
         "/taeyoung-backend/public/api/paymentConcept": {
             "get": {
                 "tags": [
@@ -3681,7 +4483,7 @@
                         "parameter": "all",
                         "name": "all",
                         "in": "query",
-                        "description": "Get all units",
+                        "description": "Get all quotations without pagination",
                         "required": false,
                         "schema": {
                             "type": "boolean"
@@ -3735,7 +4537,7 @@
                         "parameter": "number",
                         "name": "number",
                         "in": "query",
-                        "description": "Filter by number",
+                        "description": "Filter by quotation number",
                         "required": false,
                         "schema": {
                             "type": "string"
@@ -3745,7 +4547,7 @@
                         "parameter": "date",
                         "name": "date[]",
                         "in": "query",
-                        "description": "Filter by date",
+                        "description": "Filter by date range",
                         "required": false,
                         "schema": {
                             "type": "array",
@@ -3772,6 +4574,20 @@
                         "required": false,
                         "schema": {
                             "type": "string"
+                        }
+                    },
+                    {
+                        "parameter": "status",
+                        "name": "status",
+                        "in": "query",
+                        "description": "Filter by status (Pendiente or Finalizado)",
+                        "required": false,
+                        "schema": {
+                            "type": "string",
+                            "enum": [
+                                "Pendiente",
+                                "Finalizado"
+                            ]
                         }
                     }
                 ],
@@ -3957,7 +4773,124 @@
                     "content": {
                         "application/json": {
                             "schema": {
-                                "$ref": "#/components/schemas/UpdateQuotationRequest"
+                                "required": [
+                                    "date",
+                                    "detail",
+                                    "currencyType",
+                                    "client_id"
+                                ],
+                                "properties": {
+                                    "date": {
+                                        "type": "string",
+                                        "format": "date",
+                                        "example": "2024-08-19"
+                                    },
+                                    "detail": {
+                                        "type": "string",
+                                        "example": "This is a detail"
+                                    },
+                                    "discount": {
+                                        "type": "number",
+                                        "example": "0"
+                                    },
+                                    "currencyType": {
+                                        "type": "string",
+                                        "example": "USD"
+                                    },
+                                    "client_id": {
+                                        "type": "integer",
+                                        "example": "21"
+                                    },
+                                    "igvActive": {
+                                        "type": "boolean",
+                                        "example": true
+                                    },
+                                    "status": {
+                                        "type": "string",
+                                        "enum": [
+                                            "Pendiente",
+                                            "Finalizado"
+                                        ],
+                                        "example": "Pendiente"
+                                    },
+                                    "detailMachinery": {
+                                        "type": "array",
+                                        "items": {
+                                            "properties": {
+                                                "description": {
+                                                    "type": "string",
+                                                    "example": "Excavadora X"
+                                                },
+                                                "quantity": {
+                                                    "type": "integer",
+                                                    "example": 1
+                                                },
+                                                "purchasePrice": {
+                                                    "type": "number",
+                                                    "format": "float",
+                                                    "example": 100
+                                                },
+                                                "salePrice": {
+                                                    "type": "number",
+                                                    "format": "float",
+                                                    "example": 150
+                                                },
+                                                "realPrice": {
+                                                    "type": "number",
+                                                    "format": "float",
+                                                    "example": 120
+                                                },
+                                                "contablePrice": {
+                                                    "type": "number",
+                                                    "format": "float",
+                                                    "example": 130
+                                                },
+                                                "machinery_id": {
+                                                    "type": "integer",
+                                                    "example": 1
+                                                }
+                                            },
+                                            "type": "object"
+                                        }
+                                    },
+                                    "detailSpareParts": {
+                                        "type": "array",
+                                        "items": {
+                                            "properties": {
+                                                "quantity": {
+                                                    "type": "number",
+                                                    "example": 1
+                                                },
+                                                "purchasePrice": {
+                                                    "type": "number",
+                                                    "format": "float",
+                                                    "example": 100
+                                                },
+                                                "salePrice": {
+                                                    "type": "number",
+                                                    "format": "float",
+                                                    "example": 150
+                                                },
+                                                "realPrice": {
+                                                    "type": "number",
+                                                    "format": "float",
+                                                    "example": 120
+                                                },
+                                                "contablePrice": {
+                                                    "type": "number",
+                                                    "format": "float",
+                                                    "example": 130
+                                                },
+                                                "spare_part_id": {
+                                                    "type": "integer",
+                                                    "example": 1
+                                                }
+                                            },
+                                            "type": "object"
+                                        }
+                                    }
+                                },
+                                "type": "object"
                             }
                         }
                     }
@@ -4347,7 +5280,7 @@
                         "parameter": "id",
                         "name": "id",
                         "in": "path",
-                        "description": "Purchase ID",
+                        "description": "Sale ID",
                         "required": true,
                         "schema": {
                             "type": "string"
@@ -6204,6 +7137,42 @@
                 },
                 "type": "object"
             },
+            "MachineryRequest": {
+                "title": "MachineryRequest",
+                "required": [
+                    "name",
+                    "purchasePrice",
+                    "salePrice",
+                    "unit_id"
+                ],
+                "properties": {
+                    "code": {
+                        "description": "Código interno de la maquinaria",
+                        "type": "string",
+                        "example": "MCH-001"
+                    },
+                    "name": {
+                        "type": "string",
+                        "example": "Excavadora"
+                    },
+                    "purchasePrice": {
+                        "type": "number",
+                        "format": "float",
+                        "example": 50000
+                    },
+                    "salePrice": {
+                        "type": "number",
+                        "format": "float",
+                        "example": 65000
+                    },
+                    "unit_id": {
+                        "description": "ID de la unidad (tabla units)",
+                        "type": "integer",
+                        "example": 2
+                    }
+                },
+                "type": "object"
+            },
             "StoreClientRequest": {
                 "title": "Store Client Request",
                 "required": [
@@ -6475,55 +7444,77 @@
             },
             "StoreQuotationRequest": {
                 "title": "StoreQuotationRequest",
+                "description": "Request body para crear una nueva cotización",
                 "required": [
                     "date",
-                    "detail",
-                    "discount",
                     "currencyType",
                     "client_id",
+                    "igvActive",
                     "detailMachinery",
                     "detailSpareParts"
                 ],
                 "properties": {
                     "date": {
+                        "description": "Fecha de la cotización",
                         "type": "string",
                         "format": "date",
                         "example": "2024-08-19"
                     },
                     "detail": {
                         "type": "string",
-                        "example": "This is a detail"
+                        "example": "Detalle adicional de la cotización"
                     },
                     "discount": {
+                        "description": "Descuento aplicado",
                         "type": "number",
-                        "example": "0"
+                        "format": "float",
+                        "example": 0
                     },
                     "currencyType": {
+                        "description": "Tipo de moneda (USD o PEN)",
                         "type": "string",
+                        "enum": [
+                            "USD",
+                            "PEN"
+                        ],
                         "example": "USD"
                     },
                     "client_id": {
+                        "description": "ID del cliente (tabla people con type=client)",
                         "type": "integer",
-                        "example": "21"
+                        "example": 21
                     },
                     "igvActive": {
-                        "type": "string",
-                        "example": "true"
+                        "description": "Indica si se aplica IGV (true) o no (false)",
+                        "type": "boolean",
+                        "example": true
                     },
-                    "images[]": {
+                    "status": {
+                        "description": "Situación de la cotización",
+                        "type": "string",
+                        "enum": [
+                            "Pendiente",
+                            "Finalizado"
+                        ],
+                        "example": "Pendiente"
+                    },
+                    "images": {
+                        "description": "Arreglo de archivos (imágenes) adjuntos",
                         "type": "array",
                         "items": {
                             "type": "file",
                             "format": "binary"
                         }
                     },
-                    "detailMachinery[]": {
+                    "detailMachinery": {
+                        "description": "Listado de detalles de maquinaria",
                         "type": "array",
                         "items": {
                             "$ref": "#/components/schemas/DetailMachineryRequest"
                         }
                     },
-                    "detailSpareParts[]": {
+                    "detailSpareParts": {
+                        "description": "Listado de detalles de repuestos",
                         "type": "array",
                         "items": {
                             "$ref": "#/components/schemas/DetailSparePartRequest"
@@ -6533,52 +7524,92 @@
                 "type": "object"
             },
             "DetailMachineryRequest": {
+                "title": "DetailMachineryRequest",
+                "description": "Estructura para cada detalle de maquinaria (CREACIÓN)",
                 "required": [
                     "description",
                     "quantity",
-                    "salePrice"
+                    "salePrice",
+                    "machinery_id"
                 ],
                 "properties": {
                     "description": {
                         "type": "string",
-                        "example": "Description"
+                        "example": "Descripción de la maquinaria"
                     },
                     "quantity": {
                         "type": "integer",
-                        "example": "1"
+                        "example": 1
                     },
                     "purchasePrice": {
                         "type": "number",
-                        "example": "100"
+                        "format": "float",
+                        "example": 100
                     },
                     "salePrice": {
                         "type": "number",
-                        "example": "100"
+                        "format": "float",
+                        "example": 150
+                    },
+                    "realPrice": {
+                        "description": "Precio real de la maquinaria",
+                        "type": "number",
+                        "format": "float",
+                        "example": 120
+                    },
+                    "contablePrice": {
+                        "description": "Precio contable de la maquinaria",
+                        "type": "number",
+                        "format": "float",
+                        "example": 130
+                    },
+                    "machinery_id": {
+                        "description": "ID de la maquinaria (tabla machineries)",
+                        "type": "integer",
+                        "example": 1
                     }
                 },
                 "type": "object"
             },
             "DetailSparePartRequest": {
+                "title": "DetailSparePartRequest",
+                "description": "Estructura para cada detalle de repuesto (CREACIÓN)",
                 "required": [
                     "quantity",
+                    "salePrice",
                     "spare_part_id"
                 ],
                 "properties": {
                     "quantity": {
                         "type": "integer",
-                        "example": "1"
-                    },
-                    "spare_part_id": {
-                        "type": "integer",
-                        "example": "1"
+                        "example": 2
                     },
                     "purchasePrice": {
                         "type": "number",
-                        "example": "100"
+                        "format": "float",
+                        "example": 80
                     },
                     "salePrice": {
                         "type": "number",
-                        "example": "100"
+                        "format": "float",
+                        "example": 100
+                    },
+                    "realPrice": {
+                        "description": "Precio real del repuesto",
+                        "type": "number",
+                        "format": "float",
+                        "example": 90
+                    },
+                    "contablePrice": {
+                        "description": "Precio contable del repuesto",
+                        "type": "number",
+                        "format": "float",
+                        "example": 95
+                    },
+                    "spare_part_id": {
+                        "description": "ID del repuesto (tabla spare_parts)",
+                        "type": "integer",
+                        "example": 1
                     }
                 },
                 "type": "object"
@@ -6590,8 +7621,7 @@
                     "documentType",
                     "paymentType",
                     "quotas",
-                    "client_id",
-                    "detailMachinery|detailSpareParts"
+                    "client_id"
                 ],
                 "properties": {
                     "date": {
@@ -6617,11 +7647,11 @@
                     },
                     "quotation_id": {
                         "type": "integer",
-                        "example": "21"
+                        "example": 21
                     },
                     "client_id": {
                         "type": "integer",
-                        "example": "21"
+                        "example": 21
                     },
                     "currencyType": {
                         "type": "string",
@@ -6629,15 +7659,11 @@
                     },
                     "discount": {
                         "type": "number",
-                        "example": "100"
+                        "example": 100
                     },
                     "igvActive": {
                         "type": "boolean",
-                        "enum": [
-                            "true",
-                            "false"
-                        ],
-                        "example": "true"
+                        "example": true
                     },
                     "quotas": {
                         "type": "array",
@@ -6645,51 +7671,73 @@
                             "properties": {
                                 "days": {
                                     "type": "integer",
-                                    "example": "7"
+                                    "example": 7
                                 },
                                 "amount": {
                                     "type": "number",
-                                    "example": "14378.6"
+                                    "example": 14378.6
                                 }
                             },
                             "type": "object"
                         }
                     },
-                    "detailMachinery[]": {
+                    "detailMachinery": {
+                        "description": "Lista de maquinarias vendidas",
                         "type": "array",
                         "items": {
                             "properties": {
-                                "description": {
-                                    "type": "string",
-                                    "example": "Machinery description"
+                                "machinery_id": {
+                                    "type": "integer",
+                                    "example": 5
                                 },
                                 "quantity": {
                                     "type": "integer",
-                                    "example": "2"
+                                    "example": 2
                                 },
                                 "salePrice": {
                                     "type": "number",
-                                    "example": "4000"
+                                    "example": 4000
+                                },
+                                "realPrice": {
+                                    "description": "Precio real de la maquinaria",
+                                    "type": "number",
+                                    "example": 3800
+                                },
+                                "contablePrice": {
+                                    "description": "Precio contable de la maquinaria",
+                                    "type": "number",
+                                    "example": 3900
                                 }
                             },
                             "type": "object"
                         }
                     },
-                    "detailSpareParts[]": {
+                    "detailSpareParts": {
+                        "description": "Lista de repuestos vendidos",
                         "type": "array",
                         "items": {
                             "properties": {
                                 "quantity": {
                                     "type": "integer",
-                                    "example": "4"
+                                    "example": 4
                                 },
                                 "salePrice": {
                                     "type": "number",
-                                    "example": "767.5"
+                                    "example": 767.5
+                                },
+                                "realPrice": {
+                                    "description": "Precio real del repuesto",
+                                    "type": "number",
+                                    "example": 750
+                                },
+                                "contablePrice": {
+                                    "description": "Precio contable del repuesto",
+                                    "type": "number",
+                                    "example": 760
                                 },
                                 "spare_part_id": {
                                     "type": "integer",
-                                    "example": "1"
+                                    "example": 1
                                 }
                             },
                             "type": "object"
@@ -6959,45 +8007,50 @@
                 },
                 "type": "object"
             },
-            "UpdateQuotationRequest": {
-                "title": "UpdateQuotationRequest",
+            "DetailMachineryUpdateRequest": {
+                "title": "DetailMachineryUpdateRequest",
+                "description": "Estructura para cada detalle de maquinaria (ACTUALIZACIÓN)",
+                "required": [
+                    "description",
+                    "quantity",
+                    "salePrice",
+                    "machinery_id"
+                ],
                 "properties": {
-                    "date": {
+                    "description": {
                         "type": "string",
-                        "format": "date",
-                        "example": "2024-08-19"
+                        "example": "Excavadora X"
                     },
-                    "detail": {
-                        "type": "string",
-                        "example": "This is a detail"
-                    },
-                    "discount": {
-                        "type": "number",
-                        "example": "0"
-                    },
-                    "currencyType": {
-                        "type": "string",
-                        "example": "USD"
-                    },
-                    "client_id": {
+                    "quantity": {
                         "type": "integer",
-                        "example": "21"
+                        "example": 1
                     },
-                    "igvActive": {
-                        "type": "boolean",
-                        "example": "true"
+                    "purchasePrice": {
+                        "type": "number",
+                        "format": "float",
+                        "example": 100
                     },
-                    "detailMachinery": {
-                        "type": "array",
-                        "items": {
-                            "$ref": "#/components/schemas/DetailMachineryRequest"
-                        }
+                    "salePrice": {
+                        "type": "number",
+                        "format": "float",
+                        "example": 150
                     },
-                    "detailSpareParts": {
-                        "type": "array",
-                        "items": {
-                            "$ref": "#/components/schemas/DetailSparePartRequest"
-                        }
+                    "realPrice": {
+                        "description": "Precio real de la maquinaria",
+                        "type": "number",
+                        "format": "float",
+                        "example": 120
+                    },
+                    "contablePrice": {
+                        "description": "Precio contable de la maquinaria",
+                        "type": "number",
+                        "format": "float",
+                        "example": 130
+                    },
+                    "machinery_id": {
+                        "description": "ID de la maquinaria (tabla machineries)",
+                        "type": "integer",
+                        "example": 1
                     }
                 },
                 "type": "object"
@@ -7028,11 +8081,11 @@
                     },
                     "quotation_id": {
                         "type": "integer",
-                        "example": "21"
+                        "example": 21
                     },
                     "client_id": {
                         "type": "integer",
-                        "example": "21"
+                        "example": 21
                     },
                     "currencyType": {
                         "type": "string",
@@ -7040,15 +8093,11 @@
                     },
                     "discount": {
                         "type": "number",
-                        "example": "100"
+                        "example": 100
                     },
                     "igvActive": {
                         "type": "boolean",
-                        "enum": [
-                            "true",
-                            "false"
-                        ],
-                        "example": "true"
+                        "example": true
                     },
                     "quotas": {
                         "type": "array",
@@ -7056,51 +8105,73 @@
                             "properties": {
                                 "days": {
                                     "type": "integer",
-                                    "example": "7"
+                                    "example": 7
                                 },
                                 "amount": {
                                     "type": "number",
-                                    "example": "14378.6"
+                                    "example": 14378.6
                                 }
                             },
                             "type": "object"
                         }
                     },
                     "detailMachinery": {
+                        "description": "Lista de maquinarias vendidas",
                         "type": "array",
                         "items": {
                             "properties": {
-                                "description": {
-                                    "type": "string",
-                                    "example": "Machinery description"
+                                "machinery_id": {
+                                    "type": "integer",
+                                    "example": 5
                                 },
                                 "quantity": {
                                     "type": "integer",
-                                    "example": "2"
+                                    "example": 2
                                 },
                                 "salePrice": {
                                     "type": "number",
-                                    "example": "4000"
+                                    "example": 4000
+                                },
+                                "realPrice": {
+                                    "description": "Precio real de la maquinaria",
+                                    "type": "number",
+                                    "example": 3800
+                                },
+                                "contablePrice": {
+                                    "description": "Precio contable de la maquinaria",
+                                    "type": "number",
+                                    "example": 3900
                                 }
                             },
                             "type": "object"
                         }
                     },
                     "detailSpareParts": {
+                        "description": "Lista de repuestos vendidos",
                         "type": "array",
                         "items": {
                             "properties": {
                                 "quantity": {
                                     "type": "integer",
-                                    "example": "4"
+                                    "example": 4
                                 },
                                 "salePrice": {
                                     "type": "number",
-                                    "example": "767.5"
+                                    "example": 767.5
+                                },
+                                "realPrice": {
+                                    "description": "Precio real del repuesto",
+                                    "type": "number",
+                                    "example": 750
+                                },
+                                "contablePrice": {
+                                    "description": "Precio contable del repuesto",
+                                    "type": "number",
+                                    "example": 760
                                 },
                                 "spare_part_id": {
                                     "type": "integer",
-                                    "example": "1"
+                                    "example": 1
                                 }
                             },
                             "type": "object"
@@ -7339,6 +8410,100 @@
                 },
                 "type": "object"
             },
+            "BankAccountResource": {
+                "title": "BankAccountResource",
+                "required": [
+                    "id",
+                    "name",
+                    "bank_id"
+                ],
+                "properties": {
+                    "id": {
+                        "type": "integer",
+                        "example": 1
+                    },
+                    "name": {
+                        "type": "string",
+                        "example": "Cuenta Corriente 01"
+                    },
+                    "bank_id": {
+                        "type": "integer",
+                        "example": 2
+                    },
+                    "bank": {
+                        "$ref": "#/components/schemas/BankResource"
+                    },
+                    "status": {
+                        "type": "string",
+                        "example": "active"
+                    },
+                    "card_number": {
+                        "type": "string",
+                        "example": "1234-5678-9012-3456"
+                    },
+                    "card_type": {
+                        "type": "string",
+                        "example": "VISA"
+                    },
+                    "created_at": {
+                        "type": "string",
+                        "format": "date-time"
+                    },
+                    "updated_at": {
+                        "type": "string",
+                        "format": "date-time"
+                    }
+                },
+                "type": "object"
+            },
+            "BankAccountCollection": {
+                "title": "BankAccountCollection",
+                "properties": {
+                    "data": {
+                        "type": "array",
+                        "items": {
+                            "$ref": "#/components/schemas/BankAccountResource"
+                        }
+                    },
+                    "links": {
+                        "$ref": "#/components/schemas/PaginationLinks"
+                    },
+                    "meta": {
+                        "$ref": "#/components/schemas/PaginationMeta"
+                    }
+                },
+                "type": "object"
+            },
+            "BankAccountRequest": {
+                "title": "BankAccountRequest",
+                "required": [
+                    "name",
+                    "bank_id"
+                ],
+                "properties": {
+                    "name": {
+                        "type": "string",
+                        "example": "Cuenta Corriente 01"
+                    },
+                    "bank_id": {
+                        "type": "integer",
+                        "example": 2
+                    },
+                    "status": {
+                        "type": "string",
+                        "example": "active"
+                    },
+                    "card_number": {
+                        "type": "string",
+                        "example": "1234-5678-9012-3456"
+                    },
+                    "card_type": {
+                        "type": "string",
+                        "example": "VISA"
+                    }
+                },
+                "type": "object"
+            },
             "BankResource": {
                 "properties": {
                     "id": {
@@ -7540,47 +8705,78 @@
             },
             "DetailMachineryResource": {
                 "title": "DetailMachineryResource",
-                "description": "Detail Machinery resource",
+                "description": "Recurso que representa el detalle de maquinaria en una cotización u orden",
                 "properties": {
                     "id": {
                         "type": "integer",
-                        "example": "1"
+                        "example": 1
                     },
                     "description": {
                         "type": "string",
-                        "example": "This is a description"
+                        "example": "Excavadora X"
                     },
                     "quantity": {
                         "type": "integer",
-                        "example": "1"
+                        "example": 1
                     },
                     "movementType": {
                         "type": "string",
-                        "example": "Ingreso"
+                        "example": "quotation"
                     },
                     "purchasePrice": {
                         "type": "number",
-                        "example": "100"
+                        "format": "float",
+                        "example": 100
                     },
                     "salePrice": {
                         "type": "number",
-                        "example": "100"
+                        "format": "float",
+                        "example": 150
                     },
                     "purchaseValue": {
                         "type": "number",
-                        "example": "100"
+                        "format": "float",
+                        "example": 100
                     },
                     "saleValue": {
                         "type": "number",
-                        "example": "100"
+                        "format": "float",
+                        "example": 150
+                    },
+                    "realPrice": {
+                        "description": "Precio real de la maquinaria",
+                        "type": "number",
+                        "format": "float",
+                        "example": 120
+                    },
+                    "contablePrice": {
+                        "description": "Precio contable de la maquinaria",
+                        "type": "number",
+                        "format": "float",
+                        "example": 130
                     },
                     "order_id": {
                         "type": "integer",
-                        "example": "1"
+                        "example": 10,
+                        "nullable": true
                     },
                     "quotation_id": {
                         "type": "integer",
-                        "example": "21"
+                        "example": 21,
+                        "nullable": true
+                    },
+                    "machinery_id": {
+                        "type": "integer",
+                        "example": 5
+                    },
+                    "machinery": {
+                        "oneOf": [
+                            {
+                                "$ref": "#/components/schemas/MachineryResource"
+                            }
+                        ],
+                        "nullable": true,
+                        "description": "Objeto de maquinaria asociado (si existe)"
                     }
                 },
                 "type": "object"
@@ -7591,11 +8787,11 @@
                 "properties": {
                     "id": {
                         "type": "integer",
-                        "example": "1"
+                        "example": 1
                     },
                     "quantity": {
                         "type": "integer",
-                        "example": "1"
+                        "example": 1
                     },
                     "movementType": {
                         "type": "string",
@@ -7603,31 +8799,47 @@
                     },
                     "purchasePrice": {
                         "type": "number",
-                        "example": "100"
+                        "format": "float",
+                        "example": 100
                     },
                     "salePrice": {
                         "type": "number",
-                        "example": "100"
+                        "format": "float",
+                        "example": 100
                     },
                     "purchaseValue": {
                         "type": "number",
-                        "example": "100"
+                        "format": "float",
+                        "example": 100
                     },
                     "saleValue": {
                         "type": "number",
-                        "example": "100"
+                        "format": "float",
+                        "example": 100
+                    },
+                    "realPrice": {
+                        "description": "Precio real del repuesto",
+                        "type": "number",
+                        "format": "float",
+                        "example": 120
+                    },
+                    "contablePrice": {
+                        "description": "Precio contable del repuesto",
+                        "type": "number",
+                        "format": "float",
+                        "example": 130
                     },
                     "order_id": {
                         "type": "integer",
-                        "example": "1"
+                        "example": 1
                     },
                     "quotation_id": {
                         "type": "integer",
-                        "example": "21"
+                        "example": 21
                     },
                     "spare_part_id": {
                         "type": "integer",
-                        "example": "1"
+                        "example": 1
                     },
                     "sparePart": {
                         "$ref": "#/components/schemas/SparePartResource"
@@ -7671,6 +8883,91 @@
                         "type": "array",
                         "items": {
                             "$ref": "#/components/schemas/FileResource"
+                        }
+                    },
+                    "links": {
+                        "$ref": "#/components/schemas/PaginationLinks"
+                    },
+                    "meta": {
+                        "$ref": "#/components/schemas/PaginationMeta"
+                    }
+                },
+                "type": "object"
+            },
+            "MachineryResource": {
+                "title": "MachineryResource",
+                "required": [
+                    "id",
+                    "name",
+                    "purchasePrice",
+                    "salePrice",
+                    "unit_id"
+                ],
+                "properties": {
+                    "id": {
+                        "type": "integer",
+                        "example": 1
+                    },
+                    "code": {
+                        "type": "string",
+                        "example": "MCH-001"
+                    },
+                    "name": {
+                        "type": "string",
+                        "example": "Excavadora"
+                    },
+                    "purchasePrice": {
+                        "type": "number",
+                        "format": "float",
+                        "example": 50000
+                    },
+                    "salePrice": {
+                        "type": "number",
+                        "format": "float",
+                        "example": 65000
+                    },
+                    "unit_id": {
+                        "type": "integer",
+                        "example": 1
+                    },
+                    "unit": {
+                        "description": "Información de la unidad relacionada",
+                        "properties": {
+                            "id": {
+                                "type": "integer",
+                                "example": 1
+                            },
+                            "name": {
+                                "type": "string",
+                                "example": "Unit 1"
+                            },
+                            "abbreviation": {
+                                "type": "string",
+                                "example": "UN"
+                            }
+                        },
+                        "type": "object"
+                    },
+                    "created_at": {
+                        "type": "string",
+                        "format": "date-time",
+                        "example": "2025-02-21T12:12:33Z"
+                    },
+                    "updated_at": {
+                        "type": "string",
+                        "format": "date-time",
+                        "example": "2025-02-21T12:12:33Z"
+                    }
+                },
+                "type": "object"
+            },
+            "MachineryCollection": {
+                "title": "MachineryCollection",
+                "properties": {
+                    "data": {
+                        "type": "array",
+                        "items": {
+                            "$ref": "#/components/schemas/MachineryResource"
                         }
                     },
                     "links": {
@@ -7939,6 +9236,15 @@
                         "type": "string",
                         "example": "Client Name"
                     },
+                    "status": {
+                        "description": "Situación de la cotización",
+                        "type": "string",
+                        "enum": [
+                            "Pendiente",
+                            "Finalizado"
+                        ],
+                        "example": "Pendiente"
+                    },
                     "detailMachinery": {
                         "type": "array",
                         "items": {
@@ -8108,18 +9414,6 @@
                     "salePrice": {
                         "type": "number",
                         "example": "150.00"
-                    },
-                    "purchaseValue": {
-                        "type": "number",
-                        "example": "1000.00"
-                    },
-                    "saleValue": {
-                        "type": "number",
-                        "example": "1500.00"
-                    },
-                    "stock": {
-                        "type": "integer",
-                        "example": "10"
                     },
                     "unit_id": {
                         "type": "integer",
@@ -8293,6 +9587,40 @@
                 },
                 "type": "object"
             },
+            "BankAccountModel": {
+                "title": "BankAccountModel",
+                "required": [
+                    "name",
+                    "bank_id"
+                ],
+                "properties": {
+                    "id": {
+                        "type": "integer",
+                        "example": 1
+                    },
+                    "name": {
+                        "type": "string",
+                        "example": "Cuenta Corriente 01"
+                    },
+                    "bank_id": {
+                        "type": "integer",
+                        "example": 2
+                    },
+                    "status": {
+                        "type": "string",
+                        "example": "active"
+                    },
+                    "card_number": {
+                        "type": "string",
+                        "example": "1234-5678-9012-3456"
+                    },
+                    "card_type": {
+                        "type": "string",
+                        "example": "VISA"
+                    }
+                },
+                "type": "object"
+            },
             "Country": {
                 "title": "Country",
                 "description": "Country model",
@@ -8390,6 +9718,47 @@
                         "items": {
                             "$ref": "#/components/schemas/OptionMenu"
                         }
+                    }
+                },
+                "type": "object"
+            },
+            "Machinery": {
+                "title": "Machinery",
+                "required": [
+                    "name",
+                    "purchasePrice",
+                    "salePrice",
+                    "unit_id"
+                ],
+                "properties": {
+                    "id": {
+                        "type": "integer",
+                        "example": 1
+                    },
+                    "code": {
+                        "type": "string",
+                        "example": "MCH-001"
+                    },
+                    "name": {
+                        "type": "string",
+                        "example": "Excavadora"
+                    },
+                    "purchasePrice": {
+                        "type": "number",
+                        "format": "float",
+                        "example": 50000
+                    },
+                    "salePrice": {
+                        "type": "number",
+                        "format": "float",
+                        "example": 65000
+                    },
+                    "unit_id": {
+                        "type": "integer",
+                        "example": 1
+                    },
+                    "unit": {
+                        "$ref": "#/components/schemas/UnitResource"
                     }
                 },
                 "type": "object"
@@ -8591,11 +9960,9 @@
             "SparePartRequest": {
                 "title": "SparePartRequest",
                 "required": [
-                    "code",
                     "name",
                     "purchasePrice",
-                    "salePrice",
-                    "stock"
+                    "salePrice"
                 ],
                 "properties": {
                     "code": {
@@ -8613,6 +9980,10 @@
                     "salePrice": {
                         "type": "number",
                         "example": "150.00"
+                    },
+                    "unit_id": {
+                        "type": "integer",
+                        "example": "1"
                     }
                 },
                 "type": "object"
@@ -8709,6 +10080,10 @@
             "description": "Logs"
         },
         {
+            "name": "BankAccount",
+            "description": "BankAccount"
+        },
+        {
             "name": "Bank",
             "description": "Bank"
         },
@@ -8735,6 +10110,10 @@
         {
             "name": "Images",
             "description": "Images"
+        },
+        {
+            "name": "Machinery",
+            "description": "Machinery"
         },
         {
             "name": "PaymentConcept",

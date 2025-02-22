@@ -10,13 +10,13 @@ use Illuminate\Database\Eloquent\SoftDeletes;
  * @OA\Schema (
  *     schema="SparePartRequest",
  *     title="SparePartRequest",
- *     required={"code", "name", "purchasePrice", "salePrice", "stock"},
- *     @OA\Property(property="code", type="string", example="123456" ),
- *     @OA\Property(property="name", type="string", example="Spare Part" ),
- *     @OA\Property(property="purchasePrice", type="number", example="100.00" ),
- *     @OA\Property(property="salePrice", type="number", example="150.00" ),
+ *     required={"name", "purchasePrice", "salePrice"},
+ *     @OA\Property(property="code", type="string", example="123456"),
+ *     @OA\Property(property="name", type="string", example="Spare Part"),
+ *     @OA\Property(property="purchasePrice", type="number", example="100.00"),
+ *     @OA\Property(property="salePrice", type="number", example="150.00"),
+ *     @OA\Property(property="unit_id", type="integer", example="1")
  * )
- *
  */
 class SparePart extends Model
 {
@@ -28,13 +28,12 @@ class SparePart extends Model
         'name',
         'purchasePrice',
         'salePrice',
-        'stock',
         'unit_id',
     ];
 
     protected $casts = [
         'purchasePrice' => 'decimal:2',
-        'salePrice' => 'decimal:2',
+        'salePrice'     => 'decimal:2',
     ];
 
     protected $hidden = [
@@ -43,6 +42,7 @@ class SparePart extends Model
         'deleted_at',
     ];
 
+    // Ajusta los filtros y sorts, eliminando stock
     const filters = [
         'code' => 'like',
         'name' => 'like',
@@ -54,12 +54,11 @@ class SparePart extends Model
         'name',
         'purchasePrice',
         'salePrice',
-        'stock',
+        // 'stock' se ha removido
     ];
 
     public function unit()
     {
         return $this->belongsTo(Unit::class);
     }
-
 }
