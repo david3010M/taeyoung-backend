@@ -5,6 +5,7 @@ use App\Http\Controllers\AccountPayableController;
 use App\Http\Controllers\AccountReceivableController;
 use App\Http\Controllers\ExtensionController;
 use App\Http\Controllers\Auth\AuthController;
+use App\Http\Controllers\BankAccountController;
 use App\Http\Controllers\BankController;
 use App\Http\Controllers\ClientController;
 use App\Http\Controllers\CountryController;
