@@ -55,21 +55,22 @@ Route::group(
             ['index', 'show', 'store', 'update', 'destroy']
         )->names(
             [
-                'index'   => 'bankaccount.index',
-                'store'   => 'bankaccount.store',
-                'show'    => 'bankaccount.show',
-                'update'  => 'bankaccount.update',
+                'index' => 'bankaccount.index',
+                'store' => 'bankaccount.store',
+                'show' => 'bankaccount.show',
+                'update' => 'bankaccount.update',
                 'destroy' => 'bankaccount.destroy',
             ]
         );
+//        MACHINERY
         Route::resource('machinery', MachineryController::class)->only(
             ['index', 'show', 'store', 'update', 'destroy']
         )->names(
             [
-                'index'   => 'machinery.index',
-                'store'   => 'machinery.store',
-                'show'    => 'machinery.show',
-                'update'  => 'machinery.update',
+                'index' => 'machinery.index',
+                'store' => 'machinery.store',
+                'show' => 'machinery.show',
+                'update' => 'machinery.update',
                 'destroy' => 'machinery.destroy',
             ]
         );
@@ -115,6 +116,7 @@ Route::group(
         );
 
 //        TYPE USER
+        Route::put('typeuser/setAccess', [TypeUserController::class, 'setAccess'])->name('typeuser.setAccess');
         Route::resource('typeuser', TypeUserController::class)->only(
             ['index', 'show', 'store', 'update', 'destroy']
         )->names(

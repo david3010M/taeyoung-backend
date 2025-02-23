@@ -49,6 +49,7 @@ class TypeUser extends Model
         return $this->hasMany(User::class, 'typeuser_id');
     }
 
+
     public function setAccess($id, array $optionMenuIds)
     {
         $currentOptionMenuIds = $this->access()->pluck('optionmenu_id')->toArray();

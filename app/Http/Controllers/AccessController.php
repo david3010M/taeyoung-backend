@@ -14,7 +14,7 @@ class AccessController extends Controller
 
     public function store(Request $request)
     {
-        //
+        
     }
 
     public function show(int $id)

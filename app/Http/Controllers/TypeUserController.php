@@ -24,6 +24,28 @@ class TypeUserController extends Controller
         );
     }
 
+    public function setAccess(Request $request)
+    {
+        $validator = validator()->make($request->all(), [
+            'typeUser_id' => 'required|integer|exists:type_users,id',
+            'accesses' => 'required|array',
+            'accesses.*' => 'integer|exists:option_menus,id',
+        ]);
+
+        if ($validator->fails()) {
+            return response()->json(['error' => $validator->errors()->first()], 422);
+        }
+
+        $typeUserId = $request->input('typeUser_id');
+        $accesses = $request->input('accesses');
+
+        $typeUser = TypeUser::find($typeUserId);
+        $typeUser->setAccess($typeUserId, $accesses);
+
+        $typeUser->optionMenuAccess = $typeUser->access()->pluck('optionmenu_id')->toArray();
+        return response()->json($typeUser);
+    }
+
     public function store(Request $request)
     {
         //
