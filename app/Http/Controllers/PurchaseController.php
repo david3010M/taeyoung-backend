@@ -10,30 +10,67 @@ use App\Models\AccountPayable;
 use App\Models\Currency;
 use App\Models\DetailMachinery;
 use App\Models\DetailSparePart;
+use App\Models\MachineryInventory;
 use App\Models\Order;
-use App\Models\SparePart;
+use App\Models\SparePartInventory;
+use App\Traits\Filterable;
+use Illuminate\Support\Facades\DB;
 
+/**
+ * @OA\Tag(name="Purchase", description="Módulo de compras (orders.type = 'purchase')")
+ */
 class PurchaseController extends Controller
 {
+    use Filterable;
+
     /**
      * @OA\Get(
      *     path="/taeyoung-backend/public/api/purchase",
      *     tags={"Purchase"},
-     *     summary="List Purchases",
-     *     description="Returns a list of Purchases.",
+     *     summary="Listar Compras",
+     *     description="Retorna un listado de compras (type='purchase') con filtros (proveedor, fecha, número, etc.).",
      *     security={{"bearerAuth":{}}},
-     *     @OA\Parameter(parameter="page", name="page", in="query", required=false, description="Page number", @OA\Schema(type="integer")),
-     *     @OA\Parameter(parameter="per_page", name="per_page", in="query", required=false, description="Items per page", @OA\Schema(type="integer")),
-     *     @OA\Parameter(parameter="number", name="number", in="query", required=false, description="Purchase number", @OA\Schema(type="string")),
-     *     @OA\Parameter(parameter="date", name="date[]", in="query", required=false, description="Purchase date", @OA\Schema(type="array", @OA\Items(type="string", format="date"))),
-     *     @OA\Parameter(parameter="supplier_id", name="supplier_id", in="query", required=false, description="Supplier ID", @OA\Schema(type="integer")),
-     *     @OA\Parameter(parameter="supplier$filterName", name="supplier$filterName", in="query", required=false, description="Supplier name", @OA\Schema(type="string")),
-     *     @OA\Parameter(parameter="supplier$country_id", name="supplier$country_id", in="query", required=false, description="Supplier country ID", @OA\Schema(type="integer")),
-     *     @OA\Parameter(parameter="sort", name="sort", in="query", required=false, description="Sort by column", @OA\Schema(type="string")),
-     *     @OA\Parameter(parameter="direction", name="direction", in="query", required=false, description="Sort direction", @OA\Schema(type="string", enum={"asc", "desc"})),
-     *     @OA\Response(response=200, description="Successful operation", @OA\JsonContent(ref="#/components/schemas/PurchaseCollection")),
-     *     @OA\Response(response=401, description="Unauthenticated", @OA\JsonContent(ref="#/components/schemas/Unauthenticated")),
-     *     @OA\Response(response=422, description="Validation error", @OA\JsonContent(ref="#/components/schemas/ValidationError")),
+     *
+     *     @OA\Parameter(name="documentType", in="query", required=false,
+     *         description="Tipo de documento (BOLETA, FACTURA)",
+     *         @OA\Schema(type="string", enum={"BOLETA","FACTURA"})
+     *     ),
+     *     @OA\Parameter(name="number", in="query", required=false,
+     *         description="Número de la compra",
+     *         @OA\Schema(type="string")
+     *     ),
+     *     @OA\Parameter(name="date[]", in="query", required=false,
+     *         description="Rango de fechas [inicio, fin]",
+     *         @OA\Schema(type="array", @OA\Items(type="string", format="date"))
+     *     ),
+     *     @OA\Parameter(name="supplier_id", in="query", required=false,
+     *         description="ID del proveedor",
+     *         @OA\Schema(type="integer")
+     *     ),
+     *     @OA\Parameter(name="page", in="query", required=false,
+     *         description="Número de página",
+     *         @OA\Schema(type="integer")
+     *     ),
+     *     @OA\Parameter(name="per_page", in="query", required=false,
+     *         description="Items por página",
+     *         @OA\Schema(type="integer")
+     *     ),
+     *
+     *     @OA\Response(
+     *         response=200,
+     *         description="Listado de compras",
+     *         @OA\JsonContent(ref="#/components/schemas/PurchaseCollection")
+     *     ),
+     *     @OA\Response(
+     *         response=401,
+     *         description="No autenticado",
+     *         @OA\JsonContent(ref="#/components/schemas/Unauthenticated")
+     *     ),
+     *     @OA\Response(
+     *         response=422,
+     *         description="Error de validación",
+     *         @OA\JsonContent(ref="#/components/schemas/ValidationError")
+     *     )
      * )
      */
     public function index(IndexPurchaseRequest $request)
@@ -47,250 +84,497 @@ class PurchaseController extends Controller
         );
     }
 
-
     /**
-     * @OA\Post (
+     * @OA\Post(
      *     path="/taeyoung-backend/public/api/purchase",
      *     tags={"Purchase"},
-     *     summary="Store Purchase",
-     *     description="Store a new Purchase.",
+     *     summary="Crear nueva compra",
+     *     description="Crea una compra (orders.type='purchase'), registra detalles y actualiza stock.",
      *     security={{"bearerAuth":{}}},
-     *     @OA\RequestBody(required=true, description="Purchase data", @OA\JsonContent(ref="#/components/schemas/StorePurchaseRequest")),
-     *     @OA\Response(response=200, description="Successful operation", @OA\JsonContent(ref="#/components/schemas/PurchaseResource")),
-     *     @OA\Response(response=401, description="Unauthenticated", @OA\JsonContent(ref="#/components/schemas/Unauthenticated")),
-     *     @OA\Response(response=422, description="Validation error", @OA\JsonContent(ref="#/components/schemas/ValidationError"))
+     *
+     *     @OA\RequestBody(
+     *         required=true,
+     *         description="Datos de la compra",
+     *         @OA\JsonContent(ref="#/components/schemas/StorePurchaseRequest")
+     *     ),
+     *     @OA\Response(
+     *         response=200,
+     *         description="Compra creada correctamente",
+     *         @OA\JsonContent(ref="#/components/schemas/PurchaseResource")
+     *     ),
+     *     @OA\Response(
+     *         response=401,
+     *         description="No autenticado",
+     *         @OA\JsonContent(ref="#/components/schemas/Unauthenticated")
+     *     ),
+     *     @OA\Response(
+     *         response=422,
+     *         description="Error de validación",
+     *         @OA\JsonContent(ref="#/components/schemas/ValidationError")
+     *     )
      * )
      */
     public function store(StorePurchaseRequest $request)
     {
-        $exchangeRate = Currency::where('date', $request->date)->first();
-        if ($request->input('currencyType') == 'USD') {
-            if (!$exchangeRate) return response()->json(['error' => 'No se ha registrado el tipo de cambio para la fecha seleccionada'], 422);
-        }
-        $dataPurchase = [
-            'type' => 'purchase',
-            'number' => $request->input('number'),
-            'date' => $request->input('date'),
-            'detail' => $request->input('detail'),
-//            'discount' => $request->input('discount'),
-            'currencyType' => $request->input('currencyType'),
-            'supplier_id' => $request->input('supplier_id'),
-            'quotation_id' => $request->input('quotation_id'),
-        ];
-
-        $purchase = Order::create($dataPurchase);
-        $totalMachinery = 0;
-        $totalSpareParts = 0;
-
-        $detailMachinery = $request->input('detailMachinery');
-        $detailSpares = $request->input('detailSpareParts');
-
-        if ($detailMachinery) {
-            foreach ($detailMachinery as $detail) {
-                $detailMachinery = DetailMachinery::create([
-                    'description' => $detail['description'],
-                    'quantity' => $detail['quantity'],
-                    'movementType' => 'purchase',
-                    'purchasePrice' => $detail['purchasePrice'],
-                    'purchaseValue' => $detail['purchasePrice'] * $detail['quantity'],
-                    'order_id' => $purchase->id,
-                ]);
-                $totalMachinery += $detailMachinery->purchasePrice * $detailMachinery->quantity;
+        return DB::transaction(function () use ($request) {
+            // Verificar tipo de cambio si es USD
+            $exchangeRate = null;
+            if ($request->currencyType === 'USD') {
+                $exchangeRate = Currency::where('date', $request->date)->first();
+                if (!$exchangeRate) {
+                    return response()->json(['error' => 'No se ha registrado el tipo de cambio para la fecha seleccionada'], 422);
+                }
             }
-        }
 
-        if ($detailSpares) {
-            $totalSpareParts = $this->addDetailSpareParts($detailSpares, $purchase);
-        }
+            // Crear la orden (compra)
+            $purchase = Order::create([
+                'type'         => 'purchase',
+                'number'       => $request->number,
+                'date'         => $request->date,
+                'documentType' => $request->documentType,
+                'paymentType'  => $request->paymentType ?? 'CONTADO',
+                'currencyType' => $request->currencyType,
+                'supplier_id'  => $request->supplier_id,
+                'quotation_id' => $request->quotation_id,
+                'detail'       => $request->detail,
+                'status'       => 'PENDIENTE',
+            ]);
 
-        $purchase->totalMachinery = $totalMachinery;
-        $purchase->totalSpareParts = $totalSpareParts;
-        $purchase->subtotal = $totalMachinery + $totalSpareParts;
-        $purchase->total = $totalMachinery + $totalSpareParts;
+            $totalMachinery  = 0;
+            $totalSpareParts = 0;
 
-        $totalConvert = $purchase->currencyType == 'USD'
-            ? $purchase->total // Conversión del total si está en otra moneda
-            : round($purchase->total / $exchangeRate->saleRate, 2);
-        $purchase->totalExpense = $totalConvert; // Refleja el ingreso final total
-        $purchase->balance = $totalConvert;
-        $purchase->save();
+            // Detalle de maquinaria
+            if ($request->filled('detailMachinery')) {
+                foreach ($request->detailMachinery as $item) {
+                    $mach = DetailMachinery::create([
+                        'description'     => $item['description'] ?? '',
+                        'quantity'        => $item['quantity'],
+                        'movementType'    => 'purchase',
+                        'purchasePrice'   => $item['purchasePrice'],
+                        'purchaseValue'   => $item['purchasePrice'] * $item['quantity'],
+                        'realPrice'       => $item['realPrice'] ?? 0,
+                        'contablePrice'   => $item['contablePrice'] ?? 0,
+                        'machinery_id'    => $item['machinery_id'],
+                        'order_id'        => $purchase->id,
+                    ]);
+                    $totalMachinery += $mach->purchaseValue;
 
-        AccountPayable::create([
-            'paymentType' => 'CONTADO',
-            'days' => 0,
-            'date' => $purchase->date,
-            'amount' => $purchase->total,
-            'balance' => 0,
-            'supplier_id' => $purchase->supplier_id,
-            'order_id' => $purchase->id,
-            'currency_id' => $exchangeRate->id,
-        ]);
+                    // Aumentar stock en machineries_inventory
+                    $this->increaseMachineryStock(
+                        $item['machinery_id'],
+                        $item['quantity'],
+                        $item['realPrice']     ?? 0,
+                        $item['contablePrice'] ?? 0
+                    );
+                }
+            }
 
-        $purchase = Order::find($purchase->id);
-        return response()->json(new PurchaseResource($purchase));
+            // Detalle de repuestos
+            if ($request->filled('detailSpareParts')) {
+                foreach ($request->detailSpareParts as $item) {
+                    $sp = DetailSparePart::create([
+                        'quantity'      => $item['quantity'],
+                        'movementType'  => 'purchase',
+                        'purchasePrice' => $item['purchasePrice'],
+                        'purchaseValue' => $item['purchasePrice'] * $item['quantity'],
+                        'realPrice'     => $item['realPrice'] ?? 0,
+                        'contablePrice' => $item['contablePrice'] ?? 0,
+                        'spare_part_id' => $item['spare_part_id'],
+                        'order_id'      => $purchase->id,
+                    ]);
+                    $totalSpareParts += $sp->purchaseValue;
+
+                    // Aumentar stock en spare_parts_inventory
+                    $this->increaseSparePartStock(
+                        $item['spare_part_id'],
+                        $item['quantity'],
+                        $item['realPrice']     ?? 0,
+                        $item['contablePrice'] ?? 0
+                    );
+                }
+            }
+
+            // Calcular totales
+            $purchase->totalMachinery  = $totalMachinery;
+            $purchase->totalSpareParts = $totalSpareParts;
+            $purchase->subtotal        = $totalMachinery + $totalSpareParts;
+            $purchase->total           = $purchase->subtotal;
+
+            // totalExpense / balance
+            if ($request->currencyType === 'USD' && $exchangeRate) {
+                $purchase->totalExpense = round($purchase->total * $exchangeRate->saleRate, 2);
+            } else {
+                $purchase->totalExpense = $purchase->total;
+            }
+            $purchase->balance = $purchase->totalExpense;
+            $purchase->save();
+
+            // Registrar cuenta por pagar
+            AccountPayable::create([
+                'paymentType' => $purchase->paymentType,
+                'days'        => 0,
+                'date'        => $purchase->date,
+                'amount'      => $purchase->total,
+                'balance'     => $purchase->paymentType === 'CONTADO' ? 0 : $purchase->total,
+                'supplier_id' => $purchase->supplier_id,
+                'order_id'    => $purchase->id,
+                'currency_id' => $exchangeRate->id ?? null,
+            ]);
+
+            return new PurchaseResource($purchase->fresh());
+        });
     }
 
     /**
      * @OA\Get(
-     *     path="/taeyoung-backend/public/api/purchase/{id}",
-     *     tags={"Purchase"},
-     *     summary="Show Purchase",
-     *     description="Returns a Purchase.",
-     *     security={{"bearerAuth":{}}},
-     *     @OA\Parameter(parameter="id", name="id", in="path", required=true, description="Purchase ID", @OA\Schema(type="string")),
-     *     @OA\Response(response=200, description="Successful operation", @OA\JsonContent(ref="#/components/schemas/PurchaseResource")),
-     *     @OA\Response(response=401, description="Unauthenticated", @OA\JsonContent(ref="#/components/schemas/Unauthenticated")),
-     *     @OA\Response(response=404, description="Purchase not found", @OA\JsonContent(type="object", @OA\Property(property="message", type="string", example="Purchase not found")))
+     *   path="/taeyoung-backend/public/api/purchase/{id}",
+     *   tags={"Purchase"},
+     *   summary="Mostrar detalle de una compra",
+     *   description="Obtiene la información de una compra por ID (type='purchase').",
+     *   security={{"bearerAuth":{}}},
+     *
+     *   @OA\Parameter(
+     *       name="id",
+     *       in="path",
+     *       required=true,
+     *       description="ID de la compra",
+     *       @OA\Schema(type="integer")
+     *   ),
+     *   @OA\Response(
+     *       response=200,
+     *       description="Compra encontrada",
+     *       @OA\JsonContent(ref="#/components/schemas/PurchaseResource")
+     *   ),
+     *   @OA\Response(
+     *       response=404,
+     *       description="Compra no encontrada",
+     *       @OA\JsonContent(
+     *           type="object",
+     *           @OA\Property(property="message", type="string", example="Purchase not found")
+     *       )
+     *   ),
+     *   @OA\Response(
+     *       response=401,
+     *       description="No autenticado",
+     *       @OA\JsonContent(ref="#/components/schemas/Unauthenticated")
+     *   )
      * )
      */
     public function show(int $id)
     {
-        $purchase = Order::where('type', 'purchase')->find($id);
-        if (!$purchase) return response()->json(['message' => 'Purchase not found'], 404);
-        return response()->json(new PurchaseResource($purchase));
+        $purchase = Order::where('type','purchase')->find($id);
+        if (!$purchase) {
+            return response()->json(['message' => 'Purchase not found'], 404);
+        }
+        return new PurchaseResource($purchase);
     }
 
     /**
      * @OA\Put(
-     *     path="/taeyoung-backend/public/api/purchase/{id}",
-     *     tags={"Purchase"},
-     *     summary="Update Purchase",
-     *     description="Update a Purchase.",
-     *     security={{"bearerAuth":{}}},
-     *     @OA\Parameter(parameter="id", name="id", in="path", required=true, description="Purchase ID", @OA\Schema(type="string")),
-     *     @OA\RequestBody(required=true, description="Purchase data", @OA\JsonContent(ref="#/components/schemas/UpdatePurchaseRequest")),
-     *     @OA\Response(response=200, description="Successful operation", @OA\JsonContent(ref="#/components/schemas/PurchaseResource")),
-     *     @OA\Response(response=401, description="Unauthenticated", @OA\JsonContent(ref="#/components/schemas/Unauthenticated")),
-     *     @OA\Response(response=422, description="Validation error", @OA\JsonContent(ref="#/components/schemas/ValidationError")),
-     *     @OA\Response(response=404, description="Purchase not found", @OA\JsonContent(type="object", @OA\Property(property="message", type="string", example="Purchase not found")))
+     *   path="/taeyoung-backend/public/api/purchase/{id}",
+     *   tags={"Purchase"},
+     *   summary="Actualizar compra",
+     *   description="Actualiza la compra (type='purchase'), revierte el stock anterior y suma el nuevo stock.",
+     *   security={{"bearerAuth":{}}},
+     *
+     *   @OA\Parameter(
+     *       name="id",
+     *       in="path",
+     *       required=true,
+     *       description="ID de la compra",
+     *       @OA\Schema(type="integer")
+     *   ),
+     *   @OA\RequestBody(
+     *       required=true,
+     *       description="Datos para actualizar la compra",
+     *       @OA\JsonContent(ref="#/components/schemas/UpdatePurchaseRequest")
+     *   ),
+     *   @OA\Response(
+     *       response=200,
+     *       description="Compra actualizada",
+     *       @OA\JsonContent(ref="#/components/schemas/PurchaseResource")
+     *   ),
+     *   @OA\Response(
+     *       response=404,
+     *       description="Compra no encontrada",
+     *       @OA\JsonContent(
+     *           type="object",
+     *           @OA\Property(property="message", type="string", example="Purchase not found")
+     *       )
+     *   ),
+     *   @OA\Response(
+     *       response=422,
+     *       description="Error de validación",
+     *       @OA\JsonContent(ref="#/components/schemas/ValidationError")
+     *   ),
+     *   @OA\Response(
+     *       response=401,
+     *       description="No autenticado",
+     *       @OA\JsonContent(ref="#/components/schemas/Unauthenticated")
+     *   )
      * )
      */
-    public function update(UpdatePurchaseRequest $request, string $id)
+    public function update(UpdatePurchaseRequest $request, int $id)
     {
-        $purchase = Order::find($id);
-        if (!$purchase) return response()->json(['message' => 'Purchase not found'], 404);
+        return DB::transaction(function () use ($request, $id) {
 
-        $exchangeRate = Currency::where('date', $request->date ?? $purchase->date)->first();
-
-        if ($request->input('currencyType') == 'USD') {
-            if (!$exchangeRate) return response()->json(['error' => 'No se ha registrado el tipo de cambio para la fecha seleccionada'], 422);
-        }
-        $data = [
-            'date' => $request->input('date') ?? $purchase->date,
-            'detail' => $request->input('detail') ?? $purchase->detail,
-            'documentType' => $request->input('documentType') ?? $purchase->documentType,
-            'number' => $request->input('number') ?? $purchase->number,
-            'currencyType' => $request->input('currencyType') ?? $purchase->currencyType,
-            'supplier_id' => $request->input('supplier_id') ?? $purchase->supplier_id,
-            'quotation_id' => $request->input('quotation_id') ?? $purchase->quotation_id,
-        ];
-        $purchase->update($data);
-
-        $totalMachinery = 0;
-        $totalSpareParts = 0;
-
-        $detailMachinery = $request->input('detailMachinery');
-        $detailSpares = $request->input('detailSpareParts');
-
-        $purchase->detailMachinery()->delete();
-        $purchase->detailSpareParts()->delete();
-
-        if ($detailMachinery) {
-            foreach ($detailMachinery as $detail) {
-                $detailMachinery = DetailMachinery::create([
-                    'description' => $detail['description'],
-                    'quantity' => $detail['quantity'],
-                    'movementType' => 'purchase',
-                    'purchasePrice' => $detail['purchasePrice'],
-                    'purchaseValue' => $detail['purchasePrice'] * $detail['quantity'],
-                    'order_id' => $purchase->id,
-                ]);
-                $totalMachinery += $detailMachinery->purchasePrice * $detailMachinery->quantity;
+            $purchase = Order::where('type','purchase')->find($id);
+            if (!$purchase) {
+                return response()->json(['message'=>'Purchase not found'],404);
             }
-        }
 
-        if ($detailSpares) {
-            $totalSpareParts = $this->addDetailSpareParts($detailSpares, $purchase);
-        }
+            // 1) Revertir stock anterior
+            foreach ($purchase->detailMachinery as $oldMach) {
+                $this->decreaseMachineryStock(
+                    $oldMach->machinery_id,
+                    $oldMach->quantity,
+                    $oldMach->realPrice     ?? 0,
+                    $oldMach->contablePrice ?? 0
+                );
+            }
+            foreach ($purchase->detailSpareParts as $oldSp) {
+                $this->decreaseSparePartStock(
+                    $oldSp->spare_part_id,
+                    $oldSp->quantity,
+                    $oldSp->realPrice     ?? 0,
+                    $oldSp->contablePrice ?? 0
+                );
+            }
+            $purchase->detailMachinery()->delete();
+            $purchase->detailSpareParts()->delete();
 
-        $purchase->totalMachinery = $totalMachinery;
-        $purchase->totalSpareParts = $totalSpareParts;
-        $purchase->subtotal = $totalMachinery + $totalSpareParts;
-        $purchase->total = $totalMachinery + $totalSpareParts;
+            // 2) Actualizar cabecera
+            $exchangeRate = null;
+            if ($request->currencyType === 'USD') {
+                $exchangeRate = Currency::where('date', $request->date ?? $purchase->date)->first();
+                if (!$exchangeRate) {
+                    return response()->json(['error'=>'No se ha registrado el tipo de cambio para la fecha seleccionada'],422);
+                }
+            }
 
-        $totalConvert = $purchase->currencyType == 'USD'
-            ? $purchase->total // Conversión del total si está en otra moneda
-            : round($purchase->total / $exchangeRate->saleRate, 2);
-        $purchase->totalExpense = $totalConvert; // Refleja el ingreso final total
-        $purchase->balance = $totalConvert;
-        $purchase->save();
+            $purchase->update([
+                'date'         => $request->input('date', $purchase->date),
+                'documentType' => $request->input('documentType', $purchase->documentType),
+                'paymentType'  => $request->input('paymentType', $purchase->paymentType),
+                'number'       => $request->input('number', $purchase->number),
+                'currencyType' => $request->input('currencyType', $purchase->currencyType),
+                'supplier_id'  => $request->input('supplier_id', $purchase->supplier_id),
+                'quotation_id' => $request->input('quotation_id', $purchase->quotation_id),
+                'detail'       => $request->input('detail', $purchase->detail),
+            ]);
 
-        $purchase->accountPayable()->delete();
-        AccountPayable::create([
-            'paymentType' => 'CONTADO',
-            'days' => 0,
-            'date' => $purchase->date,
-            'amount' => $purchase->total,
-            'balance' => 0,
-            'supplier_id' => $purchase->supplier_id,
-            'order_id' => $purchase->id,
-            'currency_id' => $exchangeRate->id,
-        ]);
+            // 3) Crear nuevos detalles y sumar stock
+            $totalMachinery  = 0;
+            $totalSpareParts = 0;
 
-        $purchase = Order::find($purchase->id);
-        return response()->json(new PurchaseResource($purchase));
+            if ($request->filled('detailMachinery')) {
+                foreach ($request->detailMachinery as $item) {
+                    $mach = DetailMachinery::create([
+                        'description'   => $item['description'] ?? '',
+                        'quantity'      => $item['quantity'],
+                        'movementType'  => 'purchase',
+                        'purchasePrice' => $item['purchasePrice'],
+                        'purchaseValue' => $item['purchasePrice'] * $item['quantity'],
+                        'realPrice'     => $item['realPrice'] ?? 0,
+                        'contablePrice' => $item['contablePrice'] ?? 0,
+                        'machinery_id'  => $item['machinery_id'],
+                        'order_id'      => $purchase->id,
+                    ]);
+                    $totalMachinery += $mach->purchaseValue;
+
+                    $this->increaseMachineryStock(
+                        $item['machinery_id'],
+                        $item['quantity'],
+                        $item['realPrice']     ?? 0,
+                        $item['contablePrice'] ?? 0
+                    );
+                }
+            }
+
+            if ($request->filled('detailSpareParts')) {
+                foreach ($request->detailSpareParts as $item) {
+                    $sp = DetailSparePart::create([
+                        'quantity'      => $item['quantity'],
+                        'movementType'  => 'purchase',
+                        'purchasePrice' => $item['purchasePrice'],
+                        'purchaseValue' => $item['purchasePrice'] * $item['quantity'],
+                        'realPrice'     => $item['realPrice'] ?? 0,
+                        'contablePrice' => $item['contablePrice'] ?? 0,
+                        'spare_part_id' => $item['spare_part_id'],
+                        'order_id'      => $purchase->id,
+                    ]);
+                    $totalSpareParts += $sp->purchaseValue;
+
+                    $this->increaseSparePartStock(
+                        $item['spare_part_id'],
+                        $item['quantity'],
+                        $item['realPrice']     ?? 0,
+                        $item['contablePrice'] ?? 0
+                    );
+                }
+            }
+
+            // 4) Calcular totales
+            $purchase->totalMachinery  = $totalMachinery;
+            $purchase->totalSpareParts = $totalSpareParts;
+            $purchase->subtotal        = $totalMachinery + $totalSpareParts;
+            $purchase->total           = $purchase->subtotal;
+
+            if ($purchase->currencyType === 'USD' && $exchangeRate) {
+                $purchase->totalExpense = round($purchase->total * $exchangeRate->saleRate, 2);
+            } else {
+                $purchase->totalExpense = $purchase->total;
+            }
+            $purchase->balance = $purchase->totalExpense;
+            $purchase->save();
+
+            // 5) Actualizar cuenta por pagar
+            $purchase->accountPayable()->delete();
+            AccountPayable::create([
+                'paymentType' => $purchase->paymentType,
+                'days'        => 0,
+                'date'        => $purchase->date,
+                'amount'      => $purchase->total,
+                'balance'     => $purchase->paymentType === 'CONTADO' ? 0 : $purchase->total,
+                'supplier_id' => $purchase->supplier_id,
+                'order_id'    => $purchase->id,
+                'currency_id' => $exchangeRate->id ?? null,
+            ]);
+
+            return new PurchaseResource($purchase->fresh());
+        });
     }
 
     /**
      * @OA\Delete(
-     *     path="/taeyoung-backend/public/api/purchase/{id}",
-     *     tags={"Purchase"},
-     *     summary="Destroy Purchase",
-     *     description="Destroy a Purchase.",
-     *     security={{"bearerAuth":{}}},
-     *     @OA\Parameter(parameter="id", name="id", in="path", required=true, description="Purchase ID", @OA\Schema(type="string")),
-     *     @OA\Response(response=200, description="Successful operation", @OA\JsonContent(type="object", @OA\Property(property="message", type="string", example="Purchase deleted"))),
-     *     @OA\Response(response=404, description="Purchase not found", @OA\JsonContent(type="object", @OA\Property(property="message", type="string", example="Purchase not found")))
+     *   path="/taeyoung-backend/public/api/purchase/{id}",
+     *   tags={"Purchase"},
+     *   summary="Eliminar compra",
+     *   description="Elimina la compra y revierte el stock de sus detalles.",
+     *   security={{"bearerAuth":{}}},
+     *
+     *   @OA\Parameter(
+     *       name="id",
+     *       in="path",
+     *       required=true,
+     *       description="ID de la compra",
+     *       @OA\Schema(type="integer")
+     *   ),
+     *   @OA\Response(
+     *       response=200,
+     *       description="Compra eliminada",
+     *       @OA\JsonContent(
+     *           type="object",
+     *           @OA\Property(property="message", type="string", example="Purchase deleted")
+     *       )
+     *   ),
+     *   @OA\Response(
+     *       response=404,
+     *       description="Compra no encontrada",
+     *       @OA\JsonContent(
+     *           type="object",
+     *           @OA\Property(property="message", type="string", example="Purchase not found")
+     *       )
+     *   ),
+     *   @OA\Response(
+     *       response=401,
+     *       description="No autenticado",
+     *       @OA\JsonContent(ref="#/components/schemas/Unauthenticated")
+     *   )
      * )
      */
-    public function destroy(string $id)
+    public function destroy(int $id)
     {
-        $purchase = Order::find($id);
-        if (!$purchase) return response()->json(['message' => 'Purchase not found'], 404);
-        $purchase->detailMachinery()->delete();
-        $purchase->detailSpareParts()->delete();
-        $purchase->accountPayable()->delete();
-        $purchase->delete();
-        return response()->json(['message' => 'Purchase deleted']);
+        return DB::transaction(function () use ($id) {
+            $purchase = Order::where('type','purchase')->find($id);
+            if (!$purchase) {
+                return response()->json(['message'=>'Purchase not found'],404);
+            }
+            // Revertir stock
+            foreach ($purchase->detailMachinery as $oldMach) {
+                $this->decreaseMachineryStock(
+                    $oldMach->machinery_id,
+                    $oldMach->quantity,
+                    $oldMach->realPrice     ?? 0,
+                    $oldMach->contablePrice ?? 0
+                );
+            }
+            foreach ($purchase->detailSpareParts as $oldSp) {
+                $this->decreaseSparePartStock(
+                    $oldSp->spare_part_id,
+                    $oldSp->quantity,
+                    $oldSp->realPrice     ?? 0,
+                    $oldSp->contablePrice ?? 0
+                );
+            }
+            $purchase->detailMachinery()->delete();
+            $purchase->detailSpareParts()->delete();
+            $purchase->accountPayable()->delete();
+            $purchase->delete();
+
+            return response()->json(['message' => 'Purchase deleted']);
+        });
     }
 
-    private function addDetailSpareParts(mixed $detailSpareParts, $order)
+    //--------------------------------------------------------------------------
+    //                           LÓGICA DE STOCK
+    //--------------------------------------------------------------------------
+
+    private function increaseMachineryStock(int $machineryId, int $quantity, float $realPrice, float $contablePrice)
     {
-        $detailSparePartsValidate = [];
-        $totalSpareParts = 0;
-        foreach ($detailSpareParts as $detail) {
-            if (array_key_exists($detail['spare_part_id'], $detailSparePartsValidate)) {
-                $detailSparePartsValidate[$detail['spare_part_id']]['quantity'] += $detail['quantity'];
-            } else {
-                $detailSparePartsValidate[$detail['spare_part_id']] = $detail;
-            }
-        }
+        $inventory = MachineryInventory::firstOrCreate(['machinery_id' => $machineryId]);
 
-        foreach ($detailSparePartsValidate as $detail) {
-            $sparePart = SparePart::find($detail['spare_part_id']);
-            $detailSparePart = DetailSparePart::create([
-                'quantity' => $detail['quantity'],
-                'movementType' => 'quotation',
-                'purchasePrice' => (float)$detail['purchasePrice'],
-                'purchaseValue' => (float)$detail['purchasePrice'] * $detail['quantity'],
-                'spare_part_id' => $detail['spare_part_id'],
-                'order_id' => $order->id,
-            ]);
-
-            $sparePart->stock += $detailSparePart->quantity;
-            $totalSpareParts += $detailSparePart->purchaseValue;
-            $sparePart->save();
+        // Si realPrice > 0, sumamos al real_stock
+        if ($realPrice > 0) {
+            $inventory->real_stock += $quantity;
         }
-        return $totalSpareParts;
+        // Si contablePrice > 0, sumamos al contable_stock
+        if ($contablePrice > 0) {
+            $inventory->contable_stock += $quantity;
+        }
+        $inventory->save();
+    }
+
+    private function decreaseMachineryStock(int $machineryId, int $quantity, float $realPrice, float $contablePrice)
+    {
+        $inventory = MachineryInventory::where('machinery_id',$machineryId)->first();
+        if (!$inventory) {
+            return; // No existe inventario
+        }
+        if ($realPrice > 0) {
+            $inventory->real_stock = max(0, $inventory->real_stock - $quantity);
+        }
+        if ($contablePrice > 0) {
+            $inventory->contable_stock = max(0, $inventory->contable_stock - $quantity);
+        }
+        $inventory->save();
+    }
+
+    private function increaseSparePartStock(int $sparePartId, int $quantity, float $realPrice, float $contablePrice)
+    {
+        $inventory = SparePartInventory::firstOrCreate(['spare_part_id'=>$sparePartId]);
+
+        if ($realPrice > 0) {
+            $inventory->real_stock += $quantity;
+        }
+        if ($contablePrice > 0) {
+            $inventory->contable_stock += $quantity;
+        }
+        $inventory->save();
+    }
+
+    private function decreaseSparePartStock(int $sparePartId, int $quantity, float $realPrice, float $contablePrice)
+    {
+        $inventory = SparePartInventory::where('spare_part_id',$sparePartId)->first();
+        if (!$inventory) {
+            return;
+        }
+        if ($realPrice > 0) {
+            $inventory->real_stock = max(0, $inventory->real_stock - $quantity);
+        }
+        if ($contablePrice > 0) {
+            $inventory->contable_stock = max(0, $inventory->contable_stock - $quantity);
+        }
+        $inventory->save();
     }
 }

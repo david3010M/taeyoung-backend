@@ -29,6 +29,11 @@ use App\Http\Controllers\UnitController;
 use App\Http\Controllers\UserController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\MachineryController;
+use App\Http\Controllers\InventoryController;
+use App\Http\Controllers\WarehouseDocumentController;
+use App\Http\Controllers\SaleGuideController;
+use App\Http\Controllers\BankAccountController;
+
 
 
 /*
@@ -49,6 +54,37 @@ Route::group(
     ['middleware' => ['auth:sanctum']],
     function () {
 
+        //SALES GUIDE
+        Route::resource('saleGuide', SaleGuideController::class)->only(
+            ['index','show','store','update','destroy']
+        )->names([
+            'index'   => 'saleGuide.index',
+            'store'   => 'saleGuide.store',
+            'show'    => 'saleGuide.show',
+            'update'  => 'saleGuide.update',
+            'destroy' => 'saleGuide.destroy',
+        ]);
+        
+        // WAREHOUSE DOCUMENT
+
+        Route::resource('warehouseDocument', WarehouseDocumentController::class)->only(
+            ['index', 'show', 'store', 'update', 'destroy']
+        )->names(
+            [
+                'index'   => 'warehouseDocument.index',
+                'store'   => 'warehouseDocument.store',
+                'show'    => 'warehouseDocument.show',
+                'update'  => 'warehouseDocument.update',
+                'destroy' => 'warehouseDocument.destroy',
+            ]
+        );
+
+        // INVENTORY
+        Route::get('/inventory/machineries', [InventoryController::class, 'indexMachineries'])
+            ->name('inventory.machineries.index');
+
+        Route::get('/inventory/spare-parts', [InventoryController::class, 'indexSpareParts'])
+            ->name('inventory.spare-parts.index');
 
         //BANK ACCOUNT
         Route::resource('bankaccount', BankAccountController::class)->only(

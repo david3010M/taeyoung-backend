@@ -3010,6 +3010,158 @@
                 ]
             }
         },
+        "/taeyoung-backend/public/api/inventory/machineries": {
+            "get": {
+                "tags": [
+                    "Inventory"
+                ],
+                "summary": "Lista el inventario de maquinarias",
+                "description": "Retorna la paginación del inventario de maquinarias (real_stock, contable_stock) y muestra también el último realPrice/contablePrice proveniente de detail_machineries.",
+                "operationId": "e97b1b2d75e620f24095161e6c9360ab",
+                "parameters": [
+                    {
+                        "name": "page",
+                        "in": "query",
+                        "description": "Número de página",
+                        "schema": {
+                            "type": "integer"
+                        }
+                    },
+                    {
+                        "name": "per_page",
+                        "in": "query",
+                        "description": "Items por página",
+                        "schema": {
+                            "type": "integer"
+                        }
+                    },
+                    {
+                        "name": "sort",
+                        "in": "query",
+                        "description": "Columna para ordenar (ej: id)",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "direction",
+                        "in": "query",
+                        "description": "Dirección de orden (asc o desc)",
+                        "schema": {
+                            "type": "string",
+                            "enum": [
+                                "asc",
+                                "desc"
+                            ]
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Lista de inventario de maquinarias",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "data": {
+                                            "type": "array",
+                                            "items": {
+                                                "$ref": "#/components/schemas/MachineryInventoryResource"
+                                            }
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "No autenticado"
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
+        "/taeyoung-backend/public/api/inventory/spare-parts": {
+            "get": {
+                "tags": [
+                    "Inventory"
+                ],
+                "summary": "Lista el inventario de repuestos",
+                "description": "Retorna la paginación del inventario de repuestos (real_stock, contable_stock) y muestra también el último realPrice/contablePrice proveniente de detail_spare_parts.",
+                "operationId": "c3a9f661b59fe2f86c9ea9b22c807207",
+                "parameters": [
+                    {
+                        "name": "page",
+                        "in": "query",
+                        "description": "Número de página",
+                        "schema": {
+                            "type": "integer"
+                        }
+                    },
+                    {
+                        "name": "per_page",
+                        "in": "query",
+                        "description": "Items por página",
+                        "schema": {
+                            "type": "integer"
+                        }
+                    },
+                    {
+                        "name": "sort",
+                        "in": "query",
+                        "description": "Columna para ordenar (ej: id)",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "direction",
+                        "in": "query",
+                        "description": "Dirección de orden (asc o desc)",
+                        "schema": {
+                            "type": "string",
+                            "enum": [
+                                "asc",
+                                "desc"
+                            ]
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Lista de inventario de repuestos",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "data": {
+                                            "type": "array",
+                                            "items": {
+                                                "$ref": "#/components/schemas/SparePartInventoryResource"
+                                            }
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "No autenticado"
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
         "/taeyoung-backend/public/api/machinery": {
             "get": {
                 "tags": [
@@ -4064,45 +4216,36 @@
                 "tags": [
                     "Purchase"
                 ],
-                "summary": "List Purchases",
-                "description": "Returns a list of Purchases.",
+                "summary": "Listar Compras",
+                "description": "Retorna un listado de compras (type='purchase') con filtros (proveedor, fecha, número, etc.).",
                 "operationId": "5e13a68e885ce0a892de8d00d8f2c9a8",
                 "parameters": [
                     {
-                        "parameter": "page",
-                        "name": "page",
+                        "name": "documentType",
                         "in": "query",
-                        "description": "Page number",
+                        "description": "Tipo de documento (BOLETA, FACTURA)",
                         "required": false,
                         "schema": {
-                            "type": "integer"
+                            "type": "string",
+                            "enum": [
+                                "BOLETA",
+                                "FACTURA"
+                            ]
                         }
                     },
                     {
-                        "parameter": "per_page",
-                        "name": "per_page",
-                        "in": "query",
-                        "description": "Items per page",
-                        "required": false,
-                        "schema": {
-                            "type": "integer"
-                        }
-                    },
-                    {
-                        "parameter": "number",
                         "name": "number",
                         "in": "query",
-                        "description": "Purchase number",
+                        "description": "Número de la compra",
                         "required": false,
                         "schema": {
                             "type": "string"
                         }
                     },
                     {
-                        "parameter": "date",
                         "name": "date[]",
                         "in": "query",
-                        "description": "Purchase date",
+                        "description": "Rango de fechas [inicio, fin]",
                         "required": false,
                         "schema": {
                             "type": "array",
@@ -4113,63 +4256,36 @@
                         }
                     },
                     {
-                        "parameter": "supplier_id",
                         "name": "supplier_id",
                         "in": "query",
-                        "description": "Supplier ID",
+                        "description": "ID del proveedor",
                         "required": false,
                         "schema": {
                             "type": "integer"
                         }
                     },
                     {
-                        "parameter": "supplier$filterName",
-                        "name": "supplier$filterName",
+                        "name": "page",
                         "in": "query",
-                        "description": "Supplier name",
-                        "required": false,
-                        "schema": {
-                            "type": "string"
-                        }
-                    },
-                    {
-                        "parameter": "supplier$country_id",
-                        "name": "supplier$country_id",
-                        "in": "query",
-                        "description": "Supplier country ID",
+                        "description": "Número de página",
                         "required": false,
                         "schema": {
                             "type": "integer"
                         }
                     },
                     {
-                        "parameter": "sort",
-                        "name": "sort",
+                        "name": "per_page",
                         "in": "query",
-                        "description": "Sort by column",
+                        "description": "Items por página",
                         "required": false,
                         "schema": {
-                            "type": "string"
-                        }
-                    },
-                    {
-                        "parameter": "direction",
-                        "name": "direction",
-                        "in": "query",
-                        "description": "Sort direction",
-                        "required": false,
-                        "schema": {
-                            "type": "string",
-                            "enum": [
-                                "asc",
-                                "desc"
-                            ]
+                            "type": "integer"
                         }
                     }
                 ],
                 "responses": {
                     "200": {
-                        "description": "Successful operation",
+                        "description": "Listado de compras",
                         "content": {
                             "application/json": {
                                 "schema": {
@@ -4179,7 +4295,7 @@
                         }
                     },
                     "401": {
-                        "description": "Unauthenticated",
+                        "description": "No autenticado",
                         "content": {
                             "application/json": {
                                 "schema": {
@@ -4189,7 +4305,7 @@
                         }
                     },
                     "422": {
-                        "description": "Validation error",
+                        "description": "Error de validación",
                         "content": {
                             "application/json": {
                                 "schema": {
@@ -4209,11 +4325,11 @@
                 "tags": [
                     "Purchase"
                 ],
-                "summary": "Store Purchase",
-                "description": "Store a new Purchase.",
+                "summary": "Crear nueva compra",
+                "description": "Crea una compra (orders.type='purchase'), registra detalles y actualiza stock.",
                 "operationId": "c0150dc9c945e05d7d910a91172d7cd9",
                 "requestBody": {
-                    "description": "Purchase data",
+                    "description": "Datos de la compra",
                     "required": true,
                     "content": {
                         "application/json": {
@@ -4225,7 +4341,7 @@
                 },
                 "responses": {
                     "200": {
-                        "description": "Successful operation",
+                        "description": "Compra creada correctamente",
                         "content": {
                             "application/json": {
                                 "schema": {
@@ -4235,7 +4351,7 @@
                         }
                     },
                     "401": {
-                        "description": "Unauthenticated",
+                        "description": "No autenticado",
                         "content": {
                             "application/json": {
                                 "schema": {
@@ -4245,7 +4361,7 @@
                         }
                     },
                     "422": {
-                        "description": "Validation error",
+                        "description": "Error de validación",
                         "content": {
                             "application/json": {
                                 "schema": {
@@ -4267,24 +4383,23 @@
                 "tags": [
                     "Purchase"
                 ],
-                "summary": "Show Purchase",
-                "description": "Returns a Purchase.",
+                "summary": "Mostrar detalle de una compra",
+                "description": "Obtiene la información de una compra por ID (type='purchase').",
                 "operationId": "406847cc807b159de0468be3c6e040c9",
                 "parameters": [
                     {
-                        "parameter": "id",
                         "name": "id",
                         "in": "path",
-                        "description": "Purchase ID",
+                        "description": "ID de la compra",
                         "required": true,
                         "schema": {
-                            "type": "string"
+                            "type": "integer"
                         }
                     }
                 ],
                 "responses": {
                     "200": {
-                        "description": "Successful operation",
+                        "description": "Compra encontrada",
                         "content": {
                             "application/json": {
                                 "schema": {
@@ -4293,18 +4408,8 @@
                             }
                         }
                     },
-                    "401": {
-                        "description": "Unauthenticated",
-                        "content": {
-                            "application/json": {
-                                "schema": {
-                                    "$ref": "#/components/schemas/Unauthenticated"
-                                }
-                            }
-                        }
-                    },
                     "404": {
-                        "description": "Purchase not found",
+                        "description": "Compra no encontrada",
                         "content": {
                             "application/json": {
                                 "schema": {
@@ -4315,6 +4420,16 @@
                                         }
                                     },
                                     "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "No autenticado",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/Unauthenticated"
                                 }
                             }
                         }
@@ -4330,23 +4445,22 @@
                 "tags": [
                     "Purchase"
                 ],
-                "summary": "Update Purchase",
-                "description": "Update a Purchase.",
+                "summary": "Actualizar compra",
+                "description": "Actualiza la compra (type='purchase'), revierte el stock anterior y suma el nuevo stock.",
                 "operationId": "f8845bf16f864a24d1f8a8dc31b14da0",
                 "parameters": [
                     {
-                        "parameter": "id",
                         "name": "id",
                         "in": "path",
-                        "description": "Purchase ID",
+                        "description": "ID de la compra",
                         "required": true,
                         "schema": {
-                            "type": "string"
+                            "type": "integer"
                         }
                     }
                 ],
                 "requestBody": {
-                    "description": "Purchase data",
+                    "description": "Datos para actualizar la compra",
                     "required": true,
                     "content": {
                         "application/json": {
@@ -4358,7 +4472,7 @@
                 },
                 "responses": {
                     "200": {
-                        "description": "Successful operation",
+                        "description": "Compra actualizada",
                         "content": {
                             "application/json": {
                                 "schema": {
@@ -4367,28 +4481,8 @@
                             }
                         }
                     },
-                    "401": {
-                        "description": "Unauthenticated",
-                        "content": {
-                            "application/json": {
-                                "schema": {
-                                    "$ref": "#/components/schemas/Unauthenticated"
-                                }
-                            }
-                        }
-                    },
-                    "422": {
-                        "description": "Validation error",
-                        "content": {
-                            "application/json": {
-                                "schema": {
-                                    "$ref": "#/components/schemas/ValidationError"
-                                }
-                            }
-                        }
-                    },
                     "404": {
-                        "description": "Purchase not found",
+                        "description": "Compra no encontrada",
                         "content": {
                             "application/json": {
                                 "schema": {
@@ -4399,6 +4493,26 @@
                                         }
                                     },
                                     "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "Error de validación",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ValidationError"
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "No autenticado",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/Unauthenticated"
                                 }
                             }
                         }
@@ -4414,24 +4528,23 @@
                 "tags": [
                     "Purchase"
                 ],
-                "summary": "Destroy Purchase",
-                "description": "Destroy a Purchase.",
+                "summary": "Eliminar compra",
+                "description": "Elimina la compra y revierte el stock de sus detalles.",
                 "operationId": "e207c5ba3c9957d507c50b470939d780",
                 "parameters": [
                     {
-                        "parameter": "id",
                         "name": "id",
                         "in": "path",
-                        "description": "Purchase ID",
+                        "description": "ID de la compra",
                         "required": true,
                         "schema": {
-                            "type": "string"
+                            "type": "integer"
                         }
                     }
                 ],
                 "responses": {
                     "200": {
-                        "description": "Successful operation",
+                        "description": "Compra eliminada",
                         "content": {
                             "application/json": {
                                 "schema": {
@@ -4447,7 +4560,7 @@
                         }
                     },
                     "404": {
-                        "description": "Purchase not found",
+                        "description": "Compra no encontrada",
                         "content": {
                             "application/json": {
                                 "schema": {
@@ -4458,6 +4571,16 @@
                                         }
                                     },
                                     "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "No autenticado",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/Unauthenticated"
                                 }
                             }
                         }
@@ -5456,6 +5579,273 @@
                                 }
                             }
                         }
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
+        "/taeyoung-backend/public/api/saleGuide": {
+            "get": {
+                "tags": [
+                    "SaleGuide"
+                ],
+                "summary": "Listar Guías de Venta",
+                "description": "Retorna el listado de guías (type='guide') con filtros (fecha, número, cliente).",
+                "operationId": "33c2b0ba50f73cb8b11f27ba31b74b3b",
+                "parameters": [
+                    {
+                        "name": "number",
+                        "in": "query",
+                        "description": "Número de guía",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "date[]",
+                        "in": "query",
+                        "description": "Rango de fechas",
+                        "schema": {
+                            "type": "array",
+                            "items": {
+                                "type": "string",
+                                "format": "date"
+                            }
+                        }
+                    },
+                    {
+                        "name": "client_id",
+                        "in": "query",
+                        "description": "ID del cliente",
+                        "schema": {
+                            "type": "integer"
+                        }
+                    },
+                    {
+                        "name": "page",
+                        "in": "query",
+                        "description": "Página",
+                        "schema": {
+                            "type": "integer"
+                        }
+                    },
+                    {
+                        "name": "per_page",
+                        "in": "query",
+                        "description": "Items por página",
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "data": {
+                                            "type": "array",
+                                            "items": {
+                                                "$ref": "#/components/schemas/SaleGuideResource"
+                                            }
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "No autenticado"
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            },
+            "post": {
+                "tags": [
+                    "SaleGuide"
+                ],
+                "summary": "Crear Guía de Venta",
+                "description": "Crea un registro type='guide' y disminuye stock contable.",
+                "operationId": "ffc632ada74590630d4f566f498aedd6",
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/StoreSaleGuideRequest"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Guía creada",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/SaleGuideResource"
+                                }
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "Datos inválidos"
+                    },
+                    "401": {
+                        "description": "No autenticado"
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
+        "/taeyoung-backend/public/api/saleGuide/{id}": {
+            "get": {
+                "tags": [
+                    "SaleGuide"
+                ],
+                "summary": "Mostrar Guía de Venta",
+                "description": "Retorna el detalle de una guía por ID",
+                "operationId": "e0f058e7df37bd0d48da3edbf410b561",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "ID de la guía",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/SaleGuideResource"
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Guía no encontrada"
+                    },
+                    "401": {
+                        "description": "No autenticado"
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            },
+            "put": {
+                "tags": [
+                    "SaleGuide"
+                ],
+                "summary": "Actualizar Guía de Venta",
+                "description": "Edita la guía, revirtiendo el stock contable anterior y aplicando el nuevo.",
+                "operationId": "d2891df32c031a46ef360eef81fa922d",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "ID de la guía",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/UpdateSaleGuideRequest"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/SaleGuideResource"
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Guía no encontrada"
+                    },
+                    "401": {
+                        "description": "No autenticado"
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            },
+            "delete": {
+                "tags": [
+                    "SaleGuide"
+                ],
+                "summary": "Eliminar Guía de Venta",
+                "description": "Elimina la guía y revierte el stock contable de los detalles.",
+                "operationId": "5f43d1874103ce957b8e5f6a68fe414b",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "ID de la guía",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Guide deleted"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "No encontrado"
+                    },
+                    "401": {
+                        "description": "No autenticado"
                     }
                 },
                 "security": [
@@ -7009,6 +7399,292 @@
                     }
                 ]
             }
+        },
+        "/taeyoung-backend/public/api/warehouseDocument": {
+            "get": {
+                "tags": [
+                    "WarehouseDocument"
+                ],
+                "summary": "Listar documentos de almacén",
+                "description": "Obtiene la lista de documentos de almacén con filtros opcionales",
+                "operationId": "8bcf621ef29780f0ce93bb60ff382a57",
+                "parameters": [
+                    {
+                        "name": "page",
+                        "in": "query",
+                        "description": "Número de página",
+                        "required": false,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    },
+                    {
+                        "name": "per_page",
+                        "in": "query",
+                        "description": "Items por página",
+                        "required": false,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    },
+                    {
+                        "name": "documentType",
+                        "in": "query",
+                        "description": "Filtrar por tipo de documento",
+                        "required": false,
+                        "schema": {
+                            "type": "string",
+                            "enum": [
+                                "ingreso",
+                                "salida"
+                            ]
+                        }
+                    },
+                    {
+                        "name": "mode",
+                        "in": "query",
+                        "description": "Filtrar por modo",
+                        "required": false,
+                        "schema": {
+                            "type": "string",
+                            "enum": [
+                                "Real",
+                                "Contable"
+                            ]
+                        }
+                    },
+                    {
+                        "name": "number",
+                        "in": "query",
+                        "description": "Filtrar por número",
+                        "required": false,
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "date[]",
+                        "in": "query",
+                        "description": "Rango de fechas [date[0], date[1]]",
+                        "required": false,
+                        "schema": {
+                            "type": "array",
+                            "items": {
+                                "type": "string",
+                                "format": "date"
+                            }
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Lista de documentos",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "No autenticado"
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            },
+            "post": {
+                "tags": [
+                    "WarehouseDocument"
+                ],
+                "summary": "Crear documento de almacén",
+                "description": "Crea un documento de almacén (ingreso o salida, real o contable)",
+                "operationId": "eee6cd5d16367d550d82976688f8b33d",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/StoreWarehouseDocumentRequest"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Documento creado",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/WarehouseDocumentResource"
+                                }
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "Datos inválidos"
+                    },
+                    "401": {
+                        "description": "No autenticado"
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
+        "/taeyoung-backend/public/api/warehouseDocument/{id}": {
+            "get": {
+                "tags": [
+                    "WarehouseDocument"
+                ],
+                "summary": "Mostrar documento de almacén",
+                "description": "Muestra un documento de almacén por ID",
+                "operationId": "fdea3d39357ab2b178705b57374e47ce",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "ID del documento",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Documento encontrado",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/WarehouseDocumentResource"
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "No encontrado"
+                    },
+                    "401": {
+                        "description": "No autenticado"
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            },
+            "put": {
+                "tags": [
+                    "WarehouseDocument"
+                ],
+                "summary": "Actualizar documento de almacén",
+                "description": "Actualiza un documento de almacén, revirtiendo el stock anterior y aplicando el nuevo",
+                "operationId": "a0cb10210db766255c25dd37737a5108",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "ID del documento",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/UpdateWarehouseDocumentRequest"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Documento actualizado",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/WarehouseDocumentResource"
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "No encontrado"
+                    },
+                    "422": {
+                        "description": "Datos inválidos"
+                    },
+                    "401": {
+                        "description": "No autenticado"
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            },
+            "delete": {
+                "tags": [
+                    "WarehouseDocument"
+                ],
+                "summary": "Eliminar documento de almacén",
+                "description": "Elimina un documento de almacén y revierte su stock",
+                "operationId": "469e64f1c702da129f457c3e786cabf9",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "ID del documento",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Documento eliminado",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Documento eliminado"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "No encontrado"
+                    },
+                    "401": {
+                        "description": "No autenticado"
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
         }
     },
     "components": {
@@ -7133,6 +7809,185 @@
                             "type": "file",
                             "format": "binary"
                         }
+                    }
+                },
+                "type": "object"
+            },
+            "IndexInventoryRequest": {
+                "title": "IndexInventoryRequest",
+                "description": "Parámetros para listar inventario (filtros y paginación)",
+                "properties": {
+                    "page": {
+                        "description": "Número de página",
+                        "type": "integer",
+                        "example": 1
+                    },
+                    "per_page": {
+                        "description": "Items por página",
+                        "type": "integer",
+                        "example": 10
+                    },
+                    "sort": {
+                        "description": "Columna para ordenar",
+                        "type": "string",
+                        "example": "id"
+                    },
+                    "direction": {
+                        "description": "Dirección de orden",
+                        "type": "string",
+                        "enum": [
+                            "asc",
+                            "desc"
+                        ],
+                        "example": "asc"
+                    }
+                },
+                "type": "object"
+            },
+            "IndexPurchaseRequest": {
+                "title": "IndexPurchaseRequest",
+                "description": "Parámetros de filtrado para listar compras",
+                "properties": {
+                    "documentType": {
+                        "type": "string",
+                        "enum": [
+                            "BOLETA",
+                            "FACTURA"
+                        ],
+                        "example": "BOLETA"
+                    },
+                    "number": {
+                        "type": "string",
+                        "example": "COMP-0001"
+                    },
+                    "date": {
+                        "description": "Rango de fechas [inicio, fin]",
+                        "type": "array",
+                        "items": {
+                            "type": "string",
+                            "format": "date",
+                            "example": "2025-02-20"
+                        }
+                    },
+                    "supplier_id": {
+                        "type": "integer",
+                        "example": 1
+                    },
+                    "supplier_name": {
+                        "type": "string",
+                        "example": "Distribuidora ABC"
+                    },
+                    "page": {
+                        "type": "integer",
+                        "example": 1
+                    },
+                    "per_page": {
+                        "type": "integer",
+                        "example": 15
+                    }
+                },
+                "type": "object"
+            },
+            "IndexSaleGuideFilters": {
+                "title": "IndexSaleGuideFilters",
+                "description": "Parámetros de filtrado para listar Guías de Venta",
+                "properties": {
+                    "number": {
+                        "type": "string",
+                        "example": "GUIDE-001"
+                    },
+                    "date": {
+                        "description": "Rango de fechas [inicio, fin]",
+                        "type": "array",
+                        "items": {
+                            "type": "string",
+                            "format": "date",
+                            "example": "2025-02-20"
+                        }
+                    },
+                    "client_id": {
+                        "description": "ID del cliente",
+                        "type": "integer",
+                        "example": 5
+                    },
+                    "client_filterName": {
+                        "description": "Filtrar por nombre de cliente",
+                        "type": "string",
+                        "example": "Empresa ABC"
+                    },
+                    "client_country_id": {
+                        "description": "Filtrar por país del cliente",
+                        "type": "integer",
+                        "example": 2
+                    },
+                    "page": {
+                        "description": "Número de página",
+                        "type": "integer",
+                        "example": 1
+                    },
+                    "per_page": {
+                        "description": "Cantidad de elementos por página",
+                        "type": "integer",
+                        "example": 15
+                    }
+                },
+                "type": "object"
+            },
+            "IndexWarehouseDocumentRequest": {
+                "title": "IndexWarehouseDocumentRequest",
+                "properties": {
+                    "date": {
+                        "description": "Rango de fechas [inicio, fin]",
+                        "type": "array",
+                        "items": {
+                            "type": "string",
+                            "format": "date",
+                            "example": "2025-02-20"
+                        }
+                    },
+                    "documentType": {
+                        "type": "string",
+                        "enum": [
+                            "ingreso",
+                            "salida"
+                        ],
+                        "example": "ingreso"
+                    },
+                    "mode": {
+                        "type": "string",
+                        "enum": [
+                            "Real",
+                            "Contable"
+                        ],
+                        "example": "Real"
+                    },
+                    "number": {
+                        "type": "string",
+                        "example": "DOC-001"
+                    },
+                    "reason": {
+                        "type": "string",
+                        "example": "Ajuste de stock"
+                    },
+                    "comment": {
+                        "type": "string",
+                        "example": "Observaciones varias"
+                    },
+                    "sort": {
+                        "type": "string",
+                        "example": "date"
+                    },
+                    "direction": {
+                        "type": "string",
+                        "enum": [
+                            "asc",
+                            "desc"
+                        ],
+                        "example": "asc"
+                    },
+                    "per_page": {
+                        "type": "integer",
+                        "example": 10
                     }
                 },
                 "type": "object"
@@ -7372,68 +8227,128 @@
                 "type": "object"
             },
             "StorePurchaseRequest": {
+                "title": "StorePurchaseRequest",
+                "description": "Datos para crear una compra",
                 "required": [
                     "date",
-                    "detailMachinery",
+                    "number",
+                    "documentType",
+                    "currencyType",
                     "supplier_id"
                 ],
                 "properties": {
-                    "quotation_id": {
-                        "type": "integer",
-                        "example": "21"
-                    },
                     "date": {
                         "type": "string",
                         "format": "date",
-                        "example": "2024-08-19"
+                        "example": "2025-02-25"
                     },
-                    "detail": {
+                    "number": {
                         "type": "string",
-                        "example": "This is a detail"
+                        "example": "COMP-0001"
+                    },
+                    "documentType": {
+                        "type": "string",
+                        "enum": [
+                            "BOLETA",
+                            "FACTURA"
+                        ],
+                        "example": "FACTURA"
+                    },
+                    "paymentType": {
+                        "type": "string",
+                        "enum": [
+                            "CONTADO",
+                            "CREDITO"
+                        ],
+                        "example": "CONTADO"
                     },
                     "currencyType": {
                         "type": "string",
-                        "example": "USD"
+                        "enum": [
+                            "USD",
+                            "PEN"
+                        ],
+                        "example": "PEN"
                     },
                     "supplier_id": {
                         "type": "integer",
-                        "example": "1"
+                        "example": 1
+                    },
+                    "quotation_id": {
+                        "description": "Opcional. Si no usas cotizaciones, ignora.",
+                        "type": "integer",
+                        "example": null,
+                        "nullable": true
+                    },
+                    "detail": {
+                        "type": "string",
+                        "example": "Observaciones o comentario"
                     },
                     "detailMachinery": {
+                        "description": "Lista de maquinarias compradas",
                         "type": "array",
                         "items": {
                             "properties": {
+                                "machinery_id": {
+                                    "type": "integer",
+                                    "example": 10
+                                },
                                 "description": {
                                     "type": "string",
-                                    "example": "This is a description"
+                                    "example": "Retroexcavadora"
                                 },
                                 "quantity": {
                                     "type": "integer",
-                                    "example": "1"
+                                    "example": 2
                                 },
                                 "purchasePrice": {
                                     "type": "number",
-                                    "example": "100"
+                                    "format": "float",
+                                    "example": 5000
+                                },
+                                "realPrice": {
+                                    "description": "Si >0, afecta real_stock",
+                                    "type": "number",
+                                    "format": "float",
+                                    "example": 0
+                                },
+                                "contablePrice": {
+                                    "description": "Si >0, afecta contable_stock",
+                                    "type": "number",
+                                    "format": "float",
+                                    "example": 5000
                                 }
                             },
                             "type": "object"
                         }
                     },
                     "detailSpareParts": {
+                        "description": "Lista de repuestos comprados",
                         "type": "array",
                         "items": {
                             "properties": {
-                                "quantity": {
-                                    "type": "integer",
-                                    "example": "2"
-                                },
                                 "spare_part_id": {
                                     "type": "integer",
-                                    "example": "1"
+                                    "example": 1
+                                },
+                                "quantity": {
+                                    "type": "integer",
+                                    "example": 5
                                 },
                                 "purchasePrice": {
                                     "type": "number",
-                                    "example": "100"
+                                    "format": "float",
+                                    "example": 150
+                                },
+                                "realPrice": {
+                                    "type": "number",
+                                    "format": "float",
+                                    "example": 0
+                                },
+                                "contablePrice": {
+                                    "type": "number",
+                                    "format": "float",
+                                    "example": 150
                                 }
                             },
                             "type": "object"
@@ -7610,6 +8525,87 @@
                         "description": "ID del repuesto (tabla spare_parts)",
                         "type": "integer",
                         "example": 1
+                    }
+                },
+                "type": "object"
+            },
+            "StoreSaleGuideRequest": {
+                "required": [
+                    "date",
+                    "client_id",
+                    "detailMachinery|detailSpareParts"
+                ],
+                "properties": {
+                    "date": {
+                        "type": "string",
+                        "format": "date",
+                        "example": "2025-02-25"
+                    },
+                    "number": {
+                        "description": "Número de la guía",
+                        "type": "string",
+                        "example": "GUIDE-001"
+                    },
+                    "documentType": {
+                        "type": "string",
+                        "example": "GUIA"
+                    },
+                    "client_id": {
+                        "type": "integer",
+                        "example": "10"
+                    },
+                    "detail": {
+                        "type": "string",
+                        "example": "Guía de salida para XYZ"
+                    },
+                    "detailMachinery": {
+                        "type": "array",
+                        "items": {
+                            "properties": {
+                                "machinery_id": {
+                                    "type": "integer",
+                                    "example": 1
+                                },
+                                "quantity": {
+                                    "type": "integer",
+                                    "example": 5
+                                },
+                                "contablePrice": {
+                                    "type": "number",
+                                    "example": 123.45
+                                },
+                                "realPrice": {
+                                    "description": "Si se usa realPrice>0, bajaría real_stock, pero en guías normalmente no se usa",
+                                    "type": "number",
+                                    "example": 0
+                                }
+                            },
+                            "type": "object"
+                        }
+                    },
+                    "detailSpareParts": {
+                        "type": "array",
+                        "items": {
+                            "properties": {
+                                "spare_part_id": {
+                                    "type": "integer",
+                                    "example": 2
+                                },
+                                "quantity": {
+                                    "type": "integer",
+                                    "example": 3
+                                },
+                                "contablePrice": {
+                                    "type": "number",
+                                    "example": 200
+                                },
+                                "realPrice": {
+                                    "type": "number",
+                                    "example": 0
+                                }
+                            },
+                            "type": "object"
+                        }
                     }
                 },
                 "type": "object"
@@ -7855,6 +8851,74 @@
                 },
                 "type": "object"
             },
+            "StoreWarehouseDocumentRequest": {
+                "required": [
+                    "date",
+                    "documentType",
+                    "mode",
+                    "details"
+                ],
+                "properties": {
+                    "date": {
+                        "type": "string",
+                        "format": "date",
+                        "example": "2025-02-25"
+                    },
+                    "number": {
+                        "description": "Opcional. Si no se envía, se autogenera.",
+                        "type": "string",
+                        "example": "DOC-001"
+                    },
+                    "documentType": {
+                        "type": "string",
+                        "enum": [
+                            "ingreso",
+                            "salida"
+                        ],
+                        "example": "ingreso"
+                    },
+                    "mode": {
+                        "type": "string",
+                        "enum": [
+                            "Real",
+                            "Contable"
+                        ],
+                        "example": "Real"
+                    },
+                    "reason": {
+                        "type": "string",
+                        "example": "Ajuste de stock"
+                    },
+                    "comment": {
+                        "type": "string",
+                        "example": "Observaciones varias"
+                    },
+                    "details": {
+                        "description": "Detalle de items (maquinaria o repuesto). Solo uno de machinery_id o spare_part_id en cada línea",
+                        "type": "array",
+                        "items": {
+                            "properties": {
+                                "machinery_id": {
+                                    "type": "integer",
+                                    "example": 1,
+                                    "nullable": true
+                                },
+                                "spare_part_id": {
+                                    "type": "integer",
+                                    "example": null,
+                                    "nullable": true
+                                },
+                                "quantity": {
+                                    "type": "integer",
+                                    "example": 10
+                                }
+                            },
+                            "type": "object"
+                        }
+                    }
+                },
+                "type": "object"
+            },
             "UpdateClientRequest": {
                 "title": "Update Client Request",
                 "properties": {
@@ -7946,43 +9010,85 @@
                 "type": "object"
             },
             "UpdatePurchaseRequest": {
+                "title": "UpdatePurchaseRequest",
+                "description": "Datos para actualizar una compra existente",
                 "properties": {
-                    "quotation_id": {
-                        "type": "integer",
-                        "example": "21"
-                    },
                     "date": {
                         "type": "string",
                         "format": "date",
-                        "example": "2024-08-19"
+                        "example": "2025-03-01"
                     },
-                    "detail": {
+                    "number": {
                         "type": "string",
-                        "example": "This is a detail"
+                        "example": "COMP-0002"
+                    },
+                    "documentType": {
+                        "type": "string",
+                        "enum": [
+                            "BOLETA",
+                            "FACTURA"
+                        ],
+                        "example": "FACTURA"
+                    },
+                    "paymentType": {
+                        "type": "string",
+                        "enum": [
+                            "CONTADO",
+                            "CREDITO"
+                        ],
+                        "example": "CREDITO"
                     },
                     "currencyType": {
                         "type": "string",
+                        "enum": [
+                            "USD",
+                            "PEN"
+                        ],
                         "example": "USD"
                     },
                     "supplier_id": {
                         "type": "integer",
-                        "example": "1"
+                        "example": 2
+                    },
+                    "quotation_id": {
+                        "type": "integer",
+                        "example": null,
+                        "nullable": true
+                    },
+                    "detail": {
+                        "type": "string",
+                        "example": "Comentario de actualización"
                     },
                     "detailMachinery": {
                         "type": "array",
                         "items": {
                             "properties": {
+                                "machinery_id": {
+                                    "type": "integer",
+                                    "example": 5
+                                },
                                 "description": {
                                     "type": "string",
-                                    "example": "This is a description"
+                                    "example": "Nueva descripción"
                                 },
                                 "quantity": {
                                     "type": "integer",
-                                    "example": "1"
+                                    "example": 3
                                 },
                                 "purchasePrice": {
                                     "type": "number",
-                                    "example": "100"
+                                    "format": "float",
+                                    "example": 6000
+                                },
+                                "realPrice": {
+                                    "type": "number",
+                                    "format": "float",
+                                    "example": 0
+                                },
+                                "contablePrice": {
+                                    "type": "number",
+                                    "format": "float",
+                                    "example": 6000
                                 }
                             },
                             "type": "object"
@@ -7992,13 +9098,28 @@
                         "type": "array",
                         "items": {
                             "properties": {
-                                "quantity": {
-                                    "type": "integer",
-                                    "example": "3"
-                                },
                                 "spare_part_id": {
                                     "type": "integer",
-                                    "example": "1"
+                                    "example": 2
+                                },
+                                "quantity": {
+                                    "type": "integer",
+                                    "example": 10
+                                },
+                                "purchasePrice": {
+                                    "type": "number",
+                                    "format": "float",
+                                    "example": 180
+                                },
+                                "realPrice": {
+                                    "type": "number",
+                                    "format": "float",
+                                    "example": 0
+                                },
+                                "contablePrice": {
+                                    "type": "number",
+                                    "format": "float",
+                                    "example": 180
                                 }
                             },
                             "type": "object"
@@ -8051,6 +9172,80 @@
                         "description": "ID de la maquinaria (tabla machineries)",
                         "type": "integer",
                         "example": 1
+                    }
+                },
+                "type": "object"
+            },
+            "UpdateSaleGuideRequest": {
+                "properties": {
+                    "date": {
+                        "type": "string",
+                        "format": "date",
+                        "example": "2025-02-25"
+                    },
+                    "number": {
+                        "type": "string",
+                        "example": "GUIDE-001"
+                    },
+                    "documentType": {
+                        "type": "string",
+                        "example": "GUIA"
+                    },
+                    "client_id": {
+                        "type": "integer",
+                        "example": 10
+                    },
+                    "detail": {
+                        "type": "string",
+                        "example": "Guía actualizada"
+                    },
+                    "detailMachinery": {
+                        "type": "array",
+                        "items": {
+                            "properties": {
+                                "machinery_id": {
+                                    "type": "integer",
+                                    "example": 1
+                                },
+                                "quantity": {
+                                    "type": "integer",
+                                    "example": 5
+                                },
+                                "contablePrice": {
+                                    "type": "number",
+                                    "example": 100
+                                },
+                                "realPrice": {
+                                    "type": "number",
+                                    "example": 0
+                                }
+                            },
+                            "type": "object"
+                        }
+                    },
+                    "detailSpareParts": {
+                        "type": "array",
+                        "items": {
+                            "properties": {
+                                "spare_part_id": {
+                                    "type": "integer",
+                                    "example": 2
+                                },
+                                "quantity": {
+                                    "type": "integer",
+                                    "example": 3
+                                },
+                                "contablePrice": {
+                                    "type": "number",
+                                    "example": 200
+                                },
+                                "realPrice": {
+                                    "type": "number",
+                                    "example": 0
+                                }
+                            },
+                            "type": "object"
+                        }
                     }
                 },
                 "type": "object"
@@ -8248,6 +9443,73 @@
                     "abbreviation": {
                         "type": "string",
                         "example": "UN"
+                    }
+                },
+                "type": "object"
+            },
+            "UpdateWarehouseDocumentRequest": {
+                "required": [
+                    "date",
+                    "documentType",
+                    "mode",
+                    "details"
+                ],
+                "properties": {
+                    "date": {
+                        "type": "string",
+                        "format": "date",
+                        "example": "2025-02-26"
+                    },
+                    "number": {
+                        "description": "Si no se envía, se mantiene el anterior.",
+                        "type": "string",
+                        "example": "DOC-002"
+                    },
+                    "documentType": {
+                        "type": "string",
+                        "enum": [
+                            "ingreso",
+                            "salida"
+                        ],
+                        "example": "salida"
+                    },
+                    "mode": {
+                        "type": "string",
+                        "enum": [
+                            "Real",
+                            "Contable"
+                        ],
+                        "example": "Contable"
+                    },
+                    "reason": {
+                        "type": "string",
+                        "example": "Corrección de stock"
+                    },
+                    "comment": {
+                        "type": "string",
+                        "example": "Observaciones de actualización"
+                    },
+                    "details": {
+                        "type": "array",
+                        "items": {
+                            "properties": {
+                                "machinery_id": {
+                                    "type": "integer",
+                                    "example": null,
+                                    "nullable": true
+                                },
+                                "spare_part_id": {
+                                    "type": "integer",
+                                    "example": 5,
+                                    "nullable": true
+                                },
+                                "quantity": {
+                                    "type": "integer",
+                                    "example": 7
+                                }
+                            },
+                            "type": "object"
+                        }
                     }
                 },
                 "type": "object"
@@ -8894,6 +10156,66 @@
                 },
                 "type": "object"
             },
+            "MachineryInventoryResource": {
+                "title": "MachineryInventoryResource",
+                "description": "Recurso de inventario de maquinarias con último precio real/contable",
+                "properties": {
+                    "id": {
+                        "type": "integer",
+                        "example": 1
+                    },
+                    "machinery_id": {
+                        "type": "integer",
+                        "example": 10
+                    },
+                    "real_stock": {
+                        "type": "integer",
+                        "example": 100
+                    },
+                    "contable_stock": {
+                        "type": "integer",
+                        "example": 90
+                    },
+                    "machinery": {
+                        "properties": {
+                            "id": {
+                                "type": "integer",
+                                "example": 10
+                            },
+                            "code": {
+                                "type": "string",
+                                "example": "MCH-001"
+                            },
+                            "name": {
+                                "type": "string",
+                                "example": "Excavadora"
+                            },
+                            "purchasePrice": {
+                                "type": "number",
+                                "format": "float",
+                                "example": 50000
+                            },
+                            "salePrice": {
+                                "type": "number",
+                                "format": "float",
+                                "example": 65000
+                            }
+                        },
+                        "type": "object"
+                    },
+                    "lastRealPrice": {
+                        "type": "number",
+                        "format": "float",
+                        "example": 120.5
+                    },
+                    "lastContablePrice": {
+                        "type": "number",
+                        "format": "float",
+                        "example": 130
+                    }
+                },
+                "type": "object"
+            },
             "MachineryResource": {
                 "title": "MachineryResource",
                 "required": [
@@ -9051,82 +10373,90 @@
             },
             "PurchaseResource": {
                 "title": "PurchaseResource",
-                "description": "Machinery Purchase resource",
+                "description": "Recurso que representa una Compra",
                 "properties": {
                     "id": {
                         "type": "integer",
-                        "example": "1"
+                        "example": 1
                     },
                     "number": {
                         "type": "string",
-                        "example": "COMPR-0001"
+                        "example": "COMP-0001"
                     },
                     "date": {
                         "type": "string",
                         "format": "date",
-                        "example": "2024-08-19"
+                        "example": "2025-02-25"
                     },
                     "detail": {
                         "type": "string",
-                        "example": "This is a detail"
+                        "example": "Detalle o comentario"
+                    },
+                    "documentType": {
+                        "type": "string",
+                        "enum": [
+                            "BOLETA",
+                            "FACTURA"
+                        ],
+                        "example": "FACTURA"
                     },
                     "paymentType": {
                         "type": "string",
-                        "example": "Contado"
+                        "enum": [
+                            "CONTADO",
+                            "CREDITO"
+                        ],
+                        "example": "CONTADO"
                     },
                     "currencyType": {
                         "type": "string",
-                        "example": "USD"
+                        "enum": [
+                            "USD",
+                            "PEN"
+                        ],
+                        "example": "PEN"
                     },
                     "totalMachinery": {
                         "type": "number",
-                        "example": "100"
+                        "format": "float",
+                        "example": 1000
                     },
                     "totalSpareParts": {
                         "type": "number",
-                        "example": "100"
+                        "format": "float",
+                        "example": 500
                     },
                     "subtotal": {
                         "type": "number",
-                        "example": "100"
-                    },
-                    "igv": {
-                        "type": "number",
-                        "example": "18"
-                    },
-                    "discount": {
-                        "type": "number",
-                        "example": "0"
+                        "format": "float",
+                        "example": 1500
                     },
                     "total": {
                         "type": "number",
-                        "example": "118"
-                    },
-                    "totalIncome": {
-                        "type": "number",
-                        "example": "0"
+                        "format": "float",
+                        "example": 1500
                     },
                     "totalExpense": {
                         "type": "number",
-                        "example": "0"
+                        "format": "float",
+                        "example": 1500
                     },
-                    "comment": {
-                        "type": "string",
-                        "example": "This is a comment"
+                    "balance": {
+                        "type": "number",
+                        "format": "float",
+                        "example": 1500
                     },
                     "supplier_id": {
                         "type": "integer",
-                        "example": "1"
+                        "example": 1
                     },
                     "quotation_id": {
                         "type": "integer",
-                        "example": "21"
+                        "example": null,
+                        "nullable": true
                     },
                     "supplier": {
-                        "$ref": "#/components/schemas/SupplierResource"
-                    },
-                    "quotation": {
-                        "$ref": "#/components/schemas/Quotation"
+                        "$ref": "#/components/schemas/Client"
                     },
                     "detailMachinery": {
                         "type": "array",
@@ -9145,7 +10475,6 @@
             },
             "PurchaseCollection": {
                 "title": "PurchaseCollection",
-                "description": "Purchase resource collection",
                 "properties": {
                     "data": {
                         "type": "array",
@@ -9279,6 +10608,61 @@
                 },
                 "type": "object"
             },
+            "SaleGuideResource": {
+                "title": "SaleGuideResource",
+                "description": "Recurso que representa una Guía de Venta",
+                "properties": {
+                    "id": {
+                        "type": "integer",
+                        "example": 1
+                    },
+                    "number": {
+                        "type": "string",
+                        "example": "GUIDE-001"
+                    },
+                    "date": {
+                        "type": "string",
+                        "format": "date",
+                        "example": "2025-02-25"
+                    },
+                    "documentType": {
+                        "type": "string",
+                        "example": "GUIA"
+                    },
+                    "client_id": {
+                        "type": "integer",
+                        "example": 10
+                    },
+                    "client": {
+                        "$ref": "#/components/schemas/Client"
+                    },
+                    "detailMachinery": {
+                        "type": "array",
+                        "items": {
+                            "$ref": "#/components/schemas/DetailMachineryResource"
+                        }
+                    },
+                    "detailSpareParts": {
+                        "type": "array",
+                        "items": {
+                            "$ref": "#/components/schemas/DetailSparePartResource"
+                        }
+                    },
+                    "comment": {
+                        "type": "string",
+                        "example": "Observaciones varias"
+                    },
+                    "subtotal": {
+                        "type": "number",
+                        "example": 100
+                    },
+                    "total": {
+                        "type": "number",
+                        "example": 100
+                    }
+                },
+                "type": "object"
+            },
             "SaleResource": {
                 "title": "SaleResource",
                 "description": "Machinery Sale resource",
@@ -9388,6 +10772,66 @@
                     },
                     "meta": {
                         "$ref": "#/components/schemas/PaginationMeta"
+                    }
+                },
+                "type": "object"
+            },
+            "SparePartInventoryResource": {
+                "title": "SparePartInventoryResource",
+                "description": "Recurso de inventario de repuestos con último precio real/contable",
+                "properties": {
+                    "id": {
+                        "type": "integer",
+                        "example": 1
+                    },
+                    "spare_part_id": {
+                        "type": "integer",
+                        "example": 15
+                    },
+                    "real_stock": {
+                        "type": "integer",
+                        "example": 100
+                    },
+                    "contable_stock": {
+                        "type": "integer",
+                        "example": 90
+                    },
+                    "sparePart": {
+                        "properties": {
+                            "id": {
+                                "type": "integer",
+                                "example": 15
+                            },
+                            "code": {
+                                "type": "string",
+                                "example": "REP-999"
+                            },
+                            "name": {
+                                "type": "string",
+                                "example": "Filtro de aire"
+                            },
+                            "purchasePrice": {
+                                "type": "number",
+                                "format": "float",
+                                "example": 30.5
+                            },
+                            "salePrice": {
+                                "type": "number",
+                                "format": "float",
+                                "example": 45.99
+                            }
+                        },
+                        "type": "object"
+                    },
+                    "lastRealPrice": {
+                        "type": "number",
+                        "format": "float",
+                        "example": 35
+                    },
+                    "lastContablePrice": {
+                        "type": "number",
+                        "format": "float",
+                        "example": 40
                     }
                 },
                 "type": "object"
@@ -9561,6 +11005,83 @@
                     },
                     "meta": {
                         "$ref": "#/components/schemas/PaginationMeta"
+                    }
+                },
+                "type": "object"
+            },
+            "WarehouseDocumentDetailResource": {
+                "properties": {
+                    "id": {
+                        "type": "integer",
+                        "example": 1
+                    },
+                    "machinery_id": {
+                        "type": "integer",
+                        "example": null,
+                        "nullable": true
+                    },
+                    "spare_part_id": {
+                        "type": "integer",
+                        "example": 5,
+                        "nullable": true
+                    },
+                    "quantity": {
+                        "type": "integer",
+                        "example": 10
+                    },
+                    "machinery": {
+                        "$ref": "#/components/schemas/MachineryResource"
+                    },
+                    "sparePart": {
+                        "$ref": "#/components/schemas/SparePartResource"
+                    }
+                },
+                "type": "object"
+            },
+            "WarehouseDocumentResource": {
+                "properties": {
+                    "id": {
+                        "type": "integer",
+                        "example": 1
+                    },
+                    "date": {
+                        "type": "string",
+                        "format": "date",
+                        "example": "2025-02-25"
+                    },
+                    "number": {
+                        "type": "string",
+                        "example": "DOC-001"
+                    },
+                    "documentType": {
+                        "type": "string",
+                        "enum": [
+                            "ingreso",
+                            "salida"
+                        ],
+                        "example": "ingreso"
+                    },
+                    "mode": {
+                        "type": "string",
+                        "enum": [
+                            "Real",
+                            "Contable"
+                        ],
+                        "example": "Real"
+                    },
+                    "reason": {
+                        "type": "string",
+                        "example": "Ajuste de stock"
+                    },
+                    "comment": {
+                        "type": "string",
+                        "example": "Observaciones varias"
+                    },
+                    "details": {
+                        "type": "array",
+                        "items": {
+                            "$ref": "#/components/schemas/WarehouseDocumentDetailResource"
+                        }
                     }
                 },
                 "type": "object"
@@ -10050,6 +11571,86 @@
                     }
                 },
                 "type": "object"
+            },
+            "WarehouseDocument": {
+                "title": "WarehouseDocument",
+                "required": [
+                    "date",
+                    "documentType",
+                    "mode"
+                ],
+                "properties": {
+                    "id": {
+                        "type": "integer",
+                        "example": 1
+                    },
+                    "date": {
+                        "type": "string",
+                        "format": "date",
+                        "example": "2025-02-25"
+                    },
+                    "number": {
+                        "type": "string",
+                        "example": "DOC-001"
+                    },
+                    "documentType": {
+                        "type": "string",
+                        "enum": [
+                            "ingreso",
+                            "salida"
+                        ],
+                        "example": "ingreso"
+                    },
+                    "mode": {
+                        "type": "string",
+                        "enum": [
+                            "Real",
+                            "Contable"
+                        ],
+                        "example": "Real"
+                    },
+                    "reason": {
+                        "type": "string",
+                        "example": "Ajuste de stock"
+                    },
+                    "comment": {
+                        "type": "string",
+                        "example": "Observaciones varias"
+                    }
+                },
+                "type": "object"
+            },
+            "WarehouseDocumentDetail": {
+                "title": "WarehouseDocumentDetail",
+                "required": [
+                    "warehouse_document_id",
+                    "quantity"
+                ],
+                "properties": {
+                    "id": {
+                        "type": "integer",
+                        "example": 1
+                    },
+                    "warehouse_document_id": {
+                        "type": "integer",
+                        "example": 10
+                    },
+                    "machinery_id": {
+                        "type": "integer",
+                        "example": null,
+                        "nullable": true
+                    },
+                    "spare_part_id": {
+                        "type": "integer",
+                        "example": 5,
+                        "nullable": true
+                    },
+                    "quantity": {
+                        "type": "integer",
+                        "example": 10
+                    }
+                },
+                "type": "object"
             }
         },
         "securitySchemes": {
@@ -10063,6 +11664,14 @@
         }
     },
     "tags": [
+        {
+            "name": "Purchase",
+            "description": "Módulo de compras (orders.type = 'purchase')"
+        },
+        {
+            "name": "SaleGuide",
+            "description": "API para gestionar Guías de Venta (type='guide')"
+        },
         {
             "name": "Account Payables",
             "description": "Account Payables"
@@ -10112,6 +11721,10 @@
             "description": "Images"
         },
         {
+            "name": "Inventory",
+            "description": "Inventory"
+        },
+        {
             "name": "Machinery",
             "description": "Machinery"
         },
@@ -10126,10 +11739,6 @@
         {
             "name": "Province",
             "description": "Province"
-        },
-        {
-            "name": "Purchase",
-            "description": "Purchase"
         },
         {
             "name": "Quotation",
@@ -10158,6 +11767,10 @@
         {
             "name": "User",
             "description": "User"
+        },
+        {
+            "name": "WarehouseDocument",
+            "description": "WarehouseDocument"
         }
     ]
 }
