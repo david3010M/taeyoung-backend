@@ -32,7 +32,6 @@ use App\Http\Controllers\MachineryController;
 use App\Http\Controllers\InventoryController;
 use App\Http\Controllers\WarehouseDocumentController;
 use App\Http\Controllers\SaleGuideController;
-use App\Http\Controllers\BankAccountController;
 
 
 
@@ -56,28 +55,28 @@ Route::group(
 
         //SALES GUIDE
         Route::resource('saleGuide', SaleGuideController::class)->only(
-            ['index','show','store','update','destroy']
+            ['index', 'show', 'store', 'update', 'destroy']
         )->names([
-            'index'   => 'saleGuide.index',
-            'store'   => 'saleGuide.store',
-            'show'    => 'saleGuide.show',
-            'update'  => 'saleGuide.update',
-            'destroy' => 'saleGuide.destroy',
-        ]);
-        
-        // WAREHOUSE DOCUMENT
+                    'index' => 'saleGuide.index',
+                    'store' => 'saleGuide.store',
+                    'show' => 'saleGuide.show',
+                    'update' => 'saleGuide.update',
+                    'destroy' => 'saleGuide.destroy',
+                ]);
 
+        // WAREHOUSE DOCUMENT
+    
         Route::resource('warehouseDocument', WarehouseDocumentController::class)->only(
             ['index', 'show', 'store', 'update', 'destroy']
         )->names(
-            [
-                'index'   => 'warehouseDocument.index',
-                'store'   => 'warehouseDocument.store',
-                'show'    => 'warehouseDocument.show',
-                'update'  => 'warehouseDocument.update',
-                'destroy' => 'warehouseDocument.destroy',
-            ]
-        );
+                [
+                    'index' => 'warehouseDocument.index',
+                    'store' => 'warehouseDocument.store',
+                    'show' => 'warehouseDocument.show',
+                    'update' => 'warehouseDocument.update',
+                    'destroy' => 'warehouseDocument.destroy',
+                ]
+            );
 
         // INVENTORY
         Route::get('/inventory/machineries', [InventoryController::class, 'indexMachineries'])
@@ -90,27 +89,27 @@ Route::group(
         Route::resource('bankaccount', BankAccountController::class)->only(
             ['index', 'show', 'store', 'update', 'destroy']
         )->names(
-            [
-                'index' => 'bankaccount.index',
-                'store' => 'bankaccount.store',
-                'show' => 'bankaccount.show',
-                'update' => 'bankaccount.update',
-                'destroy' => 'bankaccount.destroy',
-            ]
-        );
-//        MACHINERY
+                [
+                    'index' => 'bankaccount.index',
+                    'store' => 'bankaccount.store',
+                    'show' => 'bankaccount.show',
+                    'update' => 'bankaccount.update',
+                    'destroy' => 'bankaccount.destroy',
+                ]
+            );
+        //        MACHINERY
         Route::resource('machinery', MachineryController::class)->only(
             ['index', 'show', 'store', 'update', 'destroy']
         )->names(
-            [
-                'index' => 'machinery.index',
-                'store' => 'machinery.store',
-                'show' => 'machinery.show',
-                'update' => 'machinery.update',
-                'destroy' => 'machinery.destroy',
-            ]
-        );
-//        REPORTS
+                [
+                    'index' => 'machinery.index',
+                    'store' => 'machinery.store',
+                    'show' => 'machinery.show',
+                    'update' => 'machinery.update',
+                    'destroy' => 'machinery.destroy',
+                ]
+            );
+        //        REPORTS
         Route::get('/repuestos', [PdfController::class, 'getRepuestos'])->name('repuestoReport');
         Route::get('/compra/{id}', [PdfController::class, 'getPurchase'])->name('purchaseReport');
         Route::get('/venta/{id}', [PdfController::class, 'getSale'])->name('saleReport');
@@ -121,194 +120,194 @@ Route::group(
         Route::get('/logs', [AuthController::class, 'logs'])->name('logs');
 
 
-//         SEARCH
+        //         SEARCH
         Route::get('searchByDni/{dni}', [SearchController::class, 'searchByDni']);
         Route::get('searchByRuc/{ruc}', [SearchController::class, 'searchByRuc']);
 
-//        GROUP MENU
+        //        GROUP MENU
         Route::resource('groupmenu', GroupMenuController::class)->only(
             ['index', 'show', 'store', 'update', 'destroy']
         )->names(
-            [
-                'index' => 'groupmenu.index',
-                'store' => 'groupmenu.store',
-                'show' => 'groupmenu.show',
-                'update' => 'groupmenu.update',
-                'destroy' => 'groupmenu.destroy',
-            ]
-        );
+                [
+                    'index' => 'groupmenu.index',
+                    'store' => 'groupmenu.store',
+                    'show' => 'groupmenu.show',
+                    'update' => 'groupmenu.update',
+                    'destroy' => 'groupmenu.destroy',
+                ]
+            );
 
-//        OPTION MENU
+        //        OPTION MENU
         Route::resource('optionmenu', OptionMenuController::class)->only(
             ['index', 'show', 'store', 'update', 'destroy']
         )->names(
-            [
-                'index' => 'optionmenu.index',
-                'store' => 'optionmenu.store',
-                'show' => 'optionmenu.show',
-                'update' => 'optionmenu.update',
-                'destroy' => 'optionmenu.destroy',
-            ]
-        );
+                [
+                    'index' => 'optionmenu.index',
+                    'store' => 'optionmenu.store',
+                    'show' => 'optionmenu.show',
+                    'update' => 'optionmenu.update',
+                    'destroy' => 'optionmenu.destroy',
+                ]
+            );
 
-//        TYPE USER
+        //        TYPE USER
         Route::put('typeuser/setAccess', [TypeUserController::class, 'setAccess'])->name('typeuser.setAccess');
         Route::resource('typeuser', TypeUserController::class)->only(
             ['index', 'show', 'store', 'update', 'destroy']
         )->names(
-            [
-                'index' => 'typeuser.index',
-                'store' => 'typeuser.store',
-                'show' => 'typeuser.show',
-                'update' => 'typeuser.update',
-                'destroy' => 'typeuser.destroy',
-            ]
-        );
+                [
+                    'index' => 'typeuser.index',
+                    'store' => 'typeuser.store',
+                    'show' => 'typeuser.show',
+                    'update' => 'typeuser.update',
+                    'destroy' => 'typeuser.destroy',
+                ]
+            );
 
-//        ACCESS
+        //        ACCESS
         Route::resource('access', AccessController::class)->only(
             ['index', 'show', 'store', 'update', 'destroy']
         )->names(
-            [
-                'index' => 'access.index',
-                'store' => 'access.store',
-                'show' => 'access.show',
-                'update' => 'access.update',
-                'destroy' => 'access.destroy',
-            ]
-        );
+                [
+                    'index' => 'access.index',
+                    'store' => 'access.store',
+                    'show' => 'access.show',
+                    'update' => 'access.update',
+                    'destroy' => 'access.destroy',
+                ]
+            );
 
-//        USER
+        //        USER
         Route::resource('user', UserController::class)->only(
             ['index', 'show', 'store', 'update', 'destroy']
         )->names(
-            [
-                'index' => 'user.index',
-                'store' => 'user.store',
-                'show' => 'user.show',
-                'update' => 'user.update',
-                'destroy' => 'user.destroy',
-            ]
-        );
+                [
+                    'index' => 'user.index',
+                    'store' => 'user.store',
+                    'show' => 'user.show',
+                    'update' => 'user.update',
+                    'destroy' => 'user.destroy',
+                ]
+            );
 
-//        BANK
+        //        BANK
         Route::resource('bank', BankController::class)->only(
             ['index', 'show', 'store', 'update', 'destroy']
         )->names(
-            [
-                'index' => 'bank.index',
-                'store' => 'bank.store',
-                'show' => 'bank.show',
-                'update' => 'bank.update',
-                'destroy' => 'bank.destroy',
-            ]
-        );
+                [
+                    'index' => 'bank.index',
+                    'store' => 'bank.store',
+                    'show' => 'bank.show',
+                    'update' => 'bank.update',
+                    'destroy' => 'bank.destroy',
+                ]
+            );
 
-//        COUNTRY
+        //        COUNTRY
         Route::resource('country', CountryController::class)->only(
             ['index', 'show', 'store', 'update', 'destroy']
         )->names(
-            [
-                'index' => 'country.index',
-                'store' => 'country.store',
-                'show' => 'country.show',
-                'update' => 'country.update',
-                'destroy' => 'country.destroy',
-            ]
-        );
+                [
+                    'index' => 'country.index',
+                    'store' => 'country.store',
+                    'show' => 'country.show',
+                    'update' => 'country.update',
+                    'destroy' => 'country.destroy',
+                ]
+            );
 
-//        DEPARTMENT
+        //        DEPARTMENT
         Route::resource('department', DepartmentController::class)->only(
             ['index', 'show', 'store', 'update', 'destroy']
         )->names(
-            [
-                'index' => 'department.index',
-                'store' => 'department.store',
-                'show' => 'department.show',
-                'update' => 'department.update',
-                'destroy' => 'department.destroy',
-            ]
-        );
+                [
+                    'index' => 'department.index',
+                    'store' => 'department.store',
+                    'show' => 'department.show',
+                    'update' => 'department.update',
+                    'destroy' => 'department.destroy',
+                ]
+            );
 
-//        PROVINCE
+        //        PROVINCE
         Route::resource('province', ProvinceController::class)->only(
             ['index', 'show', 'store', 'update', 'destroy']
         )->names(
-            [
-                'index' => 'province.index',
-                'store' => 'province.store',
-                'show' => 'province.show',
-                'update' => 'province.update',
-                'destroy' => 'province.destroy',
-            ]
-        );
+                [
+                    'index' => 'province.index',
+                    'store' => 'province.store',
+                    'show' => 'province.show',
+                    'update' => 'province.update',
+                    'destroy' => 'province.destroy',
+                ]
+            );
 
-//        SUPPLIER
+        //        SUPPLIER
         Route::resource('supplier', SupplierController::class)->only(
             ['index', 'show', 'store', 'update', 'destroy']
         )->names(
-            [
-                'index' => 'supplier.index',
-                'store' => 'supplier.store',
-                'show' => 'supplier.show',
-                'update' => 'supplier.update',
-                'destroy' => 'supplier.destroy',
-            ]
-        );
+                [
+                    'index' => 'supplier.index',
+                    'store' => 'supplier.store',
+                    'show' => 'supplier.show',
+                    'update' => 'supplier.update',
+                    'destroy' => 'supplier.destroy',
+                ]
+            );
 
-//        CLIENT
+        //        CLIENT
         Route::post('/client/excel', [ClientController::class, 'importExcel'])->name('client-excel');
         Route::resource('client', ClientController::class)->only(
             ['index', 'show', 'store', 'update', 'destroy']
         )->names(
-            [
-                'index' => 'client.index',
-                'store' => 'client.store',
-                'show' => 'client.show',
-                'update' => 'client.update',
-                'destroy' => 'client.destroy',
-            ]
-        );
+                [
+                    'index' => 'client.index',
+                    'store' => 'client.store',
+                    'show' => 'client.show',
+                    'update' => 'client.update',
+                    'destroy' => 'client.destroy',
+                ]
+            );
 
 
-//        UNIT
+        //        UNIT
         Route::resource('unit', UnitController::class)->only(
             ['index', 'show', 'store', 'update', 'destroy']
         )->names(
-            [
-                'index' => 'unit.index',
-                'store' => 'unit.store',
-                'show' => 'unit.show',
-                'update' => 'unit.update',
-                'destroy' => 'unit.destroy',
-            ]
-        );
+                [
+                    'index' => 'unit.index',
+                    'store' => 'unit.store',
+                    'show' => 'unit.show',
+                    'update' => 'unit.update',
+                    'destroy' => 'unit.destroy',
+                ]
+            );
 
-//        SPARE PART
+        //        SPARE PART
         Route::resource('sparePart', SparePartController::class)->only(
             ['index', 'show', 'store', 'update', 'destroy']
         )->names(
-            [
-                'index' => 'sparePart.index',
-                'store' => 'sparePart.store',
-                'show' => 'sparePart.show',
-                'update' => 'sparePart.update',
-                'destroy' => 'sparePart.destroy',
-            ]
-        );
+                [
+                    'index' => 'sparePart.index',
+                    'store' => 'sparePart.store',
+                    'show' => 'sparePart.show',
+                    'update' => 'sparePart.update',
+                    'destroy' => 'sparePart.destroy',
+                ]
+            );
 
-//        QUOTATION
+        //        QUOTATION
         Route::resource('quotation', QuotationController::class)->only(
             ['index', 'show', 'store', 'update', 'destroy']
         )->names(
-            [
-                'index' => 'quotation.index',
-                'store' => 'quotation.store',
-                'show' => 'quotation.show',
-                'update' => 'quotation.update',
-                'destroy' => 'quotation.destroy',
-            ]
-        );
+                [
+                    'index' => 'quotation.index',
+                    'store' => 'quotation.store',
+                    'show' => 'quotation.show',
+                    'update' => 'quotation.update',
+                    'destroy' => 'quotation.destroy',
+                ]
+            );
 
         Route::get('file', [FileController::class, 'index'])->name('file.index');
         Route::post('quotation/{id}/file', [FileController::class, 'storeQuotationFile'])->name('quotation.file');
@@ -316,105 +315,110 @@ Route::group(
         Route::post('order/{id}/file', [FileController::class, 'storeOrderFile'])->name('order.file');
         Route::delete('file/{id}', [FileController::class, 'destroy'])->name('file.destroy');
 
-//        MACHINERY PURCHASE
+        //        MACHINERY PURCHASE
         Route::resource('purchase', PurchaseController::class)->only(
             ['index', 'show', 'store', 'update', 'destroy']
         )->names(
-            [
-                'index' => 'purchase.index',
-                'store' => 'purchase.store',
-                'show' => 'purchase.show',
-                'update' => 'purchase.update',
-                'destroy' => 'purchase.destroy',
-            ]
-        );
+                [
+                    'index' => 'purchase.index',
+                    'store' => 'purchase.store',
+                    'show' => 'purchase.show',
+                    'update' => 'purchase.update',
+                    'destroy' => 'purchase.destroy',
+                ]
+            );
 
-//        CURRENCY
+        //        CURRENCY
         Route::resource('currency', CurrencyController::class)->only(
             ['index', 'show', 'store', 'update', 'destroy']
         )->names(
-            [
-                'index' => 'currency.index',
-                'store' => 'currency.store',
-                'show' => 'currency.show',
-                'update' => 'currency.update',
-                'destroy' => 'currency.destroy',
-            ]
-        );
+                [
+                    'index' => 'currency.index',
+                    'store' => 'currency.store',
+                    'show' => 'currency.show',
+                    'update' => 'currency.update',
+                    'destroy' => 'currency.destroy',
+                ]
+            );
 
-//        DETAIL SPARE PART
+        //        DETAIL SPARE PART
         Route::resource('detailSparePart', DetailSparePartController::class)->only(
             ['index', 'show', 'store', 'update', 'destroy']
         )->names(
-            [
-                'index' => 'detailSparePart.index',
-                'store' => 'detailSparePart.store',
-                'show' => 'detailSparePart.show',
-                'update' => 'detailSparePart.update',
-                'destroy' => 'detailSparePart.destroy',
-            ]
-        );
+                [
+                    'index' => 'detailSparePart.index',
+                    'store' => 'detailSparePart.store',
+                    'show' => 'detailSparePart.show',
+                    'update' => 'detailSparePart.update',
+                    'destroy' => 'detailSparePart.destroy',
+                ]
+            );
 
-//        PAYMENT CONCEPT
+        //        PAYMENT CONCEPT
         Route::resource('paymentConcept', PaymentConceptController::class)->only(
             ['index', 'show', 'store', 'update', 'destroy']
         )->names(
-            [
-                'index' => 'paymentConcept.index',
-                'store' => 'paymentConcept.store',
-                'show' => 'paymentConcept.show',
-                'update' => 'paymentConcept.update',
-                'destroy' => 'paymentConcept.destroy',
-            ]
-        );
+                [
+                    'index' => 'paymentConcept.index',
+                    'store' => 'paymentConcept.store',
+                    'show' => 'paymentConcept.show',
+                    'update' => 'paymentConcept.update',
+                    'destroy' => 'paymentConcept.destroy',
+                ]
+            );
 
-//        SALE
+        //        SALE
         Route::resource('sale', SaleController::class)->only(
             ['index', 'show', 'store', 'update', 'destroy']
         )->names(
-            [
-                'index' => 'sale.index',
-                'store' => 'sale.store',
-                'show' => 'sale.show',
-                'update' => 'sale.update',
-                'destroy' => 'sale.destroy',
-            ]
-        );
+                [
+                    'index' => 'sale.index',
+                    'store' => 'sale.store',
+                    'show' => 'sale.show',
+                    'update' => 'sale.update',
+                    'destroy' => 'sale.destroy',
+                ]
+            );
 
-//        ACCOUNT RECEIVABLE
+        //        ACCOUNT RECEIVABLE
         Route::resource('accountReceivable', AccountReceivableController::class)->only(
             ['index', 'show', 'store', 'update', 'destroy']
         )->names(
-            [
-                'index' => 'accountReceivable.index',
-                'store' => 'accountReceivable.store',
-                'show' => 'accountReceivable.show',
-                'update' => 'accountReceivable.update',
-                'destroy' => 'accountReceivable.destroy',
-            ]
-        );
+                [
+                    'index' => 'accountReceivable.index',
+                    'store' => 'accountReceivable.store',
+                    'show' => 'accountReceivable.show',
+                    'update' => 'accountReceivable.update',
+                    'destroy' => 'accountReceivable.destroy',
+                ]
+            );
         Route::post('accountReceivable/{id}/payment', [AccountReceivableController::class, 'storePayment'])->name('accountReceivable.payment');
         Route::delete('accountReceivable/deletePayment/{id}', [AccountReceivableController::class, 'deletePayment'])->name('accountReceivable.deletePayment');
 
-//        ACCOUNT PAYABLE
+        //        ACCOUNT PAYABLE
         Route::resource('accountPayable', AccountPayableController::class)->only(
             ['index', 'show', 'store', 'update', 'destroy']
         )->names(
-            [
-                'index' => 'accountPayable.index',
-                'store' => 'accountPayable.store',
-                'show' => 'accountPayable.show',
-                'update' => 'accountPayable.update',
-                'destroy' => 'accountPayable.destroy',
-            ]
-        );
+                [
+                    'index' => 'accountPayable.index',
+                    'store' => 'accountPayable.store',
+                    'show' => 'accountPayable.show',
+                    'update' => 'accountPayable.update',
+                    'destroy' => 'accountPayable.destroy',
+                ]
+            );
         Route::post('accountPayable/{id}/payment', [AccountPayableController::class, 'storePayment'])->name('accountPayable.payment');
         Route::delete('accountPayable/deletePayment/{id}', [AccountPayableController::class, 'deletePayment'])->name('accountPayable.deletePayment');
 
-//    EXTENSION
+        //    EXTENSION
         Route::resource('extension', ExtensionController::class)->only(['index', 'show', 'store', 'update', 'destroy'])
-            ->names(['index' => 'extension.index', 'store' => 'extension.store', 'show' => 'extension.show',
-                'update' => 'extension.update', 'destroy' => 'extension.destroy']);
+            ->names([
+                'index' => 'extension.index',
+                'store' => 'extension.store',
+                'show' => 'extension.show',
+                'update' => 'extension.update',
+                'destroy' => 'extension.destroy'
+            ]);
 
 
     }
